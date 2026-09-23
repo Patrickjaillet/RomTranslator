@@ -1,0 +1,43 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Les références entre dictionnaires sont dynamiques : elles suivent le thème et l'ordre de chargement. -->
+  <Style x:Key="Text.Heading" TargetType="{x:Type TextBlock}">
+    <Setter Property="FontSize" Value="28" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+  </Style>
+
+  <Style x:Key="Text.Subheading" TargetType="{x:Type TextBlock}">
+    <Setter Property="FontSize" Value="16" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+  </Style>
+
+  <Style x:Key="Text.Body" TargetType="{x:Type TextBlock}">
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+  </Style>
+
+  <Style x:Key="Text.Secondary" TargetType="{x:Type TextBlock}">
+    <Setter Property="FontSize" Value="13" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorSecondaryBrush}" />
+  </Style>
+
+  <Style x:Key="Surface.Card" TargetType="{x:Type Border}">
+    <Setter Property="Background" Value="{DynamicResource CardBackgroundFillColorDefaultBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DividerStrokeColorDefaultBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource Metrics.CardRadius}" />
+    <Setter Property="Padding" Value="{DynamicResource Metrics.CardPadding}" />
+  </Style>
+
+</ResourceDictionary>

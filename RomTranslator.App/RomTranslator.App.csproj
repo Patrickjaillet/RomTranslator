@@ -5,7 +5,15 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>RomTranslator</AssemblyName>
     <RootNamespace>RomTranslator.App</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Seules les langues de l'application sont copiées pour les ressources satellites des dépendances. -->
+    <SatelliteResourceLanguages>fr;en</SatelliteResourceLanguages>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="WPF-UI" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />

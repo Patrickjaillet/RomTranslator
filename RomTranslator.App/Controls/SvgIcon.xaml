@@ -1,0 +1,23 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<UserControl x:Class="RomTranslator.App.Controls.SvgIcon"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="Root"
+             Focusable="False"
+             IsTabStop="False">
+  <Viewbox Width="{Binding IconSize, ElementName=Root}"
+           Height="{Binding IconSize, ElementName=Root}"
+           Stretch="Uniform">
+    <Canvas Width="24" Height="24">
+      <Path Data="{Binding Data, ElementName=Root}"
+            Stroke="{Binding Foreground, ElementName=Root}"
+            StrokeThickness="{Binding StrokeWidth, ElementName=Root}"
+            StrokeStartLineCap="Round"
+            StrokeEndLineCap="Round"
+            StrokeLineJoin="Round" />
+    </Canvas>
+  </Viewbox>
+</UserControl>

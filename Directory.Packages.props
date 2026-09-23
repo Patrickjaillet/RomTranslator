@@ -13,6 +13,12 @@
     <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="3.10.94" />
   </ItemGroup>
 
+  <!-- Application WPF : interface Fluent et MVVM. -->
+  <ItemGroup>
+    <PackageVersion Include="WPF-UI" Version="4.3.0" />
+    <PackageVersion Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+  </ItemGroup>
+
   <!-- Paquets référencés explicitement par les projets de tests. -->
   <ItemGroup>
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />

@@ -1,0 +1,30 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<UserControl x:Class="RomTranslator.App.Controls.SvgButton"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:RomTranslator.App.Controls"
+             x:Name="Root"
+             Focusable="False"
+             IsTabStop="False">
+  <UserControl.Resources>
+    <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+  </UserControl.Resources>
+  <ui:Button Appearance="Transparent"
+             AutomationProperties.Name="{Binding ToolTip, ElementName=Root}"
+             Command="{Binding Command, ElementName=Root}"
+             CommandParameter="{Binding CommandParameter, ElementName=Root}">
+    <StackPanel Orientation="Horizontal">
+      <controls:SvgIcon Data="{Binding IconData, ElementName=Root}"
+                        IconSize="{Binding IconSize, ElementName=Root}"
+                        VerticalAlignment="Center" />
+      <TextBlock Margin="8,0,0,0"
+                 VerticalAlignment="Center"
+                 Text="{Binding Label, ElementName=Root}"
+                 Visibility="{Binding HasLabel, ElementName=Root, Converter={StaticResource BoolToVisibility}}" />
+    </StackPanel>
+  </ui:Button>
+</UserControl>

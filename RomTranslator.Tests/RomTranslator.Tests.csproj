@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />
     <ProjectReference Include="..\RomTranslator.Core\RomTranslator.Core.csproj" />
+    <ProjectReference Include="..\RomTranslator.App\RomTranslator.App.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,0 +1,12 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:RomTranslator.App.Converters">
+
+  <converters:IconKeyToGeometryConverter x:Key="IconKeyToGeometry" />
+  <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
+
+</ResourceDictionary>

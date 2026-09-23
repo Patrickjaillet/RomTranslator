@@ -1,0 +1,73 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<UserControl x:Class="RomTranslator.App.Views.HomeView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:RomTranslator.App.Controls">
+  <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+    <StackPanel MaxWidth="960"
+                Margin="{DynamicResource Metrics.PagePadding}"
+                HorizontalAlignment="Left">
+
+      <TextBlock Style="{DynamicResource Text.Heading}"
+                 Text="{Binding ProductName, StringFormat='Bienvenue dans {0}'}" />
+      <TextBlock Margin="0,8,0,0"
+                 Style="{DynamicResource Text.Body}"
+                 Text="Traduisez des ROMs de jeux vidéo en français : extraction du texte, édition de la traduction, puis réinjection dans une image prête à l'emploi." />
+      <TextBlock Margin="0,8,0,0"
+                 Style="{DynamicResource Text.Secondary}"
+                 Text="{Binding VersionText}" />
+
+      <Border Margin="0,24,0,0" Style="{DynamicResource Surface.Card}">
+        <StackPanel Orientation="Horizontal">
+          <controls:SvgIcon Margin="0,2,12,0"
+                            VerticalAlignment="Top"
+                            Data="{StaticResource Icon.gamepad}"
+                            IconSize="24" />
+          <StackPanel>
+            <TextBlock Style="{DynamicResource Text.Subheading}" Text="Un onglet par console" />
+            <TextBlock Margin="0,4,0,0"
+                       MaxWidth="640"
+                       Style="{DynamicResource Text.Secondary}"
+                       Text="Chaque console prise en charge apparaît dans un onglet dédié, à droite de cet onglet d'accueil. Le module Sega Saturn sera le premier disponible." />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <TextBlock Margin="0,32,0,12" Style="{DynamicResource Text.Subheading}" Text="Liens utiles" />
+      <ItemsControl ItemsSource="{Binding Links}">
+        <ItemsControl.ItemsPanel>
+          <ItemsPanelTemplate>
+            <WrapPanel />
+          </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <Border Width="220" Margin="0,0,12,12" Style="{DynamicResource Surface.Card}">
+              <StackPanel>
+                <controls:SvgIcon HorizontalAlignment="Left"
+                                  Data="{Binding IconKey, Converter={StaticResource IconKeyToGeometry}}"
+                                  IconSize="24" />
+                <TextBlock Margin="0,12,0,0" Style="{DynamicResource Text.Subheading}" Text="{Binding Header}" />
+                <TextBlock Margin="0,4,0,12"
+                           MinHeight="36"
+                           Style="{DynamicResource Text.Secondary}"
+                           Text="{Binding Description}" />
+                <ui:Button HorizontalAlignment="Left"
+                           AutomationProperties.Name="{Binding Header}"
+                           Command="{Binding Command}"
+                           Content="Ouvrir" />
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+
+      <TextBlock Margin="0,32,0,0" Style="{DynamicResource Text.Secondary}" Text="{Binding CopyrightText}" />
+      <TextBlock Margin="0,4,0,0" Style="{DynamicResource Text.Secondary}" Text="{Binding LicenseText}" />
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

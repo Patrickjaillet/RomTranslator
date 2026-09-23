@@ -6,11 +6,12 @@ using Xunit;
 
 namespace RomTranslator.Tests;
 
-/// <summary>Métadonnées d'assembly des projets génériques de la solution (Core et Core.Abstractions).</summary>
+/// <summary>Métadonnées d'assembly des projets génériques de la solution (application, Core et Core.Abstractions).</summary>
 public sealed class AssemblyMetadataTests
 {
     public static TheoryData<string> SolutionAssemblyNames => new()
     {
+        "RomTranslator",
         "RomTranslator.Core",
         "RomTranslator.Core.Abstractions",
     };

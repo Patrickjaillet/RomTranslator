@@ -17,7 +17,7 @@ internal static class AssemblyMetadataAssertions
 
     // Expression de référence de la spécification SemVer 2.0.0, adaptée : le préfixe MAJOR.MINOR.PATCH
     // est obligatoire, le suffixe de pré-publication (-alpha.1) et les métadonnées de build (+abc123) sont facultatifs.
-    private static readonly Regex SemVerPattern = new(
+    private static readonly Regex _semVerPattern = new(
         @"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?(\+[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$",
         RegexOptions.CultureInvariant);
 
@@ -41,6 +41,6 @@ internal static class AssemblyMetadataAssertions
         string? version = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion;
 
         Assert.NotNull(version);
-        Assert.Matches(SemVerPattern, version);
+        Assert.Matches(_semVerPattern, version);
     }
 }
