@@ -1,0 +1,70 @@
+## RomTranslator — .gitignore
+## Toute modification de ce fichier doit être justifiée dans MEMOIRE.md
+
+# --- Fichiers de gouvernance internes (jamais publiés) ---
+ROADMAP.md
+CLAUDE.md
+MEMOIRE.md
+COMPILATION.md
+
+# --- Build .NET ---
+bin/
+obj/
+publish/
+*.dll
+*.pdb
+artifacts/
+
+# --- Visual Studio ---
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# --- Rider / VS Code (au cas où) ---
+.idea/
+.vscode/
+*.swp
+
+# --- Versioning automatique (fichiers générés) ---
+version.json.bak
+GitVersion.yml.user
+
+# --- Configuration portable locale (générée à l'exécution, jamais versionnée) ---
+/config/
+/projects/
+/logs/
+
+# --- ROMs et images disque de test (droits d'auteur — jamais commit) ---
+*.bin
+*.cue
+*.iso
+*.ccd
+*.img
+*.sub
+*.mdf
+*.mds
+*.rom
+*.smc
+*.sfc
+*.n64
+*.z64
+*.gba
+*.nds
+/roms/
+/test-images/
+
+# --- Divers OS ---
+Thumbs.db
+.DS_Store
+desktop.ini
+
+# --- Packages NuGet locaux ---
+*.nupkg
+.nuget/
+
+# --- Résultats de tests ---
+TestResults/
+coverage/
+*.trx
