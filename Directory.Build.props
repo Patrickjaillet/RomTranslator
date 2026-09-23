@@ -15,6 +15,10 @@
     <AnalysisLevel>10.0-recommended</AnalysisLevel>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- Requis par Roslyn pour appliquer IDE0005 (usings inutiles) pendant le build. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <!-- Documentation XML obligatoire seulement là où elle est écrite : pas d'avertissement sur les membres non documentés. -->
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
   <!--
