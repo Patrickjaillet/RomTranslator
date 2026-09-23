@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>RomTranslator.Core</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />
+  </ItemGroup>
+
+</Project>

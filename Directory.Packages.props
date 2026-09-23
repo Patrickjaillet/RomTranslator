@@ -1,0 +1,23 @@
+<Project>
+
+  <!--
+    Gestion centralisée des versions NuGet : toute version de paquet est déclarée ici et
+    uniquement ici. Les fichiers .csproj référencent les paquets sans numéro de version.
+  -->
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <!-- Appliqué automatiquement à tous les projets de la solution (numéro de version SemVer). -->
+  <ItemGroup>
+    <GlobalPackageReference Include="Nerdbank.GitVersioning" Version="3.10.94" />
+  </ItemGroup>
+
+  <!-- Paquets référencés explicitement par les projets de tests. -->
+  <ItemGroup>
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="xunit.v3" Version="3.2.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,11 @@
+# Fins de ligne : LF dans le dépôt et dans la copie de travail (cohérent avec .editorconfig).
+* text=auto eol=lf
+
+# Le format de fichier solution de Visual Studio attend CRLF.
+*.sln text eol=crlf
+
+# Fichiers binaires
+*.png binary
+*.ico binary
+*.zip binary
+*.7z binary

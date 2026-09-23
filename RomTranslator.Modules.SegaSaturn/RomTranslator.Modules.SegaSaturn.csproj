@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <RootNamespace>RomTranslator.Modules.SegaSaturn</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\RomTranslator.Core\RomTranslator.Core.csproj" />
+  </ItemGroup>
+
+</Project>

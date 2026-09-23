@@ -1,0 +1,69 @@
+
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomTranslator.App", "RomTranslator.App\RomTranslator.App.csproj", "{5EC56E42-4AFE-4267-BF21-6F8F586D16BB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomTranslator.Core", "RomTranslator.Core\RomTranslator.Core.csproj", "{6BDC8897-3EEE-4356-B717-8BC3C9249946}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomTranslator.Core.Abstractions", "RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj", "{CDECFAAB-06F9-4C29-B426-F5417E5C564F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomTranslator.Modules.SegaSaturn", "RomTranslator.Modules.SegaSaturn\RomTranslator.Modules.SegaSaturn.csproj", "{DBB181EF-84CD-44B8-8866-2710A4AC3D48}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomTranslator.Tests", "RomTranslator.Tests\RomTranslator.Tests.csproj", "{94E2A31F-840B-4F6A-B5A2-8830CDF17F0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RomTranslator.Tests.SegaSaturn", "RomTranslator.Tests.SegaSaturn\RomTranslator.Tests.SegaSaturn.csproj", "{EFA136B1-A86D-40B1-BC2F-007A0E6C8D32}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E9960B91-0FBF-44BF-955C-75E2AF7173E7}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		Directory.Build.props = Directory.Build.props
+		Directory.Packages.props = Directory.Packages.props
+		global.json = global.json
+		version.json = version.json
+		LICENSE = LICENSE
+		README.md = README.md
+		build\SharedAssemblyInfo.cs = build\SharedAssemblyInfo.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5EC56E42-4AFE-4267-BF21-6F8F586D16BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EC56E42-4AFE-4267-BF21-6F8F586D16BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EC56E42-4AFE-4267-BF21-6F8F586D16BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EC56E42-4AFE-4267-BF21-6F8F586D16BB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BDC8897-3EEE-4356-B717-8BC3C9249946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BDC8897-3EEE-4356-B717-8BC3C9249946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BDC8897-3EEE-4356-B717-8BC3C9249946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BDC8897-3EEE-4356-B717-8BC3C9249946}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CDECFAAB-06F9-4C29-B426-F5417E5C564F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CDECFAAB-06F9-4C29-B426-F5417E5C564F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CDECFAAB-06F9-4C29-B426-F5417E5C564F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CDECFAAB-06F9-4C29-B426-F5417E5C564F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBB181EF-84CD-44B8-8866-2710A4AC3D48}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBB181EF-84CD-44B8-8866-2710A4AC3D48}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBB181EF-84CD-44B8-8866-2710A4AC3D48}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBB181EF-84CD-44B8-8866-2710A4AC3D48}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94E2A31F-840B-4F6A-B5A2-8830CDF17F0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94E2A31F-840B-4F6A-B5A2-8830CDF17F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94E2A31F-840B-4F6A-B5A2-8830CDF17F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94E2A31F-840B-4F6A-B5A2-8830CDF17F0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EFA136B1-A86D-40B1-BC2F-007A0E6C8D32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EFA136B1-A86D-40B1-BC2F-007A0E6C8D32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EFA136B1-A86D-40B1-BC2F-007A0E6C8D32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EFA136B1-A86D-40B1-BC2F-007A0E6C8D32}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {07F53DE8-39A8-4356-AB3E-33695472BDDA}
+	EndGlobalSection
+EndGlobal

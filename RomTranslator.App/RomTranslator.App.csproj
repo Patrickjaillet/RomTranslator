@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>true</UseWPF>
+    <AssemblyName>RomTranslator</AssemblyName>
+    <RootNamespace>RomTranslator.App</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />
+    <ProjectReference Include="..\RomTranslator.Core\RomTranslator.Core.csproj" />
+  </ItemGroup>
+
+</Project>
