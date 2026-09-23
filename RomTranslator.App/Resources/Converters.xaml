@@ -7,6 +7,10 @@
                     xmlns:converters="clr-namespace:RomTranslator.App.Converters">
 
   <converters:IconKeyToGeometryConverter x:Key="IconKeyToGeometry" />
+  <converters:TranslationStatusToBrushConverter x:Key="TranslationStatusToBrush" />
+  <converters:TranslationStatusToLabelConverter x:Key="TranslationStatusToLabel" />
+  <converters:CountToVisibilityConverter x:Key="CountToVisibility" />
+  <converters:NullToVisibilityConverter x:Key="NullToVisibility" />
   <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
 </ResourceDictionary>

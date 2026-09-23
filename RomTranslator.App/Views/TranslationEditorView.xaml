@@ -1,0 +1,266 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<UserControl x:Class="RomTranslator.App.Views.TranslationEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:RomTranslator.App.Controls"
+             xmlns:vm="clr-namespace:RomTranslator.App.ViewModels"
+             xmlns:abstractions="clr-namespace:RomTranslator.Core.Abstractions;assembly=RomTranslator.Core.Abstractions"
+             xmlns:loc="clr-namespace:RomTranslator.Core.Localization;assembly=RomTranslator.Core"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+  <UserControl.Resources>
+    <ObjectDataProvider x:Key="StatusFilterValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="vm:TranslationStatusFilter" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+    <ObjectDataProvider x:Key="StatusValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="abstractions:TranslationStatus" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+  </UserControl.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <!-- Barre d'outils : recherche, filtre de statut, annuler/rétablir -->
+    <Grid Grid.Row="0" Margin="24,20,24,12">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <Grid Grid.Column="0" MaxWidth="420" HorizontalAlignment="Left">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="Auto" />
+          <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <controls:SvgIcon Grid.Column="0"
+                          Margin="10,0,0,0"
+                          Panel.ZIndex="1"
+                          VerticalAlignment="Center"
+                          Data="{StaticResource Icon.search}"
+                          Foreground="{DynamicResource TextFillColorSecondaryBrush}"
+                          IconSize="16" />
+        <ui:TextBox Grid.Column="0"
+                    Grid.ColumnSpan="2"
+                    Padding="34,8,10,8"
+                    PlaceholderText="{x:Static loc:Strings.Editor_SearchPlaceholder}"
+                    Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+      </Grid>
+
+      <StackPanel Grid.Column="1"
+                  Margin="12,0,0,0"
+                  VerticalAlignment="Center"
+                  Orientation="Horizontal">
+        <controls:SvgIcon Margin="0,0,6,0"
+                          VerticalAlignment="Center"
+                          Data="{StaticResource Icon.filter}"
+                          IconSize="16"
+                          Foreground="{DynamicResource TextFillColorSecondaryBrush}" />
+        <ComboBox MinWidth="180"
+                  ItemsSource="{Binding Source={StaticResource StatusFilterValues}}"
+                  SelectedItem="{Binding StatusFilter}" />
+      </StackPanel>
+
+      <StackPanel Grid.Column="2"
+                  Margin="16,0,0,0"
+                  VerticalAlignment="Center"
+                  Orientation="Horizontal">
+        <controls:SvgButton Margin="0,0,4,0"
+                            Command="{Binding UndoCommand}"
+                            IconData="{StaticResource Icon.undo}"
+                            ToolTip="{x:Static loc:Strings.Editor_Undo_ToolTip}" />
+        <controls:SvgButton Command="{Binding RedoCommand}"
+                            IconData="{StaticResource Icon.redo}"
+                            ToolTip="{x:Static loc:Strings.Editor_Redo_ToolTip}" />
+      </StackPanel>
+    </Grid>
+
+    <!-- Barre de progression de la traduction du projet -->
+    <Grid Grid.Row="1" Margin="24,0,24,12">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <ProgressBar Grid.Column="0"
+                   Height="6"
+                   VerticalAlignment="Center"
+                   Maximum="100"
+                   Minimum="0"
+                   Value="{Binding TranslatedPercent, Mode=OneWay}" />
+
+      <TextBlock Grid.Column="1"
+                 Margin="12,0,0,0"
+                 VerticalAlignment="Center"
+                 Style="{DynamicResource Text.Secondary}"
+                 Text="{Binding ProgressSummaryText}" />
+    </Grid>
+
+    <!-- Corps : liste maître à gauche, panneau d'édition à droite -->
+    <Grid Grid.Row="2" Margin="24,0,24,20">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="360" />
+        <ColumnDefinition Width="16" />
+        <ColumnDefinition Width="*" />
+      </Grid.ColumnDefinitions>
+
+      <!-- Liste des entrées -->
+      <Border Grid.Column="0" Style="{DynamicResource Surface.Card}" Padding="8">
+        <Grid>
+          <ListBox Background="Transparent"
+                    BorderThickness="0"
+                    ItemContainerStyle="{StaticResource Editor.EntryRow}"
+                    ItemsSource="{Binding Entries}"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    SelectedItem="{Binding SelectedEntry, Mode=TwoWay}"
+                    Visibility="{Binding Entries.Count, Converter={StaticResource CountToVisibility}}">
+            <ListBox.ItemTemplate>
+              <DataTemplate DataType="{x:Type vm:TranslationEntryViewModel}">
+                <Grid>
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                  </Grid.ColumnDefinitions>
+                  <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                  </Grid.RowDefinitions>
+
+                  <TextBlock Grid.Row="0"
+                             Grid.Column="0"
+                             Grid.ColumnSpan="2"
+                             Margin="0,0,0,4"
+                             Style="{DynamicResource Text.Body}"
+                             Text="{Binding SourceText}"
+                             TextTrimming="CharacterEllipsis" />
+
+                  <Border Grid.Row="1"
+                          Grid.Column="0"
+                          Style="{DynamicResource Editor.StatusBadge}"
+                          Background="{Binding Status, Converter={StaticResource TranslationStatusToBrush}}"
+                          Opacity="0.16">
+                    <TextBlock Style="{DynamicResource Editor.StatusBadgeText}"
+                               Foreground="{Binding Status, Converter={StaticResource TranslationStatusToBrush}}"
+                               Text="{Binding Status, Converter={StaticResource TranslationStatusToLabel}}" />
+                  </Border>
+
+                  <controls:SvgIcon Grid.Row="1"
+                                    Grid.Column="1"
+                                    VerticalAlignment="Center"
+                                    Data="{StaticResource Icon.alert-triangle}"
+                                    Foreground="#FFD18A1D"
+                                    IconSize="16"
+                                    Visibility="{Binding ExceedsLengthLimit, Converter={StaticResource BoolToVisibility}}" />
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+
+          <TextBlock HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Style="{DynamicResource Text.Secondary}"
+                     Text="{x:Static loc:Strings.Editor_NoResults}"
+                     TextAlignment="Center"
+                     TextWrapping="Wrap"
+                     Visibility="{Binding Entries.Count, Converter={StaticResource CountToVisibility}, ConverterParameter=Invert}" />
+        </Grid>
+      </Border>
+
+      <!-- Panneau d'édition de l'entrée sélectionnée -->
+      <Border Grid.Column="2" Style="{DynamicResource Surface.Card}">
+        <Grid>
+          <StackPanel Visibility="{Binding SelectedEntry, Converter={StaticResource NullToVisibility}}"
+                      DataContext="{Binding SelectedEntry}">
+
+            <Grid>
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+              </Grid.ColumnDefinitions>
+
+              <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <TextBlock VerticalAlignment="Center"
+                           Style="{DynamicResource Text.Secondary}"
+                           Text="{x:Static loc:Strings.Editor_OffsetLabel}" />
+                <TextBlock Margin="6,0,0,0"
+                           VerticalAlignment="Center"
+                           FontFamily="Consolas"
+                           Style="{DynamicResource Text.Secondary}"
+                           Text="{Binding OffsetDisplay}" />
+              </StackPanel>
+
+              <ComboBox Grid.Column="1"
+                        MinWidth="140"
+                        ItemsSource="{Binding Source={StaticResource StatusValues}}"
+                        SelectedItem="{Binding Status}" />
+            </Grid>
+
+            <TextBlock Margin="0,20,0,6" Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.Editor_SourceTextLabel}" />
+            <TextBox MinHeight="80"
+                     Style="{DynamicResource Editor.SourceTextBox}"
+                     Text="{Binding SourceText, Mode=OneWay}" />
+
+            <TextBlock Margin="0,20,0,6" Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.Editor_TranslatedTextLabel}" />
+            <TextBox MinHeight="80"
+                     Style="{DynamicResource Editor.TranslationTextBox}"
+                     Text="{Binding TranslatedText, UpdateSourceTrigger=PropertyChanged}" />
+
+            <TextBlock Margin="0,8,0,0"
+                       Style="{DynamicResource Text.Secondary}"
+                       Text="{Binding OccurrenceCountDisplayText}" />
+
+            <Border Margin="0,8,0,0"
+                    Padding="10,6"
+                    Background="#1AD18A1D"
+                    BorderBrush="#FFD18A1D"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                    Visibility="{Binding ExceedsLengthLimit, Converter={StaticResource BoolToVisibility}}">
+              <StackPanel Orientation="Horizontal">
+                <controls:SvgIcon VerticalAlignment="Center" Data="{StaticResource Icon.alert-triangle}" Foreground="#FFD18A1D" IconSize="16" />
+                <TextBlock Margin="8,0,0,0"
+                           VerticalAlignment="Center"
+                           Foreground="#FFD18A1D"
+                           Style="{DynamicResource Text.Secondary}"
+                           Text="{Binding LengthLimitExceededMessage}"
+                           TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+
+            <TextBlock Margin="0,6,0,0"
+                       Style="{DynamicResource Text.Secondary}"
+                       Text="{Binding LengthLimitDisplayText}"
+                       Visibility="{Binding LengthLimitDisplayText, Converter={StaticResource NullToVisibility}}" />
+
+            <TextBlock Margin="0,20,0,6"
+                       Style="{DynamicResource Text.Subheading}"
+                       Text="{x:Static loc:Strings.Editor_ContextLabel}"
+                       Visibility="{Binding Context, Converter={StaticResource NullToVisibility}}" />
+            <TextBlock Style="{DynamicResource Text.Secondary}"
+                       Text="{Binding Context}"
+                       TextWrapping="Wrap"
+                       Visibility="{Binding Context, Converter={StaticResource NullToVisibility}}" />
+          </StackPanel>
+
+          <TextBlock HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Style="{DynamicResource Text.Secondary}"
+                     Text="{x:Static loc:Strings.Editor_NoSelection}"
+                     Visibility="{Binding SelectedEntry, Converter={StaticResource NullToVisibility}, ConverterParameter=Invert}" />
+        </Grid>
+      </Border>
+    </Grid>
+  </Grid>
+</UserControl>

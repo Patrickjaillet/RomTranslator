@@ -31,6 +31,9 @@
     <DataTemplate DataType="{x:Type vm:HomeViewModel}">
       <views:HomeView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:TranslationEditorViewModel}">
+      <views:TranslationEditorView />
+    </DataTemplate>
 
     <DataTemplate x:Key="CommandBarButtonTemplate">
       <controls:SvgButton Margin="0,0,4,0"

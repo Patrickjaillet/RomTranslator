@@ -56,4 +56,16 @@ public static class IconKeys
 
     /// <summary>Quitter.</summary>
     public const string Exit = "exit";
+
+    /// <summary>Recherche.</summary>
+    public const string Search = "search";
+
+    /// <summary>Filtre.</summary>
+    public const string Filter = "filter";
+
+    /// <summary>Validation, entrée traitée.</summary>
+    public const string Check = "check";
+
+    /// <summary>Alerte (dépassement de la limite de longueur).</summary>
+    public const string AlertTriangle = "alert-triangle";
 }

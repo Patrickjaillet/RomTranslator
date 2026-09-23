@@ -242,4 +242,66 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   <data name="Application_Title" xml:space="preserve">
     <value>RomTranslator</value>
   </data>
+
+  <!-- Translation editor -->
+  <data name="TranslationStatus_NotTranslated" xml:space="preserve">
+    <value>Not translated</value>
+  </data>
+  <data name="TranslationStatus_InProgress" xml:space="preserve">
+    <value>In progress</value>
+  </data>
+  <data name="TranslationStatus_Translated" xml:space="preserve">
+    <value>Translated</value>
+  </data>
+  <data name="TranslationStatus_Validated" xml:space="preserve">
+    <value>Validated</value>
+  </data>
+  <data name="Editor_SearchPlaceholder" xml:space="preserve">
+    <value>Search in the source text or the translation…</value>
+  </data>
+  <data name="Editor_FilterAll" xml:space="preserve">
+    <value>All entries</value>
+  </data>
+  <data name="Editor_FilterExceedsLimit" xml:space="preserve">
+    <value>Length overruns</value>
+  </data>
+  <data name="Editor_SourceTextLabel" xml:space="preserve">
+    <value>Source text</value>
+  </data>
+  <data name="Editor_TranslatedTextLabel" xml:space="preserve">
+    <value>Translation</value>
+  </data>
+  <data name="Editor_ContextLabel" xml:space="preserve">
+    <value>Context</value>
+  </data>
+  <data name="Editor_StatusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Editor_OffsetLabel" xml:space="preserve">
+    <value>Offset in the ROM</value>
+  </data>
+  <data name="Editor_OccurrenceCountLabel" xml:space="preserve">
+    <value>{0} occurrence(s) grouped</value>
+  </data>
+  <data name="Editor_LengthLimitLabel" xml:space="preserve">
+    <value>{0} / {1} bytes</value>
+  </data>
+  <data name="Editor_LengthLimitExceeded" xml:space="preserve">
+    <value>The translation exceeds the {1}-byte limit ({0} bytes).</value>
+  </data>
+  <data name="Editor_ProgressSummary" xml:space="preserve">
+    <value>{0} of {1} entries translated ({2}%)</value>
+  </data>
+  <data name="Editor_NoSelection" xml:space="preserve">
+    <value>Select an entry from the list to edit it.</value>
+  </data>
+  <data name="Editor_NoResults" xml:space="preserve">
+    <value>No entry matches the current search or filter.</value>
+  </data>
+  <data name="Editor_Undo_ToolTip" xml:space="preserve">
+    <value>Undo the last change</value>
+  </data>
+  <data name="Editor_Redo_ToolTip" xml:space="preserve">
+    <value>Redo the undone change</value>
+  </data>
 </root>

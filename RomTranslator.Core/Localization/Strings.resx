@@ -242,4 +242,66 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="Application_Title" xml:space="preserve">
     <value>RomTranslator</value>
   </data>
+
+  <!-- Éditeur de traduction -->
+  <data name="TranslationStatus_NotTranslated" xml:space="preserve">
+    <value>Non traduit</value>
+  </data>
+  <data name="TranslationStatus_InProgress" xml:space="preserve">
+    <value>En cours</value>
+  </data>
+  <data name="TranslationStatus_Translated" xml:space="preserve">
+    <value>Traduit</value>
+  </data>
+  <data name="TranslationStatus_Validated" xml:space="preserve">
+    <value>Validé</value>
+  </data>
+  <data name="Editor_SearchPlaceholder" xml:space="preserve">
+    <value>Rechercher dans le texte source ou la traduction…</value>
+  </data>
+  <data name="Editor_FilterAll" xml:space="preserve">
+    <value>Toutes les entrées</value>
+  </data>
+  <data name="Editor_FilterExceedsLimit" xml:space="preserve">
+    <value>Dépassements de longueur</value>
+  </data>
+  <data name="Editor_SourceTextLabel" xml:space="preserve">
+    <value>Texte source</value>
+  </data>
+  <data name="Editor_TranslatedTextLabel" xml:space="preserve">
+    <value>Traduction</value>
+  </data>
+  <data name="Editor_ContextLabel" xml:space="preserve">
+    <value>Contexte</value>
+  </data>
+  <data name="Editor_StatusLabel" xml:space="preserve">
+    <value>Statut</value>
+  </data>
+  <data name="Editor_OffsetLabel" xml:space="preserve">
+    <value>Décalage dans la ROM</value>
+  </data>
+  <data name="Editor_OccurrenceCountLabel" xml:space="preserve">
+    <value>{0} occurrence(s) regroupée(s)</value>
+  </data>
+  <data name="Editor_LengthLimitLabel" xml:space="preserve">
+    <value>{0} / {1} octets</value>
+  </data>
+  <data name="Editor_LengthLimitExceeded" xml:space="preserve">
+    <value>La traduction dépasse la limite de {1} octets ({0} octets).</value>
+  </data>
+  <data name="Editor_ProgressSummary" xml:space="preserve">
+    <value>{0} sur {1} entrées traduites ({2} %)</value>
+  </data>
+  <data name="Editor_NoSelection" xml:space="preserve">
+    <value>Sélectionnez une entrée dans la liste pour l'éditer.</value>
+  </data>
+  <data name="Editor_NoResults" xml:space="preserve">
+    <value>Aucune entrée ne correspond à la recherche ou au filtre actif.</value>
+  </data>
+  <data name="Editor_Undo_ToolTip" xml:space="preserve">
+    <value>Annuler la dernière modification</value>
+  </data>
+  <data name="Editor_Redo_ToolTip" xml:space="preserve">
+    <value>Rétablir la modification annulée</value>
+  </data>
 </root>

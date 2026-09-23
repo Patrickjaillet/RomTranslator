@@ -40,4 +40,78 @@
     <Setter Property="Padding" Value="{DynamicResource Metrics.CardPadding}" />
   </Style>
 
+  <!-- Éditeur de traduction : badge de statut (pastille + libellé sur fond teinté). -->
+  <Style x:Key="Editor.StatusBadge" TargetType="{x:Type Border}">
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Padding" Value="8,3" />
+    <Setter Property="HorizontalAlignment" Value="Left" />
+  </Style>
+
+  <Style x:Key="Editor.StatusBadgeText" TargetType="{x:Type TextBlock}">
+    <Setter Property="FontSize" Value="12" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+  </Style>
+
+  <!-- Ligne de la liste des entrées : mise en évidence douce au survol et à la sélection. -->
+  <Style x:Key="Editor.EntryRow" TargetType="{x:Type ListBoxItem}">
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="Margin" Value="0,0,0,4" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="{x:Type ListBoxItem}">
+          <Border x:Name="RowBorder"
+                  Padding="{TemplateBinding Padding}"
+                  Background="Transparent"
+                  BorderThickness="1,1,1,1"
+                  BorderBrush="Transparent"
+                  CornerRadius="6">
+            <ContentPresenter />
+          </Border>
+          <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+              <Setter TargetName="RowBorder" Property="Background" Value="{DynamicResource SubtleFillColorSecondaryBrush}" />
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+              <Setter TargetName="RowBorder" Property="Background" Value="{DynamicResource SubtleFillColorTertiaryBrush}" />
+              <Setter TargetName="RowBorder" Property="BorderBrush" Value="{DynamicResource Palette.AccentBrush}" />
+            </Trigger>
+          </ControlTemplate.Triggers>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Zone de texte source : lecture seule, fond légèrement distinct du reste du panneau. -->
+  <Style x:Key="Editor.SourceTextBox" TargetType="{x:Type TextBox}">
+    <Setter Property="IsReadOnly" Value="True" />
+    <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DividerStrokeColorDefaultBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="AcceptsReturn" Value="True" />
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+  </Style>
+
+  <!-- Zone de traduction éditable : bordure d'accent au focus, contour d'alerte en cas de dépassement de longueur. -->
+  <Style x:Key="Editor.TranslationTextBox" TargetType="{x:Type TextBox}">
+    <Setter Property="Background" Value="{DynamicResource ControlFillColorDefaultBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource DividerStrokeColorDefaultBrush}" />
+    <Setter Property="BorderThickness" Value="1.5" />
+    <Setter Property="Padding" Value="12,10" />
+    <Setter Property="TextWrapping" Value="Wrap" />
+    <Setter Property="AcceptsReturn" Value="True" />
+    <Setter Property="VerticalScrollBarVisibility" Value="Auto" />
+    <Setter Property="FontSize" Value="14" />
+    <Setter Property="Foreground" Value="{DynamicResource TextFillColorPrimaryBrush}" />
+    <Style.Triggers>
+      <Trigger Property="IsKeyboardFocusWithin" Value="True">
+        <Setter Property="BorderBrush" Value="{DynamicResource Palette.AccentBrush}" />
+      </Trigger>
+    </Style.Triggers>
+  </Style>
+
 </ResourceDictionary>
