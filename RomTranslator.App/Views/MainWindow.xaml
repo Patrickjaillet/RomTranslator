@@ -9,6 +9,7 @@
                  xmlns:controls="clr-namespace:RomTranslator.App.Controls"
                  xmlns:vm="clr-namespace:RomTranslator.App.ViewModels"
                  xmlns:views="clr-namespace:RomTranslator.App.Views"
+                 xmlns:loc="clr-namespace:RomTranslator.Core.Localization;assembly=RomTranslator.Core"
                  Title="RomTranslator"
                  Width="1280"
                  Height="720"
@@ -57,7 +58,7 @@
 
     <!-- Menu principal -->
     <Menu Grid.Row="1" Margin="8,0,8,0" Background="Transparent">
-        <MenuItem Header="_Fichier">
+        <MenuItem Header="{x:Static loc:Strings.Menu_File}">
             <MenuItem DataContext="{Binding NewProject}"
                       Command="{Binding Command}"
                       Header="{Binding Header}"
@@ -105,7 +106,7 @@
               </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
-        <MenuItem Header="_Édition">
+        <MenuItem Header="{x:Static loc:Strings.Menu_Edit}">
             <MenuItem DataContext="{Binding Undo}"
                       Command="{Binding Command}"
                       Header="{Binding Header}"
@@ -125,7 +126,7 @@
               </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
-        <MenuItem Header="_Outils">
+        <MenuItem Header="{x:Static loc:Strings.Menu_Tools}">
             <MenuItem DataContext="{Binding Settings}"
                       Command="{Binding Command}"
                       Header="{Binding Header}"
@@ -136,7 +137,7 @@
               </MenuItem.Icon>
             </MenuItem>
         </MenuItem>
-        <MenuItem Header="_Aide">
+        <MenuItem Header="{x:Static loc:Strings.Menu_Help}">
             <MenuItem DataContext="{Binding Help}"
                       Command="{Binding Command}"
                       Header="{Binding Header}"
@@ -254,7 +255,7 @@
                    VerticalAlignment="Center"
                    Style="{DynamicResource Text.Secondary}"
                    Text="{Binding Status.LanguageCode}"
-                   ToolTip="Langue de l'interface" />
+                   ToolTip="{x:Static loc:Strings.StatusBar_LanguageToolTip}" />
       </Grid>
     </Border>
   </Grid>

@@ -3,11 +3,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.App.Services;
 using RomTranslator.Core.Configuration;
 using RomTranslator.Core.Information;
+using RomTranslator.Core.Localization;
 
 namespace RomTranslator.App.ViewModels;
 
@@ -48,37 +50,37 @@ public sealed class MainViewModel
         Status = new StatusBarViewModel(languageCode);
 
         Website = new LinkItemViewModel(
-            "Site officiel", "Ouvrir le site officiel et la documentation", IconKeys.Website, ProjectLinks.WebsiteUrl, urlLauncher, ReportLinkFailure);
+            Strings.Link_Website, Strings.Link_Website_Description, IconKeys.Website, ProjectLinks.WebsiteUrl, urlLauncher, ReportLinkFailure);
         Repository = new LinkItemViewModel(
-            "Code source", "Consulter le code source du projet", IconKeys.Repository, ProjectLinks.RepositoryUrl, urlLauncher, ReportLinkFailure);
+            Strings.Menu_Help_Repository, Strings.Link_Repository_Description, IconKeys.Repository, ProjectLinks.RepositoryUrl, urlLauncher, ReportLinkFailure);
         Releases = new LinkItemViewModel(
-            "Versions", "Télécharger la dernière version portable", IconKeys.Releases, ProjectLinks.ReleasesUrl, urlLauncher, ReportLinkFailure);
+            Strings.Menu_Help_Releases, Strings.Link_Releases_Description, IconKeys.Releases, ProjectLinks.ReleasesUrl, urlLauncher, ReportLinkFailure);
         Contact = new LinkItemViewModel(
-            "Contact", "Écrire à l'auteur", IconKeys.Contact, ProjectLinks.ContactUrl, urlLauncher, ReportLinkFailure);
+            Strings.Menu_Help_Contact, Strings.Link_Contact_Description, IconKeys.Contact, ProjectLinks.ContactUrl, urlLauncher, ReportLinkFailure);
         Links = new[] { Website, Repository, Releases, Contact };
 
         Home = new HomeViewModel(info, Links);
         Tabs = new TabsViewModel(settings.Window.LastActiveTabId);
-        Tabs.AddTab(new TabItemViewModel(HomeTabId, "Accueil", IconKeys.Home, Home, isPermanent: true));
+        Tabs.AddTab(new TabItemViewModel(HomeTabId, Strings.Tab_Home, IconKeys.Home, Home, isPermanent: true));
 
-        NewProject = Unavailable("Nouveau projet…", "Créer un projet de traduction (bientôt disponible)", IconKeys.NewProject, "Ctrl+N");
-        OpenProject = Unavailable("Ouvrir un projet…", "Ouvrir un projet de traduction (bientôt disponible)", IconKeys.Open, "Ctrl+O");
-        SaveProject = Unavailable("Enregistrer", "Enregistrer le projet (bientôt disponible)", IconKeys.Save, "Ctrl+S");
-        ExportProject = Unavailable("Exporter…", "Exporter la traduction (bientôt disponible)", IconKeys.Export, "Ctrl+E");
-        Exit = new AppCommandViewModel("Quitter", "Fermer RomTranslator", IconKeys.Exit, new RelayCommand(exit), "Alt+F4");
+        NewProject = Unavailable(Strings.Menu_File_NewProject, Strings.Menu_File_NewProject_ToolTip, IconKeys.NewProject, "Ctrl+N");
+        OpenProject = Unavailable(Strings.Menu_File_OpenProject, Strings.Menu_File_OpenProject_ToolTip, IconKeys.Open, "Ctrl+O");
+        SaveProject = Unavailable(Strings.Menu_File_SaveProject, Strings.Menu_File_SaveProject_ToolTip, IconKeys.Save, "Ctrl+S");
+        ExportProject = Unavailable(Strings.Menu_File_ExportProject, Strings.Menu_File_ExportProject_ToolTip, IconKeys.Export, "Ctrl+E");
+        Exit = new AppCommandViewModel(Strings.Menu_File_Exit, Strings.Menu_File_Exit_ToolTip, IconKeys.Exit, new RelayCommand(exit), "Alt+F4");
 
-        Undo = Unavailable("Annuler", "Annuler la dernière modification (bientôt disponible)", IconKeys.Undo);
-        Redo = Unavailable("Rétablir", "Rétablir la modification annulée (bientôt disponible)", IconKeys.Redo);
+        Undo = Unavailable(Strings.Menu_Edit_Undo, Strings.Menu_Edit_Undo_ToolTip, IconKeys.Undo);
+        Redo = Unavailable(Strings.Menu_Edit_Redo, Strings.Menu_Edit_Redo_ToolTip, IconKeys.Redo);
 
-        Settings = Unavailable("Paramètres…", "Ouvrir les paramètres (bientôt disponible)", IconKeys.Settings);
+        Settings = Unavailable(Strings.Menu_Tools_Settings, Strings.Menu_Tools_Settings_ToolTip, IconKeys.Settings);
 
-        Help = new AppCommandViewModel("Aide en ligne", "Ouvrir l'aide en ligne", IconKeys.Help, Website.Command);
-        About = Unavailable("À propos de RomTranslator", "Informations sur l'application (bientôt disponible)", IconKeys.About);
+        Help = new AppCommandViewModel(Strings.Menu_Help_Online, Strings.Menu_Help_Online_ToolTip, IconKeys.Help, Website.Command);
+        About = Unavailable(Strings.Menu_Help_About, Strings.Menu_Help_About_ToolTip, IconKeys.About);
 
         CommandBarPrimary = new[] { NewProject, OpenProject, SaveProject, ExportProject };
         CommandBarSecondary = new[] { Settings, Help };
 
-        Status.ReportMessage("Prêt");
+        Status.ReportMessage(Strings.StatusBar_Ready);
     }
 
     /// <summary>Identité de l'application.</summary>
@@ -175,6 +177,6 @@ public sealed class MainViewModel
 
     private void ReportLinkFailure(string url)
     {
-        Status.ReportMessage("Impossible d'ouvrir : " + url);
+        Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_LinkOpenFailed, url));
     }
 }

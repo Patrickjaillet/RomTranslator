@@ -4,6 +4,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Windows.Media;
 using RomTranslator.App.Services;
@@ -11,6 +12,7 @@ using RomTranslator.App.ViewModels;
 using RomTranslator.Core.Configuration;
 using RomTranslator.Core.Diagnostics;
 using RomTranslator.Core.Information;
+using RomTranslator.Core.Localization;
 using RomTranslator.Core.Portability;
 
 namespace RomTranslator.App;
@@ -36,8 +38,15 @@ public partial class App : Application
 
         SettingsStore settingsStore = new(locations);
         AppSettings settings = settingsStore.Load();
+
+        CultureInfo culture = LanguageSelector.Resolve(settings.LanguageCode, CultureInfo.CurrentUICulture.TwoLetterISOLanguageName);
+        CultureInfo.CurrentUICulture = culture;
+        CultureInfo.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentUICulture = culture;
+        Thread.CurrentThread.CurrentCulture = culture;
+
         ApplicationInfo info = ApplicationInfo.FromAssembly(typeof(App).Assembly);
-        string languageCode = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName.ToUpperInvariant();
+        string languageCode = culture.TwoLetterISOLanguageName.ToUpperInvariant();
 
         MainViewModel viewModel = new(info, settingsStore, settings, new ShellUrlLauncher(), Shutdown, languageCode);
 
@@ -56,9 +65,8 @@ public partial class App : Application
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
             MessageBox.Show(
-                "RomTranslator ne peut pas écrire dans son dossier :\n" + locations.RootDirectory
-                + "\n\nDéplacez l'application dans un dossier accessible en écriture (bureau, disque externe, etc.).",
-                "RomTranslator",
+                string.Format(CultureInfo.CurrentCulture, Strings.Startup_StorageNotWritable, locations.RootDirectory),
+                Strings.Application_Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             return false;
@@ -73,12 +81,12 @@ public partial class App : Application
             args.Handled = true;
 
             string details = reportPath is null
-                ? "Le rapport d'erreur n'a pas pu être enregistré."
-                : "Un rapport d'erreur a été enregistré dans :\n" + reportPath;
+                ? Strings.Startup_CrashReportNotSaved
+                : string.Format(CultureInfo.CurrentCulture, Strings.Startup_CrashReportSaved, reportPath);
 
             MessageBox.Show(
-                "RomTranslator a rencontré une erreur inattendue et va se fermer.\n\n" + details,
-                "RomTranslator",
+                string.Format(CultureInfo.CurrentCulture, Strings.Startup_UnhandledException, details),
+                Strings.Application_Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
             Shutdown(1);

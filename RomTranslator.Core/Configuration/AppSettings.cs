@@ -20,4 +20,10 @@ public sealed class AppSettings
         get => _window;
         set => _window = value ?? new WindowSettings();
     }
+
+    /// <summary>
+    /// Langue d'interface choisie explicitement (« fr » ou « en »), ou <see langword="null" /> pour suivre
+    /// la langue du système. Le changement de langue nécessite un redémarrage de l'application.
+    /// </summary>
+    public string? LanguageCode { get; set; }
 }

@@ -23,6 +23,20 @@ public sealed class SettingsStoreTests
         Assert.Null(settings.Window.Left);
         Assert.Null(settings.Window.LastActiveTabId);
         Assert.False(settings.Window.IsMaximized);
+        Assert.Null(settings.LanguageCode);
+    }
+
+    [Fact]
+    public void Save_then_Load_round_trips_the_language_code()
+    {
+        using TemporaryDirectory temp = new();
+        PortableLocations locations = new(temp.FullPath);
+        AppSettings settings = new() { LanguageCode = "en" };
+
+        new SettingsStore(locations).Save(settings);
+        AppSettings loaded = new SettingsStore(locations).Load();
+
+        Assert.Equal("en", loaded.LanguageCode);
     }
 
     [Fact]

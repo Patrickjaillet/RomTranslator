@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<root>
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+
+  <!-- Menu Fichier -->
+  <data name="Menu_File" xml:space="preserve">
+    <value>_Fichier</value>
+  </data>
+  <data name="Menu_File_NewProject" xml:space="preserve">
+    <value>Nouveau projet…</value>
+  </data>
+  <data name="Menu_File_NewProject_ToolTip" xml:space="preserve">
+    <value>Créer un projet de traduction (bientôt disponible)</value>
+  </data>
+  <data name="Menu_File_OpenProject" xml:space="preserve">
+    <value>Ouvrir un projet…</value>
+  </data>
+  <data name="Menu_File_OpenProject_ToolTip" xml:space="preserve">
+    <value>Ouvrir un projet de traduction (bientôt disponible)</value>
+  </data>
+  <data name="Menu_File_SaveProject" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Menu_File_SaveProject_ToolTip" xml:space="preserve">
+    <value>Enregistrer le projet (bientôt disponible)</value>
+  </data>
+  <data name="Menu_File_ExportProject" xml:space="preserve">
+    <value>Exporter…</value>
+  </data>
+  <data name="Menu_File_ExportProject_ToolTip" xml:space="preserve">
+    <value>Exporter la traduction (bientôt disponible)</value>
+  </data>
+  <data name="Menu_File_Exit" xml:space="preserve">
+    <value>Quitter</value>
+  </data>
+  <data name="Menu_File_Exit_ToolTip" xml:space="preserve">
+    <value>Fermer RomTranslator</value>
+  </data>
+
+  <!-- Menu Édition -->
+  <data name="Menu_Edit" xml:space="preserve">
+    <value>_Édition</value>
+  </data>
+  <data name="Menu_Edit_Undo" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="Menu_Edit_Undo_ToolTip" xml:space="preserve">
+    <value>Annuler la dernière modification (bientôt disponible)</value>
+  </data>
+  <data name="Menu_Edit_Redo" xml:space="preserve">
+    <value>Rétablir</value>
+  </data>
+  <data name="Menu_Edit_Redo_ToolTip" xml:space="preserve">
+    <value>Rétablir la modification annulée (bientôt disponible)</value>
+  </data>
+
+  <!-- Menu Outils -->
+  <data name="Menu_Tools" xml:space="preserve">
+    <value>_Outils</value>
+  </data>
+  <data name="Menu_Tools_Settings" xml:space="preserve">
+    <value>Paramètres…</value>
+  </data>
+  <data name="Menu_Tools_Settings_ToolTip" xml:space="preserve">
+    <value>Ouvrir les paramètres (bientôt disponible)</value>
+  </data>
+
+  <!-- Menu Aide -->
+  <data name="Menu_Help" xml:space="preserve">
+    <value>_Aide</value>
+  </data>
+  <data name="Menu_Help_Online" xml:space="preserve">
+    <value>Aide en ligne</value>
+  </data>
+  <data name="Menu_Help_Online_ToolTip" xml:space="preserve">
+    <value>Ouvrir l'aide en ligne</value>
+  </data>
+  <data name="Menu_Help_Repository" xml:space="preserve">
+    <value>Code source</value>
+  </data>
+  <data name="Menu_Help_Repository_ToolTip" xml:space="preserve">
+    <value>Consulter le code source du projet</value>
+  </data>
+  <data name="Menu_Help_Releases" xml:space="preserve">
+    <value>Versions</value>
+  </data>
+  <data name="Menu_Help_Releases_ToolTip" xml:space="preserve">
+    <value>Télécharger la dernière version portable</value>
+  </data>
+  <data name="Menu_Help_Contact" xml:space="preserve">
+    <value>Contact</value>
+  </data>
+  <data name="Menu_Help_Contact_ToolTip" xml:space="preserve">
+    <value>Écrire à l'auteur</value>
+  </data>
+  <data name="Menu_Help_About" xml:space="preserve">
+    <value>À propos de RomTranslator</value>
+  </data>
+  <data name="Menu_Help_About_ToolTip" xml:space="preserve">
+    <value>Informations sur l'application (bientôt disponible)</value>
+  </data>
+
+  <!-- Liens du projet (réutilisés par l'accueil) -->
+  <data name="Link_Website" xml:space="preserve">
+    <value>Site officiel</value>
+  </data>
+  <data name="Link_Website_Description" xml:space="preserve">
+    <value>Ouvrir le site officiel et la documentation</value>
+  </data>
+  <data name="Link_Repository_Description" xml:space="preserve">
+    <value>Consulter le code source du projet</value>
+  </data>
+  <data name="Link_Releases_Description" xml:space="preserve">
+    <value>Télécharger la dernière version portable</value>
+  </data>
+  <data name="Link_Contact_Description" xml:space="preserve">
+    <value>Écrire à l'auteur</value>
+  </data>
+  <data name="Link_Open" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+
+  <!-- Onglets -->
+  <data name="Tab_Home" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+
+  <!-- Barre de statut -->
+  <data name="StatusBar_Ready" xml:space="preserve">
+    <value>Prêt</value>
+  </data>
+  <data name="StatusBar_LinkOpenFailed" xml:space="preserve">
+    <value>Impossible d'ouvrir : {0}</value>
+  </data>
+  <data name="StatusBar_LanguageToolTip" xml:space="preserve">
+    <value>Langue de l'interface</value>
+  </data>
+
+  <!-- Écran d'accueil -->
+  <data name="Home_Welcome" xml:space="preserve">
+    <value>Bienvenue dans {0}</value>
+  </data>
+  <data name="Home_Description" xml:space="preserve">
+    <value>Traduisez des ROMs de jeux vidéo en français : extraction du texte, édition de la traduction, puis réinjection dans une image prête à l'emploi.</value>
+  </data>
+  <data name="Home_VersionPrefix" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="Home_OneTabPerConsole_Title" xml:space="preserve">
+    <value>Un onglet par console</value>
+  </data>
+  <data name="Home_OneTabPerConsole_Description" xml:space="preserve">
+    <value>Chaque console prise en charge apparaît dans un onglet dédié, à droite de cet onglet d'accueil. Le module Sega Saturn sera le premier disponible.</value>
+  </data>
+  <data name="Home_UsefulLinks" xml:space="preserve">
+    <value>Liens utiles</value>
+  </data>
+  <data name="Home_License" xml:space="preserve">
+    <value>Logiciel libre distribué sous licence GNU GPL v3.</value>
+  </data>
+
+  <!-- Démarrage et erreurs fatales -->
+  <data name="Startup_StorageNotWritable" xml:space="preserve">
+    <value>RomTranslator ne peut pas écrire dans son dossier :
+{0}
+
+Déplacez l'application dans un dossier accessible en écriture (bureau, disque externe, etc.).</value>
+  </data>
+  <data name="Startup_CrashReportSaved" xml:space="preserve">
+    <value>Un rapport d'erreur a été enregistré dans :
+{0}</value>
+  </data>
+  <data name="Startup_CrashReportNotSaved" xml:space="preserve">
+    <value>Le rapport d'erreur n'a pas pu être enregistré.</value>
+  </data>
+  <data name="Startup_UnhandledException" xml:space="preserve">
+    <value>RomTranslator a rencontré une erreur inattendue et va se fermer.
+
+{0}</value>
+  </data>
+  <data name="Application_Title" xml:space="preserve">
+    <value>RomTranslator</value>
+  </data>
+</root>

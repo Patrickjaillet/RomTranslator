@@ -3,7 +3,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using RomTranslator.Core.Information;
+using RomTranslator.Core.Localization;
 
 namespace RomTranslator.App.ViewModels;
 
@@ -16,14 +18,14 @@ public sealed class HomeViewModel
         ArgumentNullException.ThrowIfNull(info);
         ArgumentNullException.ThrowIfNull(links);
 
-        ProductName = info.Name;
-        VersionText = "Version " + info.Version;
+        WelcomeText = string.Format(CultureInfo.CurrentCulture, Strings.Home_Welcome, info.Name);
+        VersionText = string.Format(CultureInfo.CurrentCulture, Strings.Home_VersionPrefix, info.Version);
         CopyrightText = info.Copyright;
         Links = links;
     }
 
-    /// <summary>Nom du produit.</summary>
-    public string ProductName { get; }
+    /// <summary>Message de bienvenue avec le nom du produit.</summary>
+    public string WelcomeText { get; }
 
     /// <summary>Version affichée.</summary>
     public string VersionText { get; }
@@ -32,7 +34,7 @@ public sealed class HomeViewModel
     public string CopyrightText { get; }
 
     /// <summary>Mention de licence.</summary>
-    public string LicenseText => "Logiciel libre distribué sous licence GNU GPL v3.";
+    public string LicenseText => Strings.Home_License;
 
     /// <summary>Liens vers le site, le code source, les versions et le contact.</summary>
     public IReadOnlyList<LinkItemViewModel> Links { get; }
