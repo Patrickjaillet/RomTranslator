@@ -4,8 +4,10 @@
 using System;
 using System.ComponentModel;
 using System.Windows;
+using RomTranslator.App.Services;
 using RomTranslator.App.ViewModels;
 using RomTranslator.Core.Configuration;
+using RomTranslator.Core.Portability;
 
 namespace RomTranslator.App.Views;
 
@@ -73,5 +75,28 @@ public partial class MainWindow : Wpf.Ui.Controls.FluentWindow
             Height = bounds.Height,
             IsMaximized = WindowState == WindowState.Maximized,
         };
+    }
+
+    /// <summary>Ouvre l'écran de paramètres, modal par rapport à la fenêtre principale.</summary>
+    internal static void ShowSettings(Window owner, SettingsStore settingsStore, AppSettings settings, PortableLocations locations)
+    {
+        SettingsViewModel viewModel = new(
+            settingsStore,
+            settings,
+            locations,
+            new ShellFolderLauncher(),
+            message => (owner as MainWindow)?._viewModel.Status.ReportMessage(message));
+
+        SettingsWindow window = new(viewModel) { Owner = owner };
+        window.ShowDialog();
+    }
+
+    /// <summary>Ouvre la boîte de dialogue « À propos », modale par rapport à la fenêtre principale.</summary>
+    internal static void ShowAbout(Window owner, MainViewModel mainViewModel)
+    {
+        AboutViewModel viewModel = new(mainViewModel.Info, mainViewModel.Website, mainViewModel.Repository);
+
+        AboutWindow window = new(viewModel) { Owner = owner };
+        window.ShowDialog();
     }
 }

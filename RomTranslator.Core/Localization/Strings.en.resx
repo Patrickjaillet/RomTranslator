@@ -304,4 +304,62 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   <data name="Editor_Redo_ToolTip" xml:space="preserve">
     <value>Redo the undone change</value>
   </data>
+
+  <!-- About box -->
+  <data name="About_Title" xml:space="preserve">
+    <value>About RomTranslator</value>
+  </data>
+  <data name="About_Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+
+  <!-- Settings screen -->
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="Settings_LanguageSection" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="Settings_LanguageLabel" xml:space="preserve">
+    <value>Interface language</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>Follow the system language</value>
+  </data>
+  <data name="Settings_LanguageFrench" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="Settings_LanguageEnglish" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_LanguageRestartNotice" xml:space="preserve">
+    <value>The language change will take effect the next time RomTranslator starts.</value>
+  </data>
+  <data name="Settings_ThemeSection" xml:space="preserve">
+    <value>Theme</value>
+  </data>
+  <data name="Settings_ThemeLightOnly" xml:space="preserve">
+    <value>Light theme (locked, no dark mode is offered)</value>
+  </data>
+  <data name="Settings_FoldersSection" xml:space="preserve">
+    <value>Portable folders</value>
+  </data>
+  <data name="Settings_ConfigFolderLabel" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="Settings_ProjectsFolderLabel" xml:space="preserve">
+    <value>Projects</value>
+  </data>
+  <data name="Settings_LogsFolderLabel" xml:space="preserve">
+    <value>Logs</value>
+  </data>
+  <data name="Settings_OpenFolder" xml:space="preserve">
+    <value>Open</value>
+  </data>
+  <data name="Settings_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Settings_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

@@ -20,9 +20,19 @@ public sealed class MainViewModelTests
         PortableLocations locations,
         FakeUrlLauncher launcher,
         Action? exit = null,
-        AppSettings? settings = null)
+        AppSettings? settings = null,
+        Action? openSettings = null,
+        Action? openAbout = null)
     {
-        return new MainViewModel(_info, new SettingsStore(locations), settings ?? new AppSettings(), launcher, exit ?? (() => { }), "FR");
+        return new MainViewModel(
+            _info,
+            new SettingsStore(locations),
+            settings ?? new AppSettings(),
+            launcher,
+            exit ?? (() => { }),
+            "FR",
+            openSettings ?? (() => { }),
+            openAbout ?? (() => { }));
     }
 
     [Fact]
@@ -58,13 +68,39 @@ public sealed class MainViewModelTests
         AppCommandViewModel[] pending =
         {
             viewModel.NewProject, viewModel.OpenProject, viewModel.SaveProject, viewModel.ExportProject,
-            viewModel.Undo, viewModel.Redo, viewModel.Settings, viewModel.About,
+            viewModel.Undo, viewModel.Redo,
         };
 
         foreach (AppCommandViewModel command in pending)
         {
             Assert.False(command.Command.CanExecute(null), command.Header);
         }
+    }
+
+    [Fact]
+    public void Settings_command_invokes_the_open_settings_action()
+    {
+        using TemporaryDirectory temp = new();
+        int openCount = 0;
+        MainViewModel viewModel = Create(new PortableLocations(temp.FullPath), new FakeUrlLauncher(), openSettings: () => openCount++);
+
+        Assert.True(viewModel.Settings.Command.CanExecute(null));
+        viewModel.Settings.Command.Execute(null);
+
+        Assert.Equal(1, openCount);
+    }
+
+    [Fact]
+    public void About_command_invokes_the_open_about_action()
+    {
+        using TemporaryDirectory temp = new();
+        int openCount = 0;
+        MainViewModel viewModel = Create(new PortableLocations(temp.FullPath), new FakeUrlLauncher(), openAbout: () => openCount++);
+
+        Assert.True(viewModel.About.Command.CanExecute(null));
+        viewModel.About.Command.Execute(null);
+
+        Assert.Equal(1, openCount);
     }
 
     [Fact]

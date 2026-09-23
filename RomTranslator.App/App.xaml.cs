@@ -48,9 +48,19 @@ public partial class App : Application
         ApplicationInfo info = ApplicationInfo.FromAssembly(typeof(App).Assembly);
         string languageCode = culture.TwoLetterISOLanguageName.ToUpperInvariant();
 
-        MainViewModel viewModel = new(info, settingsStore, settings, new ShellUrlLauncher(), Shutdown, languageCode);
+        Views.MainWindow? window = null;
+        MainViewModel? viewModel = null;
+        viewModel = new MainViewModel(
+            info,
+            settingsStore,
+            settings,
+            new ShellUrlLauncher(),
+            Shutdown,
+            languageCode,
+            openSettings: () => Views.MainWindow.ShowSettings(window!, settingsStore, settings, locations),
+            openAbout: () => Views.MainWindow.ShowAbout(window!, viewModel!));
 
-        Views.MainWindow window = new(viewModel, settings.Window);
+        window = new Views.MainWindow(viewModel, settings.Window);
         MainWindow = window;
         window.Show();
     }

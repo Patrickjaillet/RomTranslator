@@ -29,19 +29,25 @@ public sealed class MainViewModel
     /// <param name="urlLauncher">Service d'ouverture des adresses externes.</param>
     /// <param name="exit">Action qui ferme l'application.</param>
     /// <param name="languageCode">Code court de la langue active.</param>
+    /// <param name="openSettings">Action qui ouvre l'écran de paramètres.</param>
+    /// <param name="openAbout">Action qui ouvre la boîte « À propos ».</param>
     public MainViewModel(
         ApplicationInfo info,
         SettingsStore settingsStore,
         AppSettings settings,
         IUrlLauncher urlLauncher,
         Action exit,
-        string languageCode)
+        string languageCode,
+        Action openSettings,
+        Action openAbout)
     {
         ArgumentNullException.ThrowIfNull(info);
         ArgumentNullException.ThrowIfNull(settingsStore);
         ArgumentNullException.ThrowIfNull(settings);
         ArgumentNullException.ThrowIfNull(urlLauncher);
         ArgumentNullException.ThrowIfNull(exit);
+        ArgumentNullException.ThrowIfNull(openSettings);
+        ArgumentNullException.ThrowIfNull(openAbout);
 
         Info = info;
         _settingsStore = settingsStore;
@@ -72,10 +78,12 @@ public sealed class MainViewModel
         Undo = Unavailable(Strings.Menu_Edit_Undo, Strings.Menu_Edit_Undo_ToolTip, IconKeys.Undo);
         Redo = Unavailable(Strings.Menu_Edit_Redo, Strings.Menu_Edit_Redo_ToolTip, IconKeys.Redo);
 
-        Settings = Unavailable(Strings.Menu_Tools_Settings, Strings.Menu_Tools_Settings_ToolTip, IconKeys.Settings);
+        Settings = new AppCommandViewModel(
+            Strings.Menu_Tools_Settings, Strings.Menu_Tools_Settings_ToolTip, IconKeys.Settings, new RelayCommand(openSettings));
 
         Help = new AppCommandViewModel(Strings.Menu_Help_Online, Strings.Menu_Help_Online_ToolTip, IconKeys.Help, Website.Command);
-        About = Unavailable(Strings.Menu_Help_About, Strings.Menu_Help_About_ToolTip, IconKeys.About);
+        About = new AppCommandViewModel(
+            Strings.Menu_Help_About, Strings.Menu_Help_About_ToolTip, IconKeys.About, new RelayCommand(openAbout));
 
         CommandBarPrimary = new[] { NewProject, OpenProject, SaveProject, ExportProject };
         CommandBarSecondary = new[] { Settings, Help };

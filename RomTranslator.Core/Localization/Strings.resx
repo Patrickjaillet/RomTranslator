@@ -304,4 +304,62 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="Editor_Redo_ToolTip" xml:space="preserve">
     <value>Rétablir la modification annulée</value>
   </data>
+
+  <!-- Boîte À propos -->
+  <data name="About_Title" xml:space="preserve">
+    <value>À propos de RomTranslator</value>
+  </data>
+  <data name="About_Close" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+
+  <!-- Écran de paramètres -->
+  <data name="Settings_Title" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="Settings_LanguageSection" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="Settings_LanguageLabel" xml:space="preserve">
+    <value>Langue de l'interface</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>Suivre la langue du système</value>
+  </data>
+  <data name="Settings_LanguageFrench" xml:space="preserve">
+    <value>Français</value>
+  </data>
+  <data name="Settings_LanguageEnglish" xml:space="preserve">
+    <value>Anglais</value>
+  </data>
+  <data name="Settings_LanguageRestartNotice" xml:space="preserve">
+    <value>Le changement de langue prendra effet au prochain démarrage de RomTranslator.</value>
+  </data>
+  <data name="Settings_ThemeSection" xml:space="preserve">
+    <value>Thème</value>
+  </data>
+  <data name="Settings_ThemeLightOnly" xml:space="preserve">
+    <value>Thème clair (verrouillé, aucune bascule sombre n'est proposée)</value>
+  </data>
+  <data name="Settings_FoldersSection" xml:space="preserve">
+    <value>Dossiers portables</value>
+  </data>
+  <data name="Settings_ConfigFolderLabel" xml:space="preserve">
+    <value>Configuration</value>
+  </data>
+  <data name="Settings_ProjectsFolderLabel" xml:space="preserve">
+    <value>Projets</value>
+  </data>
+  <data name="Settings_LogsFolderLabel" xml:space="preserve">
+    <value>Journaux</value>
+  </data>
+  <data name="Settings_OpenFolder" xml:space="preserve">
+    <value>Ouvrir</value>
+  </data>
+  <data name="Settings_Save" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Settings_Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
 </root>
