@@ -2,6 +2,7 @@
 // © 2026 Patrick JAILLET — RomTranslator
 
 using System;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -69,12 +70,25 @@ public sealed class MainViewModelTests
     [Fact]
     public void Title_is_the_product_name()
     {
-        using TemporaryDirectory temp = new();
-        MainViewModel viewModel = Create(new PortableLocations(temp.FullPath), new FakeUrlLauncher());
+        // Status.Message est résolu depuis les ressources RESX via CultureInfo.CurrentUICulture, jamais
+        // définie par ce test (App.OnStartup s'en charge normalement) : sans cette précaution, le message
+        // attendu dépend de la langue du système d'exécution (constaté en intégration continue, où le
+        // runner Windows est en anglais alors que les postes de développement sont en français).
+        CultureInfo previousUiCulture = CultureInfo.CurrentUICulture;
+        CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("fr");
+        try
+        {
+            using TemporaryDirectory temp = new();
+            MainViewModel viewModel = Create(new PortableLocations(temp.FullPath), new FakeUrlLauncher());
 
-        Assert.Equal("RomTranslator", viewModel.Title);
-        Assert.Equal("Prêt", viewModel.Status.Message);
-        Assert.Equal("FR", viewModel.Status.LanguageCode);
+            Assert.Equal("RomTranslator", viewModel.Title);
+            Assert.Equal("Prêt", viewModel.Status.Message);
+            Assert.Equal("FR", viewModel.Status.LanguageCode);
+        }
+        finally
+        {
+            CultureInfo.CurrentUICulture = previousUiCulture;
+        }
     }
 
     [Fact]
