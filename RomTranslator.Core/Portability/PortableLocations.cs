@@ -23,6 +23,9 @@ public sealed class PortableLocations
     /// <summary>Nom du sous-dossier des journaux.</summary>
     public const string LogsDirectoryName = "logs";
 
+    /// <summary>Nom du sous-dossier de fichiers temporaires (jamais le dossier temporaire système).</summary>
+    public const string TempDirectoryName = "temp";
+
     /// <summary>Nom du fichier de paramètres de l'application.</summary>
     public const string SettingsFileName = "settings.json";
 
@@ -47,6 +50,12 @@ public sealed class PortableLocations
     /// <summary>Dossier des journaux.</summary>
     public string LogsDirectory => Path.Combine(RootDirectory, LogsDirectoryName);
 
+    /// <summary>
+    /// Dossier de fichiers temporaires, sous le dossier de l'application (jamais le dossier temporaire système,
+    /// interdit par la contrainte de portabilité : toute écriture doit rester déplaçable avec l'application).
+    /// </summary>
+    public string TempDirectory => Path.Combine(RootDirectory, TempDirectoryName);
+
     /// <summary>Chemin du fichier de paramètres.</summary>
     public string SettingsFilePath => Path.Combine(ConfigDirectory, SettingsFileName);
 
@@ -63,6 +72,7 @@ public sealed class PortableLocations
         Directory.CreateDirectory(ConfigDirectory);
         Directory.CreateDirectory(ProjectsDirectory);
         Directory.CreateDirectory(LogsDirectory);
+        Directory.CreateDirectory(TempDirectory);
     }
 
     /// <summary>Indique si un chemin est situé dans le dossier racine (ou est le dossier racine lui-même).</summary>

@@ -18,6 +18,10 @@
   <ItemGroup>
     <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />
     <ProjectReference Include="..\RomTranslator.Core\RomTranslator.Core.csproj" />
+    <!-- Composition directe des modules consoles concrets embarqués par l'application (voir MEMOIRE.md,
+         Phase 5.7) : App connaît et compose les modules qu'elle embarque, mais aucun module ne référence
+         jamais App en retour (le sens interdit initial reste interdit). -->
+    <ProjectReference Include="..\RomTranslator.Modules.SegaSaturn\RomTranslator.Modules.SegaSaturn.csproj" />
   </ItemGroup>
 
 </Project>

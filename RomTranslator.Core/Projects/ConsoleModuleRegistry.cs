@@ -6,14 +6,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace RomTranslator.Core.Abstractions;
+namespace RomTranslator.Core.Projects;
 
 /// <summary>
 /// Registre des modules consoles disponibles. Un module s'enregistre par <see cref="Register" /> ; le Core
 /// et l'application composent la liste des modules chargés sans jamais référencer un module concret
-/// (voir la séparation de dépendances : <c>Modules.*</c> dépend du Core, jamais l'inverse). Le mécanisme
-/// qui découvre les modules au démarrage (assemblies d'un sous-dossier, ou composition explicite) reste à
-/// définir ; ce registre est la structure de données qu'il alimentera.
+/// (voir la séparation de dépendances : <c>Modules.*</c> dépend du Core, jamais l'inverse). Pour l'instant
+/// alimenté par composition directe (un seul module, Sega Saturn) plutôt que par une découverte automatique
+/// (scan d'un sous-dossier de modules), reportée à une phase ultérieure d'extensibilité multi-consoles.
 /// </summary>
 public sealed class ConsoleModuleRegistry
 {

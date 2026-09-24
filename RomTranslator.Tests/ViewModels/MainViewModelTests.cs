@@ -3,10 +3,14 @@
 
 using System;
 using System.IO;
+using System.Linq;
 using RomTranslator.App.ViewModels;
 using RomTranslator.Core.Configuration;
 using RomTranslator.Core.Information;
 using RomTranslator.Core.Portability;
+using RomTranslator.Core.Projects;
+using RomTranslator.Modules.SegaSaturn.CharacterTables;
+using RomTranslator.Tests.SegaSaturn.Support;
 using RomTranslator.Tests.Support;
 using Xunit;
 
@@ -22,7 +26,12 @@ public sealed class MainViewModelTests
         Action? exit = null,
         AppSettings? settings = null,
         Action? openSettings = null,
-        Action? openAbout = null)
+        Action? openAbout = null,
+        Func<NewSaturnProjectViewModel, string?>? openNewSaturnProjectWizard = null,
+        Func<string?>? promptOpenProjectPath = null,
+        Action<CharacterTableEditorViewModel>? openCharacterTableEditor = null,
+        Func<string?>? promptSaveTranslatedRomPath = null,
+        Func<string?>? promptSaveIpsPatchPath = null)
     {
         return new MainViewModel(
             _info,
@@ -31,8 +40,16 @@ public sealed class MainViewModelTests
             launcher,
             exit ?? (() => { }),
             "FR",
+            locations.RootDirectory,
+            locations.ProjectsDirectory,
+            locations.TempDirectory,
             openSettings ?? (() => { }),
-            openAbout ?? (() => { }));
+            openAbout ?? (() => { }),
+            openNewSaturnProjectWizard ?? (_ => null),
+            promptOpenProjectPath ?? (() => null),
+            openCharacterTableEditor ?? (_ => { }),
+            promptSaveTranslatedRomPath ?? (() => null),
+            promptSaveIpsPatchPath ?? (() => null));
     }
 
     [Fact]
@@ -65,16 +82,123 @@ public sealed class MainViewModelTests
         using TemporaryDirectory temp = new();
         MainViewModel viewModel = Create(new PortableLocations(temp.FullPath), new FakeUrlLauncher());
 
-        AppCommandViewModel[] pending =
-        {
-            viewModel.NewProject, viewModel.OpenProject, viewModel.SaveProject, viewModel.ExportProject,
-            viewModel.Undo, viewModel.Redo,
-        };
+        AppCommandViewModel[] pending = { viewModel.ExportProject, viewModel.Undo, viewModel.Redo };
 
         foreach (AppCommandViewModel command in pending)
         {
             Assert.False(command.Command.CanExecute(null), command.Header);
         }
+    }
+
+    [Fact]
+    public void NewProject_and_OpenProject_are_enabled()
+    {
+        using TemporaryDirectory temp = new();
+        MainViewModel viewModel = Create(new PortableLocations(temp.FullPath), new FakeUrlLauncher());
+
+        Assert.True(viewModel.NewProject.Command.CanExecute(null));
+        Assert.True(viewModel.OpenProject.Command.CanExecute(null));
+    }
+
+    [Fact]
+    public void SaveProject_is_disabled_without_a_selected_project_tab()
+    {
+        using TemporaryDirectory temp = new();
+        MainViewModel viewModel = Create(new PortableLocations(temp.FullPath), new FakeUrlLauncher());
+
+        Assert.False(viewModel.SaveProject.Command.CanExecute(null));
+    }
+
+    [Fact]
+    public void NewProject_invokes_the_wizard_and_opens_the_created_project_tab()
+    {
+        using TemporaryDirectory temp = new();
+        PortableLocations locations = new(temp.FullPath);
+        bool wizardInvoked = false;
+
+        MainViewModel viewModel = Create(
+            locations,
+            new FakeUrlLauncher(),
+            openNewSaturnProjectWizard: wizard =>
+            {
+                wizardInvoked = true;
+                Assert.NotNull(wizard);
+                return null;
+            });
+
+        viewModel.NewProject.Command.Execute(null);
+
+        Assert.True(wizardInvoked);
+        Assert.Single(viewModel.Tabs.Items);
+    }
+
+    [Fact]
+    public void End_to_end_create_translate_save_and_export_a_saturn_project()
+    {
+        using TemporaryDirectory temp = new();
+        PortableLocations locations = new(temp.FullPath);
+        locations.EnsureDirectories();
+
+        Directory.CreateDirectory(Path.Combine(locations.RootDirectory, "PredefinedTables"));
+        File.Copy(
+            Path.Combine(AppContext.BaseDirectory, "PredefinedTables", "ascii.tbl"),
+            Path.Combine(locations.RootDirectory, "PredefinedTables", "ascii.tbl"),
+            overwrite: true);
+
+        byte[] payload = System.Text.Encoding.ASCII.GetBytes("Hello, adventurer!");
+        string cuePath = SyntheticSaturnDiscBuilder.Build(temp.FullPath, payloadBytes: payload, payloadOffset: 5L * 2048);
+
+        string? createdProjectPath = null;
+        string? romExportPath = null;
+        string? patchExportPath = null;
+
+        MainViewModel viewModel = Create(
+            locations,
+            new FakeUrlLauncher(),
+            openNewSaturnProjectWizard: wizard =>
+            {
+                wizard.ValidateImageCommand.Execute(cuePath);
+                wizard.ProjectName = "Mon jeu";
+                wizard.ContinueToSettingsCommand.Execute(null);
+                wizard.CreateProjectCommand.Execute(null);
+                createdProjectPath = wizard.CreatedProjectPath;
+                return createdProjectPath;
+            },
+            promptSaveTranslatedRomPath: () =>
+            {
+                romExportPath = Path.Combine(temp.FullPath, "export", "traduit.cue");
+                return romExportPath;
+            },
+            promptSaveIpsPatchPath: () =>
+            {
+                patchExportPath = Path.Combine(temp.FullPath, "export", "patch.ips");
+                return patchExportPath;
+            });
+
+        viewModel.NewProject.Command.Execute(null);
+
+        Assert.NotNull(createdProjectPath);
+        Assert.Equal(2, viewModel.Tabs.Items.Count);
+        SaturnProjectViewModel projectTab = Assert.IsType<SaturnProjectViewModel>(viewModel.Tabs.SelectedItem?.Content);
+
+        TranslationEntryViewModel entry = projectTab.Editor.Entries.Cast<TranslationEntryViewModel>()
+            .Single(candidate => candidate.SourceText == "Hello, adventurer!");
+        entry.TranslatedText = "Salut, voyageur!";
+
+        Assert.True(viewModel.SaveProject.Command.CanExecute(null));
+        viewModel.SaveProject.Command.Execute(null);
+
+        TranslationProject reloaded = new TranslationProjectStore().Load(createdProjectPath!);
+        Assert.Equal("Salut, voyageur!", reloaded.Entries.Single(e => e.SourceText == "Hello, adventurer!").TranslatedText);
+
+        Directory.CreateDirectory(Path.Combine(temp.FullPath, "export"));
+        projectTab.ExportTranslatedRomCommand.Execute(null);
+        Assert.NotNull(romExportPath);
+        Assert.True(File.Exists(romExportPath));
+
+        projectTab.ExportPatchCommand.Execute(null);
+        Assert.NotNull(patchExportPath);
+        Assert.True(File.Exists(patchExportPath), viewModel.Status.Message);
     }
 
     [Fact]

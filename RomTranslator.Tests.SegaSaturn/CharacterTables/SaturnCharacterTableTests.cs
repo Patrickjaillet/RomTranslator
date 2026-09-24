@@ -25,6 +25,16 @@ public sealed class SaturnCharacterTableTests
     }
 
     [Fact]
+    public void TableFile_exposes_the_loaded_content()
+    {
+        CharacterTableFile file = CharacterTableFileReader.Parse(new[] { "41=A", "42=B" });
+        SaturnCharacterTable table = new("Test", file);
+
+        Assert.Same(file, table.TableFile);
+        Assert.Equal(2, table.TableFile.Entries.Count);
+    }
+
+    [Fact]
     public void Encode_maps_characters_back_to_their_bytes()
     {
         SaturnCharacterTable table = CreateAsciiTable();

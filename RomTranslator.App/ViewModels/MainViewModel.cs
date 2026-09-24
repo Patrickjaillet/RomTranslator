@@ -7,9 +7,16 @@ using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.App.Services;
+using RomTranslator.Core.Abstractions;
+using RomTranslator.Core.Binary;
 using RomTranslator.Core.Configuration;
 using RomTranslator.Core.Information;
 using RomTranslator.Core.Localization;
+using RomTranslator.Core.Projects;
+using RomTranslator.Modules.SegaSaturn;
+using RomTranslator.Modules.SegaSaturn.CharacterTables;
+using RomTranslator.Modules.SegaSaturn.Disc;
+using RomTranslator.Modules.SegaSaturn.ViewModels;
 
 namespace RomTranslator.App.ViewModels;
 
@@ -21,6 +28,15 @@ public sealed class MainViewModel
 
     private readonly SettingsStore _settingsStore;
     private readonly AppSettings _settings;
+    private readonly TranslationProjectStore _projectStore = new();
+    private readonly ConsoleModuleRegistry _consoleModules = new();
+    private readonly Func<NewSaturnProjectViewModel, string?> _openNewSaturnProjectWizard;
+    private readonly Func<string?> _promptOpenProjectPath;
+    private readonly Action<CharacterTableEditorViewModel> _openCharacterTableEditor;
+    private readonly Func<string?> _promptSaveTranslatedRomPath;
+    private readonly Func<string?> _promptSaveIpsPatchPath;
+    private readonly string _tempDirectory;
+    private readonly RelayCommand _saveProjectCommand;
 
     /// <summary>Initialise la fenêtre principale.</summary>
     /// <param name="info">Identité de l'application.</param>
@@ -29,8 +45,19 @@ public sealed class MainViewModel
     /// <param name="urlLauncher">Service d'ouverture des adresses externes.</param>
     /// <param name="exit">Action qui ferme l'application.</param>
     /// <param name="languageCode">Code court de la langue active.</param>
+    /// <param name="applicationDirectory">Dossier de l'application, pour les modules consoles.</param>
+    /// <param name="projectsDirectory">Dossier portable des projets de traduction.</param>
+    /// <param name="tempDirectory">Dossier portable de fichiers temporaires (jamais le dossier temporaire système).</param>
     /// <param name="openSettings">Action qui ouvre l'écran de paramètres.</param>
     /// <param name="openAbout">Action qui ouvre la boîte « À propos ».</param>
+    /// <param name="openNewSaturnProjectWizard">
+    /// Ouvre l'assistant de création d'un projet Saturn et retourne le chemin du projet créé si l'utilisateur
+    /// a choisi de l'ouvrir immédiatement, ou <see langword="null" /> si l'assistant a été annulé.
+    /// </param>
+    /// <param name="promptOpenProjectPath">Demande à l'utilisateur un fichier de projet à ouvrir, ou <see langword="null" /> si annulé.</param>
+    /// <param name="openCharacterTableEditor">Ouvre l'éditeur de table de caractères du module Saturn.</param>
+    /// <param name="promptSaveTranslatedRomPath">Demande à l'utilisateur le chemin de l'image ROM traduite à générer, ou <see langword="null" /> si annulé.</param>
+    /// <param name="promptSaveIpsPatchPath">Demande à l'utilisateur le chemin du patch IPS à générer, ou <see langword="null" /> si annulé.</param>
     public MainViewModel(
         ApplicationInfo info,
         SettingsStore settingsStore,
@@ -38,20 +65,46 @@ public sealed class MainViewModel
         IUrlLauncher urlLauncher,
         Action exit,
         string languageCode,
+        string applicationDirectory,
+        string projectsDirectory,
+        string tempDirectory,
         Action openSettings,
-        Action openAbout)
+        Action openAbout,
+        Func<NewSaturnProjectViewModel, string?> openNewSaturnProjectWizard,
+        Func<string?> promptOpenProjectPath,
+        Action<CharacterTableEditorViewModel> openCharacterTableEditor,
+        Func<string?> promptSaveTranslatedRomPath,
+        Func<string?> promptSaveIpsPatchPath)
     {
         ArgumentNullException.ThrowIfNull(info);
         ArgumentNullException.ThrowIfNull(settingsStore);
         ArgumentNullException.ThrowIfNull(settings);
         ArgumentNullException.ThrowIfNull(urlLauncher);
         ArgumentNullException.ThrowIfNull(exit);
+        ArgumentException.ThrowIfNullOrWhiteSpace(applicationDirectory);
+        ArgumentException.ThrowIfNullOrWhiteSpace(projectsDirectory);
+        ArgumentException.ThrowIfNullOrWhiteSpace(tempDirectory);
         ArgumentNullException.ThrowIfNull(openSettings);
         ArgumentNullException.ThrowIfNull(openAbout);
+        ArgumentNullException.ThrowIfNull(openNewSaturnProjectWizard);
+        ArgumentNullException.ThrowIfNull(promptOpenProjectPath);
+        ArgumentNullException.ThrowIfNull(openCharacterTableEditor);
+        ArgumentNullException.ThrowIfNull(promptSaveTranslatedRomPath);
+        ArgumentNullException.ThrowIfNull(promptSaveIpsPatchPath);
 
         Info = info;
         _settingsStore = settingsStore;
         _settings = settings;
+        _openNewSaturnProjectWizard = openNewSaturnProjectWizard;
+        _promptOpenProjectPath = promptOpenProjectPath;
+        _openCharacterTableEditor = openCharacterTableEditor;
+        _promptSaveTranslatedRomPath = promptSaveTranslatedRomPath;
+        _promptSaveIpsPatchPath = promptSaveIpsPatchPath;
+
+        SaturnModule = new SaturnConsoleModule(applicationDirectory, _projectStore);
+        _consoleModules.Register(SaturnModule);
+        ProjectsDirectory = projectsDirectory;
+        _tempDirectory = tempDirectory;
 
         Status = new StatusBarViewModel(languageCode);
 
@@ -68,10 +121,21 @@ public sealed class MainViewModel
         Home = new HomeViewModel(info, Links);
         Tabs = new TabsViewModel(settings.Window.LastActiveTabId);
         Tabs.AddTab(new TabItemViewModel(HomeTabId, Strings.Tab_Home, IconKeys.Home, Home, isPermanent: true));
+        Tabs.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(TabsViewModel.SelectedItem))
+            {
+                _saveProjectCommand.NotifyCanExecuteChanged();
+            }
+        };
 
-        NewProject = Unavailable(Strings.Menu_File_NewProject, Strings.Menu_File_NewProject_ToolTip, IconKeys.NewProject, "Ctrl+N");
-        OpenProject = Unavailable(Strings.Menu_File_OpenProject, Strings.Menu_File_OpenProject_ToolTip, IconKeys.Open, "Ctrl+O");
-        SaveProject = Unavailable(Strings.Menu_File_SaveProject, Strings.Menu_File_SaveProject_ToolTip, IconKeys.Save, "Ctrl+S");
+        NewProject = new AppCommandViewModel(
+            Strings.Menu_File_NewProject, Strings.Menu_File_NewProject_ToolTip, IconKeys.NewProject, new RelayCommand(CreateNewSaturnProject), "Ctrl+N");
+        OpenProject = new AppCommandViewModel(
+            Strings.Menu_File_OpenProject, Strings.Menu_File_OpenProject_ToolTip, IconKeys.Open, new RelayCommand(OpenExistingProject), "Ctrl+O");
+        _saveProjectCommand = new RelayCommand(SaveActiveProject, CanSaveActiveProject);
+        SaveProject = new AppCommandViewModel(
+            Strings.Menu_File_SaveProject, Strings.Menu_File_SaveProject_ToolTip, IconKeys.Save, _saveProjectCommand, "Ctrl+S");
         ExportProject = Unavailable(Strings.Menu_File_ExportProject, Strings.Menu_File_ExportProject_ToolTip, IconKeys.Export, "Ctrl+E");
         Exit = new AppCommandViewModel(Strings.Menu_File_Exit, Strings.Menu_File_Exit_ToolTip, IconKeys.Exit, new RelayCommand(exit), "Alt+F4");
 
@@ -96,6 +160,12 @@ public sealed class MainViewModel
 
     /// <summary>Titre affiché dans la barre de titre.</summary>
     public string Title => Info.Name;
+
+    /// <summary>Module console Sega Saturn, seul module embarqué pour l'instant.</summary>
+    public SaturnConsoleModule SaturnModule { get; }
+
+    /// <summary>Dossier portable des projets de traduction, proposé par défaut à la création d'un projet.</summary>
+    public string ProjectsDirectory { get; }
 
     /// <summary>Onglets.</summary>
     public TabsViewModel Tabs { get; }
@@ -186,5 +256,165 @@ public sealed class MainViewModel
     private void ReportLinkFailure(string url)
     {
         Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_LinkOpenFailed, url));
+    }
+
+    private void CreateNewSaturnProject()
+    {
+        NewSaturnProjectViewModel wizard = new(SaturnModule, _projectStore, AppContext.BaseDirectory, ProjectsDirectory);
+        string? createdProjectPath = _openNewSaturnProjectWizard(wizard);
+
+        if (createdProjectPath is not null)
+        {
+            OpenProjectTab(createdProjectPath);
+        }
+    }
+
+    private void OpenExistingProject()
+    {
+        string? path = _promptOpenProjectPath();
+        if (path is not null)
+        {
+            OpenProjectTab(path);
+        }
+    }
+
+    private void OpenProjectTab(string projectPath)
+    {
+        string tabId = Path.GetFullPath(projectPath);
+
+        if (Tabs.SelectTab(tabId))
+        {
+            return;
+        }
+
+        try
+        {
+            ConsoleProjectContext context = SaturnModule.LoadProjectContext(projectPath);
+            TranslationEditorViewModel editor = new(context.Project, context.LengthPolicy, context.CharacterTable);
+            SaturnRomInfoViewModel? romInfo = TryLoadRomInfo(context.Project.RomPath);
+
+            SaturnProjectViewModel projectTab = new(
+                romInfo,
+                editor,
+                openCharacterTableEditor: () => OpenCharacterTableEditorFor(context.CharacterTable),
+                exportTranslatedRom: () => ExportTranslatedRom(context.Project, context.CharacterTable),
+                exportPatch: () => ExportPatch(context.Project, context.CharacterTable));
+
+            Tabs.AddTab(new TabItemViewModel(tabId, context.Project.Name, SaturnModule.IconKey, projectTab));
+            Tabs.SelectTab(tabId);
+        }
+        catch (Exception exception) when (exception is IOException or InvalidDataException or UnauthorizedAccessException)
+        {
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_ProjectOpenFailed, exception.Message));
+        }
+    }
+
+    private SaturnRomInfoViewModel? TryLoadRomInfo(string romPath)
+    {
+        try
+        {
+            return new SaturnRomInfoViewModel(SaturnModule.RomLoader.Load(romPath));
+        }
+        catch (Exception exception) when (exception is IOException or InvalidDataException)
+        {
+            return null;
+        }
+    }
+
+    private void OpenCharacterTableEditorFor(ICharacterTable characterTable)
+    {
+        CharacterTableFile? file = characterTable is SaturnCharacterTable saturnTable ? saturnTable.TableFile : null;
+        _openCharacterTableEditor(new CharacterTableEditorViewModel(file));
+    }
+
+    private void ExportTranslatedRom(TranslationProject project, ICharacterTable characterTable)
+    {
+        string? outputPath = _promptSaveTranslatedRomPath();
+        if (outputPath is null)
+        {
+            return;
+        }
+
+        try
+        {
+            TextInjectionResult result = SaturnModule.TextInjector.Inject(project.RomPath, outputPath, project.Entries.ConvertAll(entry => (ITranslationEntry)entry), characterTable);
+            Status.ReportMessage(result.Messages.Count == 0
+                ? string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_RomExported, outputPath)
+                : string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_RomExportedWithMessages, outputPath, result.Messages.Count));
+        }
+        catch (Exception exception) when (exception is IOException or InvalidOperationException)
+        {
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_RomExportFailed, exception.Message));
+        }
+    }
+
+    private void ExportPatch(TranslationProject project, ICharacterTable characterTable)
+    {
+        string? patchPath = _promptSaveIpsPatchPath();
+        if (patchPath is null)
+        {
+            return;
+        }
+
+        string temporaryDirectory = Path.Combine(_tempDirectory, Path.GetRandomFileName());
+        Directory.CreateDirectory(temporaryDirectory);
+        string temporaryRomPath = Path.Combine(temporaryDirectory, "translated.cue");
+
+        try
+        {
+            SaturnModule.TextInjector.Inject(project.RomPath, temporaryRomPath, project.Entries.ConvertAll(entry => (ITranslationEntry)entry), characterTable);
+
+            string sourceDataFile = CueSheetReader.Read(project.RomPath).FirstDataTrack!.DataFilePath;
+            string translatedDataFile = CueSheetReader.Read(temporaryRomPath).FirstDataTrack!.DataFilePath;
+            IpsPatch.Create(sourceDataFile, translatedDataFile, patchPath);
+
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_PatchExported, patchPath));
+        }
+        catch (Exception exception) when (exception is IOException or InvalidOperationException or NotSupportedException or InvalidDataException)
+        {
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_PatchExportFailed, exception.Message));
+        }
+        finally
+        {
+            TryDeleteDirectory(temporaryDirectory);
+        }
+    }
+
+    private static void TryDeleteDirectory(string path)
+    {
+        try
+        {
+            if (Directory.Exists(path))
+            {
+                Directory.Delete(path, recursive: true);
+            }
+        }
+        catch (IOException)
+        {
+            // Le nettoyage des fichiers temporaires n'est pas critique : ils seront balayés par le système.
+        }
+    }
+
+    private bool CanSaveActiveProject()
+    {
+        return Tabs.SelectedItem?.Content is SaturnProjectViewModel;
+    }
+
+    private void SaveActiveProject()
+    {
+        if (Tabs.SelectedItem?.Content is not SaturnProjectViewModel { Editor: var editor })
+        {
+            return;
+        }
+
+        try
+        {
+            _projectStore.Save(editor.Project, Tabs.SelectedItem.Id);
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_ProjectSaved, editor.Project.Name));
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
+        {
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_ProjectSaveFailed, exception.Message));
+        }
     }
 }

@@ -2,11 +2,11 @@
 // © 2026 Patrick JAILLET — RomTranslator
 
 using System;
-using RomTranslator.Core.Abstractions;
+using RomTranslator.Core.Projects;
 using RomTranslator.Tests.Support;
 using Xunit;
 
-namespace RomTranslator.Tests.Abstractions;
+namespace RomTranslator.Tests.Projects;
 
 public sealed class ConsoleModuleRegistryTests
 {

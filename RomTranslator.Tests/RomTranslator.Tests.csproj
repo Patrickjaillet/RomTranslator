@@ -19,6 +19,21 @@
     <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />
     <ProjectReference Include="..\RomTranslator.Core\RomTranslator.Core.csproj" />
     <ProjectReference Include="..\RomTranslator.App\RomTranslator.App.csproj" />
+    <ProjectReference Include="..\RomTranslator.Modules.SegaSaturn\RomTranslator.Modules.SegaSaturn.csproj" />
+  </ItemGroup>
+
+  <!-- Constructeur d'image disque Saturn synthétique, partagé avec RomTranslator.Tests.SegaSaturn (source unique). -->
+  <ItemGroup>
+    <Compile Include="..\RomTranslator.Tests.SegaSaturn\Support\SyntheticSaturnDiscBuilder.cs"
+             Link="Support\SyntheticSaturnDiscBuilder.cs" />
+  </ItemGroup>
+
+  <!-- Tables de caractères prédéfinies du module Saturn, nécessaires aux tests de bout en bout du nouveau projet. -->
+  <ItemGroup>
+    <None Include="..\RomTranslator.Modules.SegaSaturn\CharacterTables\PredefinedTables\*.tbl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>PredefinedTables\%(Filename)%(Extension)</Link>
+    </None>
   </ItemGroup>
 
 </Project>

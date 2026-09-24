@@ -34,6 +34,9 @@
     <DataTemplate DataType="{x:Type vm:TranslationEditorViewModel}">
       <views:TranslationEditorView />
     </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:SaturnProjectViewModel}">
+      <views:SaturnProjectView />
+    </DataTemplate>
 
     <DataTemplate x:Key="CommandBarButtonTemplate">
       <controls:SvgButton Margin="0,0,4,0"

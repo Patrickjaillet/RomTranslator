@@ -132,6 +132,15 @@ public static class Strings
     /// <summary>Chaîne localisée « StatusBar_LinkOpenFailed ».</summary>
     public static string StatusBar_LinkOpenFailed => _resourceManager.GetString("StatusBar_LinkOpenFailed", CultureInfo.CurrentUICulture) ?? string.Empty;
 
+    /// <summary>Chaîne localisée « StatusBar_ProjectOpenFailed ».</summary>
+    public static string StatusBar_ProjectOpenFailed => _resourceManager.GetString("StatusBar_ProjectOpenFailed", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « StatusBar_ProjectSaved ».</summary>
+    public static string StatusBar_ProjectSaved => _resourceManager.GetString("StatusBar_ProjectSaved", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « StatusBar_ProjectSaveFailed ».</summary>
+    public static string StatusBar_ProjectSaveFailed => _resourceManager.GetString("StatusBar_ProjectSaveFailed", CultureInfo.CurrentUICulture) ?? string.Empty;
+
     /// <summary>Chaîne localisée « StatusBar_LanguageToolTip ».</summary>
     public static string StatusBar_LanguageToolTip => _resourceManager.GetString("StatusBar_LanguageToolTip", CultureInfo.CurrentUICulture) ?? string.Empty;
 
@@ -503,5 +512,101 @@ public static class Strings
 
     /// <summary>Chaîne localisée « Saturn_Injection_ConsistencyMismatch ».</summary>
     public static string Saturn_Injection_ConsistencyMismatch => _resourceManager.GetString("Saturn_Injection_ConsistencyMismatch", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_ModuleDisplayName ».</summary>
+    public static string Saturn_ModuleDisplayName => _resourceManager.GetString("Saturn_ModuleDisplayName", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_ModuleDescription ».</summary>
+    public static string Saturn_ModuleDescription => _resourceManager.GetString("Saturn_ModuleDescription", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_Title ».</summary>
+    public static string NewProject_Title => _resourceManager.GetString("NewProject_Title", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_SelectImageSection ».</summary>
+    public static string NewProject_SelectImageSection => _resourceManager.GetString("NewProject_SelectImageSection", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_SelectImageLabel ».</summary>
+    public static string NewProject_SelectImageLabel => _resourceManager.GetString("NewProject_SelectImageLabel", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_BrowseButton ».</summary>
+    public static string NewProject_BrowseButton => _resourceManager.GetString("NewProject_BrowseButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_ImageFileFilter ».</summary>
+    public static string NewProject_ImageFileFilter => _resourceManager.GetString("NewProject_ImageFileFilter", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_ValidationMessagesHeader ».</summary>
+    public static string NewProject_ValidationMessagesHeader => _resourceManager.GetString("NewProject_ValidationMessagesHeader", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_SettingsSection ».</summary>
+    public static string NewProject_SettingsSection => _resourceManager.GetString("NewProject_SettingsSection", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_NameLabel ».</summary>
+    public static string NewProject_NameLabel => _resourceManager.GetString("NewProject_NameLabel", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_CharacterTableSection ».</summary>
+    public static string NewProject_CharacterTableSection => _resourceManager.GetString("NewProject_CharacterTableSection", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_CharacterTableAscii ».</summary>
+    public static string NewProject_CharacterTableAscii => _resourceManager.GetString("NewProject_CharacterTableAscii", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_CharacterTableShiftJis ».</summary>
+    public static string NewProject_CharacterTableShiftJis => _resourceManager.GetString("NewProject_CharacterTableShiftJis", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_CharacterTableExternal ».</summary>
+    public static string NewProject_CharacterTableExternal => _resourceManager.GetString("NewProject_CharacterTableExternal", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_CreationFailed ».</summary>
+    public static string NewProject_CreationFailed => _resourceManager.GetString("NewProject_CreationFailed", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_DoneMessage ».</summary>
+    public static string NewProject_DoneMessage => _resourceManager.GetString("NewProject_DoneMessage", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_CancelButton ».</summary>
+    public static string NewProject_CancelButton => _resourceManager.GetString("NewProject_CancelButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_BackButton ».</summary>
+    public static string NewProject_BackButton => _resourceManager.GetString("NewProject_BackButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_NextButton ».</summary>
+    public static string NewProject_NextButton => _resourceManager.GetString("NewProject_NextButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_CreateButton ».</summary>
+    public static string NewProject_CreateButton => _resourceManager.GetString("NewProject_CreateButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « NewProject_OpenButton ».</summary>
+    public static string NewProject_OpenButton => _resourceManager.GetString("NewProject_OpenButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « OpenProject_FileFilter ».</summary>
+    public static string OpenProject_FileFilter => _resourceManager.GetString("OpenProject_FileFilter", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Project_UnknownGame ».</summary>
+    public static string Saturn_Project_UnknownGame => _resourceManager.GetString("Saturn_Project_UnknownGame", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Project_CharacterTableButton ».</summary>
+    public static string Saturn_Project_CharacterTableButton => _resourceManager.GetString("Saturn_Project_CharacterTableButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Project_ExportPatchButton ».</summary>
+    public static string Saturn_Project_ExportPatchButton => _resourceManager.GetString("Saturn_Project_ExportPatchButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Project_ExportRomButton ».</summary>
+    public static string Saturn_Project_ExportRomButton => _resourceManager.GetString("Saturn_Project_ExportRomButton", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Project_IpsFileFilter ».</summary>
+    public static string Saturn_Project_IpsFileFilter => _resourceManager.GetString("Saturn_Project_IpsFileFilter", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « StatusBar_RomExported ».</summary>
+    public static string StatusBar_RomExported => _resourceManager.GetString("StatusBar_RomExported", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « StatusBar_RomExportedWithMessages ».</summary>
+    public static string StatusBar_RomExportedWithMessages => _resourceManager.GetString("StatusBar_RomExportedWithMessages", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « StatusBar_RomExportFailed ».</summary>
+    public static string StatusBar_RomExportFailed => _resourceManager.GetString("StatusBar_RomExportFailed", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « StatusBar_PatchExported ».</summary>
+    public static string StatusBar_PatchExported => _resourceManager.GetString("StatusBar_PatchExported", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « StatusBar_PatchExportFailed ».</summary>
+    public static string StatusBar_PatchExportFailed => _resourceManager.GetString("StatusBar_PatchExportFailed", CultureInfo.CurrentUICulture) ?? string.Empty;
 
 }

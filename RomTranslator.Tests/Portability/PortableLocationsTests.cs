@@ -21,11 +21,12 @@ public sealed class PortableLocationsTests
         Assert.Equal(Path.Combine(temp.FullPath, "config"), locations.ConfigDirectory);
         Assert.Equal(Path.Combine(temp.FullPath, "projects"), locations.ProjectsDirectory);
         Assert.Equal(Path.Combine(temp.FullPath, "logs"), locations.LogsDirectory);
+        Assert.Equal(Path.Combine(temp.FullPath, "temp"), locations.TempDirectory);
         Assert.Equal(Path.Combine(temp.FullPath, "config", "settings.json"), locations.SettingsFilePath);
     }
 
     [Fact]
-    public void EnsureDirectories_creates_the_three_folders()
+    public void EnsureDirectories_creates_the_four_folders()
     {
         using TemporaryDirectory temp = new();
         PortableLocations locations = new(temp.FullPath);
@@ -35,6 +36,7 @@ public sealed class PortableLocationsTests
         Assert.True(Directory.Exists(locations.ConfigDirectory));
         Assert.True(Directory.Exists(locations.ProjectsDirectory));
         Assert.True(Directory.Exists(locations.LogsDirectory));
+        Assert.True(Directory.Exists(locations.TempDirectory));
     }
 
     [Fact]

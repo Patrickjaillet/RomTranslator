@@ -1,0 +1,60 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<UserControl x:Class="RomTranslator.App.Views.SaturnProjectView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+             xmlns:controls="clr-namespace:RomTranslator.App.Controls"
+             xmlns:views="clr-namespace:RomTranslator.App.Views"
+             xmlns:loc="clr-namespace:RomTranslator.Core.Localization;assembly=RomTranslator.Core">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <!-- En-tête : métadonnées du jeu détecté et actions propres au module Saturn -->
+    <Grid Grid.Row="0" Margin="24,20,24,0">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0">
+        <TextBlock Style="{DynamicResource Text.Heading}" Text="{Binding HeaderText}" />
+        <StackPanel Margin="0,4,0,0"
+                    Orientation="Horizontal"
+                    Visibility="{Binding RomInfo, Converter={StaticResource NullToVisibility}}">
+          <TextBlock Style="{DynamicResource Text.Secondary}"
+                     Text="{Binding RomInfo.Publisher}"
+                     Visibility="{Binding RomInfo.Publisher, Converter={StaticResource NullToVisibility}}" />
+          <TextBlock Margin="12,0,0,0"
+                     Style="{DynamicResource Text.Secondary}"
+                     Text="{Binding RomInfo.Region}"
+                     Visibility="{Binding RomInfo.Region, Converter={StaticResource NullToVisibility}}" />
+          <TextBlock Margin="12,0,0,0"
+                     Style="{DynamicResource Text.Secondary}"
+                     Text="{Binding RomInfo.ProductId}"
+                     Visibility="{Binding RomInfo.ProductId, Converter={StaticResource NullToVisibility}}" />
+        </StackPanel>
+      </StackPanel>
+
+      <StackPanel Grid.Column="1" VerticalAlignment="Center" Orientation="Horizontal">
+        <ui:Button Margin="0,0,8,0"
+                   Command="{Binding OpenCharacterTableEditorCommand}"
+                   Content="{x:Static loc:Strings.Saturn_Project_CharacterTableButton}" />
+        <ui:Button Margin="0,0,8,0"
+                   Command="{Binding ExportPatchCommand}"
+                   Content="{x:Static loc:Strings.Saturn_Project_ExportPatchButton}" />
+        <ui:Button Appearance="Primary"
+                   Command="{Binding ExportTranslatedRomCommand}"
+                   Content="{x:Static loc:Strings.Saturn_Project_ExportRomButton}" />
+      </StackPanel>
+    </Grid>
+
+    <views:TranslationEditorView Grid.Row="1" DataContext="{Binding Editor}" />
+  </Grid>
+</UserControl>

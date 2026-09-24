@@ -2,6 +2,7 @@
 // © 2026 Patrick JAILLET — RomTranslator
 
 using RomTranslator.Core.Abstractions;
+using RomTranslator.Core.Projects;
 
 namespace RomTranslator.Tests.Support;
 
@@ -23,8 +24,8 @@ internal sealed class FakeConsoleModule : IConsoleModule
     public ITextExtractor TextExtractor => throw new System.NotSupportedException();
     public ITextInjector TextInjector => throw new System.NotSupportedException();
 
-    public object CreateTabContent(string projectPath)
+    public ConsoleProjectContext LoadProjectContext(string projectPath)
     {
-        return new object();
+        throw new System.NotSupportedException();
     }
 }

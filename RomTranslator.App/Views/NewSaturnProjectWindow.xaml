@@ -1,0 +1,163 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<ui:FluentWindow x:Class="RomTranslator.App.Views.NewSaturnProjectWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:controls="clr-namespace:RomTranslator.App.Controls"
+                 xmlns:vm="clr-namespace:RomTranslator.App.ViewModels"
+                 xmlns:loc="clr-namespace:RomTranslator.Core.Localization;assembly=RomTranslator.Core"
+                 xmlns:sys="clr-namespace:System;assembly=mscorlib"
+                 Title="{x:Static loc:Strings.NewProject_Title}"
+                 Width="640"
+                 Height="560"
+                 MinWidth="560"
+                 MinHeight="480"
+                 ExtendsContentIntoTitleBar="True"
+                 ShowInTaskbar="False"
+                 WindowBackdropType="Mica"
+                 WindowStartupLocation="CenterOwner">
+
+  <ui:FluentWindow.Resources>
+    <ObjectDataProvider x:Key="CharacterTableChoiceValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
+      <ObjectDataProvider.MethodParameters>
+        <x:Type TypeName="vm:SaturnCharacterTableChoice" />
+      </ObjectDataProvider.MethodParameters>
+    </ObjectDataProvider>
+  </ui:FluentWindow.Resources>
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <ui:TitleBar Grid.Row="0" Title="{x:Static loc:Strings.NewProject_Title}" ShowMaximize="False" />
+
+    <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+      <StackPanel Margin="{DynamicResource Metrics.PagePadding}">
+
+        <!-- Étape 1 : sélection et validation de l'image disque -->
+        <StackPanel Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=SelectImage}">
+          <TextBlock Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.NewProject_SelectImageSection}" />
+          <Border Margin="0,8,0,0" Style="{DynamicResource Surface.Card}">
+            <StackPanel>
+              <TextBlock Style="{DynamicResource Text.Body}" Text="{x:Static loc:Strings.NewProject_SelectImageLabel}" />
+              <Grid Margin="0,8,0,0">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:TextBox Grid.Column="0" IsReadOnly="True" Text="{Binding RomPath, Mode=OneWay}" />
+                <ui:Button Grid.Column="1" Margin="8,0,0,0" Click="OnBrowseImageClick" Content="{x:Static loc:Strings.NewProject_BrowseButton}" />
+              </Grid>
+            </StackPanel>
+          </Border>
+
+          <StackPanel Margin="0,16,0,0" Visibility="{Binding ValidationMessages.Count, Converter={StaticResource CountToVisibility}}">
+            <TextBlock Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.NewProject_ValidationMessagesHeader}" />
+            <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding ValidationMessages}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                  <TextBlock Margin="0,2" Style="{DynamicResource Text.Secondary}" Text="{Binding}" TextWrapping="Wrap" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </StackPanel>
+
+        <!-- Étape 2 : nom du projet et table de caractères -->
+        <StackPanel Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=ProjectSettings}">
+          <TextBlock Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.NewProject_SettingsSection}" />
+          <Border Margin="0,8,0,0" Style="{DynamicResource Surface.Card}">
+            <StackPanel>
+              <TextBlock Style="{DynamicResource Text.Body}" Text="{x:Static loc:Strings.NewProject_NameLabel}" />
+              <ui:TextBox Margin="0,8,0,0" Text="{Binding ProjectName, UpdateSourceTrigger=PropertyChanged}" />
+            </StackPanel>
+          </Border>
+
+          <TextBlock Margin="0,20,0,0" Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.NewProject_CharacterTableSection}" />
+          <Border Margin="0,8,0,0" Style="{DynamicResource Surface.Card}">
+            <StackPanel>
+              <RadioButton Content="{x:Static loc:Strings.NewProject_CharacterTableAscii}"
+                           GroupName="CharacterTable"
+                           IsChecked="{Binding CharacterTableChoice, Converter={StaticResource EnumToRadioButton}, ConverterParameter=Ascii}" />
+              <RadioButton Margin="0,8,0,0"
+                           Content="{x:Static loc:Strings.NewProject_CharacterTableShiftJis}"
+                           GroupName="CharacterTable"
+                           IsChecked="{Binding CharacterTableChoice, Converter={StaticResource EnumToRadioButton}, ConverterParameter=ShiftJisKana}" />
+              <RadioButton Margin="0,8,0,0"
+                           Content="{x:Static loc:Strings.NewProject_CharacterTableExternal}"
+                           GroupName="CharacterTable"
+                           IsChecked="{Binding CharacterTableChoice, Converter={StaticResource EnumToRadioButton}, ConverterParameter=ExternalFile}" />
+
+              <Grid Margin="24,8,0,0" Visibility="{Binding CharacterTableChoice, Converter={StaticResource EnumEquals}, ConverterParameter=ExternalFile}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <ui:TextBox Grid.Column="0" IsReadOnly="True" Text="{Binding ExternalCharacterTablePath, Mode=OneWay}" />
+                <ui:Button Grid.Column="1" Margin="8,0,0,0" Click="OnBrowseCharacterTableClick" Content="{x:Static loc:Strings.NewProject_BrowseButton}" />
+              </Grid>
+            </StackPanel>
+          </Border>
+
+          <Border Margin="0,16,0,0"
+                  Padding="10,6"
+                  Background="#1AD13A3A"
+                  BorderBrush="#FFD13A3A"
+                  BorderThickness="1"
+                  CornerRadius="6"
+                  Visibility="{Binding ErrorMessage, Converter={StaticResource NullToVisibility}}">
+            <StackPanel Orientation="Horizontal">
+              <controls:SvgIcon VerticalAlignment="Center" Data="{StaticResource Icon.alert-triangle}" Foreground="#FFD13A3A" IconSize="16" />
+              <TextBlock Margin="8,0,0,0"
+                         VerticalAlignment="Center"
+                         Foreground="#FFD13A3A"
+                         Style="{DynamicResource Text.Secondary}"
+                         Text="{Binding ErrorMessage}"
+                         TextWrapping="Wrap" />
+            </StackPanel>
+          </Border>
+        </StackPanel>
+
+        <!-- Étape 3 : confirmation -->
+        <StackPanel Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=Done}">
+          <StackPanel Orientation="Horizontal">
+            <controls:SvgIcon VerticalAlignment="Center" Data="{StaticResource Icon.check}" IconSize="24" />
+            <TextBlock Margin="10,0,0,0" VerticalAlignment="Center" Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.NewProject_DoneMessage}" />
+          </StackPanel>
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+
+    <StackPanel Grid.Row="2"
+                Margin="{DynamicResource Metrics.PagePadding}"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+      <ui:Button Margin="0,0,8,0"
+                 Click="OnCancelClick"
+                 Content="{x:Static loc:Strings.NewProject_CancelButton}"
+                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=Invert|Done}" />
+      <ui:Button Margin="0,0,8,0"
+                 Command="{Binding BackToImageCommand}"
+                 Content="{x:Static loc:Strings.NewProject_BackButton}"
+                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=ProjectSettings}" />
+      <ui:Button Appearance="Primary"
+                 Command="{Binding ContinueToSettingsCommand}"
+                 Content="{x:Static loc:Strings.NewProject_NextButton}"
+                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=SelectImage}" />
+      <ui:Button Appearance="Primary"
+                 Command="{Binding CreateProjectCommand}"
+                 Content="{x:Static loc:Strings.NewProject_CreateButton}"
+                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=ProjectSettings}" />
+      <ui:Button Appearance="Primary"
+                 Click="OnOpenProjectClick"
+                 Content="{x:Static loc:Strings.NewProject_OpenButton}"
+                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=Done}" />
+    </StackPanel>
+  </Grid>
+</ui:FluentWindow>

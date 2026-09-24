@@ -76,6 +76,9 @@ public sealed class TranslationEditorViewModel : ObservableObject
         SelectedEntry = _entries.FirstOrDefault();
     }
 
+    /// <summary>Projet édité, pour son enregistrement par l'écran qui héberge cet éditeur.</summary>
+    public TranslationProject Project => _project;
+
     /// <summary>Glossaire du projet, partagé par l'éditeur et la fenêtre de gestion du glossaire.</summary>
     public GlossaryViewModel Glossary { get; }
 

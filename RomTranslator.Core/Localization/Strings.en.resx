@@ -193,6 +193,15 @@
   <data name="StatusBar_LinkOpenFailed" xml:space="preserve">
     <value>Could not open: {0}</value>
   </data>
+  <data name="StatusBar_ProjectOpenFailed" xml:space="preserve">
+    <value>Could not open the project: {0}</value>
+  </data>
+  <data name="StatusBar_ProjectSaved" xml:space="preserve">
+    <value>Project "{0}" saved.</value>
+  </data>
+  <data name="StatusBar_ProjectSaveFailed" xml:space="preserve">
+    <value>Could not save the project: {0}</value>
+  </data>
   <data name="StatusBar_LanguageToolTip" xml:space="preserve">
     <value>Interface language</value>
   </data>
@@ -594,5 +603,105 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   </data>
   <data name="Saturn_Injection_ConsistencyMismatch" xml:space="preserve">
     <value>Consistency check: rereading the written location for "{0}" (offset 0x{1:X}) gives "{2}", which differs from the expected translation.</value>
+  </data>
+  <data name="Saturn_ModuleDisplayName" xml:space="preserve">
+    <value>Sega Saturn</value>
+  </data>
+  <data name="Saturn_ModuleDescription" xml:space="preserve">
+    <value>Translate Sega Saturn games (BIN/CUE disc images).</value>
+  </data>
+
+  <!-- New project wizard -->
+  <data name="NewProject_Title" xml:space="preserve">
+    <value>New Sega Saturn project</value>
+  </data>
+  <data name="NewProject_SelectImageSection" xml:space="preserve">
+    <value>Source disc image</value>
+  </data>
+  <data name="NewProject_SelectImageLabel" xml:space="preserve">
+    <value>.cue file of the disc image to translate</value>
+  </data>
+  <data name="NewProject_BrowseButton" xml:space="preserve">
+    <value>Browse…</value>
+  </data>
+  <data name="NewProject_ImageFileFilter" xml:space="preserve">
+    <value>BIN/CUE sheet (*.cue)|*.cue</value>
+  </data>
+  <data name="NewProject_ValidationMessagesHeader" xml:space="preserve">
+    <value>Validation result</value>
+  </data>
+  <data name="NewProject_SettingsSection" xml:space="preserve">
+    <value>Project settings</value>
+  </data>
+  <data name="NewProject_NameLabel" xml:space="preserve">
+    <value>Project name</value>
+  </data>
+  <data name="NewProject_CharacterTableSection" xml:space="preserve">
+    <value>Character table</value>
+  </data>
+  <data name="NewProject_CharacterTableAscii" xml:space="preserve">
+    <value>ASCII (predefined)</value>
+  </data>
+  <data name="NewProject_CharacterTableShiftJis" xml:space="preserve">
+    <value>Shift-JIS, hiragana/katakana (predefined)</value>
+  </data>
+  <data name="NewProject_CharacterTableExternal" xml:space="preserve">
+    <value>External .tbl file…</value>
+  </data>
+  <data name="NewProject_CreationFailed" xml:space="preserve">
+    <value>Could not create the project: {0}</value>
+  </data>
+  <data name="NewProject_DoneMessage" xml:space="preserve">
+    <value>The project was created and the text was extracted automatically.</value>
+  </data>
+  <data name="NewProject_CancelButton" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="NewProject_BackButton" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="NewProject_NextButton" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="NewProject_CreateButton" xml:space="preserve">
+    <value>Create project</value>
+  </data>
+  <data name="NewProject_OpenButton" xml:space="preserve">
+    <value>Open project</value>
+  </data>
+  <data name="OpenProject_FileFilter" xml:space="preserve">
+    <value>RomTranslator project (*.rtproj)|*.rtproj</value>
+  </data>
+
+  <!-- Saturn project tab -->
+  <data name="Saturn_Project_UnknownGame" xml:space="preserve">
+    <value>Unknown game</value>
+  </data>
+  <data name="Saturn_Project_CharacterTableButton" xml:space="preserve">
+    <value>Character table…</value>
+  </data>
+  <data name="Saturn_Project_ExportPatchButton" xml:space="preserve">
+    <value>Export an IPS patch…</value>
+  </data>
+  <data name="Saturn_Project_ExportRomButton" xml:space="preserve">
+    <value>Export the translated ROM…</value>
+  </data>
+  <data name="Saturn_Project_IpsFileFilter" xml:space="preserve">
+    <value>IPS patch (*.ips)|*.ips</value>
+  </data>
+  <data name="StatusBar_RomExported" xml:space="preserve">
+    <value>Translated ROM generated: {0}</value>
+  </data>
+  <data name="StatusBar_RomExportedWithMessages" xml:space="preserve">
+    <value>Translated ROM generated: {0} ({1} message(s), see the log).</value>
+  </data>
+  <data name="StatusBar_RomExportFailed" xml:space="preserve">
+    <value>Could not generate the translated ROM: {0}</value>
+  </data>
+  <data name="StatusBar_PatchExported" xml:space="preserve">
+    <value>IPS patch generated: {0}</value>
+  </data>
+  <data name="StatusBar_PatchExportFailed" xml:space="preserve">
+    <value>Could not generate the patch: {0}</value>
   </data>
 </root>

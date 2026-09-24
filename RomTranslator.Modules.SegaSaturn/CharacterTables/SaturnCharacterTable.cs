@@ -33,6 +33,7 @@ public sealed class SaturnCharacterTable : ICharacterTable
         ArgumentNullException.ThrowIfNull(file);
 
         Name = name;
+        TableFile = file;
         _entries = file.Entries;
 
         _decodeMap = new Dictionary<string, string>(StringComparer.Ordinal);
@@ -50,6 +51,9 @@ public sealed class SaturnCharacterTable : ICharacterTable
 
     /// <inheritdoc />
     public string Name { get; }
+
+    /// <summary>Contenu de la table tel que chargé, réutilisable pour la réenregistrer ou l'éditer.</summary>
+    public CharacterTableFile TableFile { get; }
 
     /// <inheritdoc />
     /// <exception cref="ArgumentException">

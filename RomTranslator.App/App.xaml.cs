@@ -57,8 +57,16 @@ public partial class App : Application
             new ShellUrlLauncher(),
             Shutdown,
             languageCode,
+            locations.RootDirectory,
+            locations.ProjectsDirectory,
+            locations.TempDirectory,
             openSettings: () => Views.MainWindow.ShowSettings(window!, settingsStore, settings, locations),
-            openAbout: () => Views.MainWindow.ShowAbout(window!, viewModel!));
+            openAbout: () => Views.MainWindow.ShowAbout(window!, viewModel!),
+            openNewSaturnProjectWizard: wizard => Views.MainWindow.ShowNewSaturnProjectWizard(window!, wizard),
+            promptOpenProjectPath: () => Views.MainWindow.PromptOpenProjectPath(window!),
+            openCharacterTableEditor: editorViewModel => Views.MainWindow.ShowCharacterTableEditor(window!, editorViewModel),
+            promptSaveTranslatedRomPath: () => Views.MainWindow.PromptSaveTranslatedRomPath(window!),
+            promptSaveIpsPatchPath: () => Views.MainWindow.PromptSaveIpsPatchPath(window!));
 
         window = new Views.MainWindow(viewModel, settings.Window);
         MainWindow = window;
