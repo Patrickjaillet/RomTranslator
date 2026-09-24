@@ -1,0 +1,42 @@
+# SPDX-License-Identifier: GPL-3.0-only
+# © 2026 Patrick JAILLET — RomTranslator
+
+name: Build et tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Récupération du dépôt
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Installation du SDK .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Restauration des paquets
+        run: dotnet restore RomTranslator.sln
+
+      - name: Compilation (Release)
+        run: dotnet build RomTranslator.sln -c Release --no-restore
+
+      - name: Tests
+        run: dotnet test RomTranslator.sln -c Release --no-build --logger "trx;LogFileName=resultats.trx" --results-directory TestResults
+
+      - name: Publication des résultats de tests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: resultats-tests
+          path: TestResults
