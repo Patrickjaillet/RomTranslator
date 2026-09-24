@@ -5,6 +5,7 @@ using System;
 using System.Globalization;
 using System.Text;
 using System.Windows;
+using System.Windows.Input;
 using Microsoft.Win32;
 using RomTranslator.App.ViewModels;
 using RomTranslator.Core.Localization;
@@ -54,6 +55,14 @@ public partial class BinaryDiffWindow : Wpf.Ui.Controls.FluentWindow
         catch (NotSupportedException)
         {
             MessageBox.Show(this, Strings.Diff_IpsLimitExceeded, Title, MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+    }
+
+    private void OnWindowKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
+        {
+            Close();
         }
     }
 }

@@ -17,7 +17,8 @@
                  ExtendsContentIntoTitleBar="True"
                  ShowInTaskbar="False"
                  WindowBackdropType="Mica"
-                 WindowStartupLocation="CenterOwner">
+                 WindowStartupLocation="CenterOwner"
+                 KeyDown="OnWindowKeyDown">
 
   <Grid>
     <Grid.RowDefinitions>

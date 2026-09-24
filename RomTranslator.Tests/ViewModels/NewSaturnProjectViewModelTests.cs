@@ -3,6 +3,7 @@
 
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using RomTranslator.App.ViewModels;
 using RomTranslator.Core.Projects;
 using RomTranslator.Modules.SegaSaturn;
@@ -54,7 +55,7 @@ public sealed class NewSaturnProjectViewModelTests
     }
 
     [Fact]
-    public void CreateProjectCommand_extracts_text_and_saves_the_rtproj_file()
+    public async Task CreateProjectCommand_extracts_text_and_saves_the_rtproj_file()
     {
         using TemporaryDirectory temp = new();
         string applicationDirectory = Path.Combine(temp.FullPath, "app");
@@ -76,7 +77,7 @@ public sealed class NewSaturnProjectViewModelTests
         wizard.ContinueToSettingsCommand.Execute(null);
 
         Assert.True(wizard.CreateProjectCommand.CanExecute(null));
-        wizard.CreateProjectCommand.Execute(null);
+        await wizard.CreateProjectCommand.ExecuteAsync(null);
 
         Assert.Equal(NewSaturnProjectStep.Done, wizard.Step);
         Assert.NotNull(wizard.CreatedProjectPath);

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // © 2026 Patrick JAILLET — RomTranslator
 
+using System.Threading.Tasks;
 using RomTranslator.App.ViewModels;
 using RomTranslator.Core.Abstractions;
 using RomTranslator.Core.Projects;
@@ -21,7 +22,7 @@ public sealed class SaturnProjectViewModelTests
     public void HeaderText_shows_the_game_title_when_metadata_is_available()
     {
         SaturnRomInfoViewModel romInfo = new(new RomMetadata("Mon jeu", "Éditeur", "Europe", "T-12345"));
-        SaturnProjectViewModel viewModel = new(romInfo, CreateEditor(), () => { }, () => { }, () => { });
+        SaturnProjectViewModel viewModel = new(romInfo, CreateEditor(), () => { }, () => Task.CompletedTask, () => Task.CompletedTask);
 
         Assert.Equal("Mon jeu", viewModel.HeaderText);
         Assert.Same(romInfo, viewModel.RomInfo);
@@ -30,25 +31,29 @@ public sealed class SaturnProjectViewModelTests
     [Fact]
     public void HeaderText_falls_back_to_a_placeholder_when_metadata_is_unavailable()
     {
-        SaturnProjectViewModel viewModel = new(null, CreateEditor(), () => { }, () => { }, () => { });
+        SaturnProjectViewModel viewModel = new(null, CreateEditor(), () => { }, () => Task.CompletedTask, () => Task.CompletedTask);
 
         Assert.False(string.IsNullOrEmpty(viewModel.HeaderText));
         Assert.Null(viewModel.RomInfo);
     }
 
     [Fact]
-    public void Commands_invoke_the_supplied_actions()
+    public async Task Commands_invoke_the_supplied_actions()
     {
         int characterTableOpened = 0;
         int romExported = 0;
         int patchExported = 0;
 
         SaturnProjectViewModel viewModel = new(
-            null, CreateEditor(), () => characterTableOpened++, () => romExported++, () => patchExported++);
+            null,
+            CreateEditor(),
+            () => characterTableOpened++,
+            () => { romExported++; return Task.CompletedTask; },
+            () => { patchExported++; return Task.CompletedTask; });
 
         viewModel.OpenCharacterTableEditorCommand.Execute(null);
-        viewModel.ExportTranslatedRomCommand.Execute(null);
-        viewModel.ExportPatchCommand.Execute(null);
+        await viewModel.ExportTranslatedRomCommand.ExecuteAsync(null);
+        await viewModel.ExportPatchCommand.ExecuteAsync(null);
 
         Assert.Equal(1, characterTableOpened);
         Assert.Equal(1, romExported);

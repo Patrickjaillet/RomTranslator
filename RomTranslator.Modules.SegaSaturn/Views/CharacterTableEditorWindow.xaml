@@ -16,7 +16,8 @@
                  ExtendsContentIntoTitleBar="True"
                  ShowInTaskbar="False"
                  WindowBackdropType="Mica"
-                 WindowStartupLocation="CenterOwner">
+                 WindowStartupLocation="CenterOwner"
+                 KeyDown="OnWindowKeyDown">
 
   <Grid>
     <Grid.RowDefinitions>
@@ -79,7 +80,10 @@
       <ItemsControl ItemsSource="{Binding ValidationIssues}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
-            <TextBlock Margin="0,2" FontSize="13" Foreground="#FFD18A1D" Text="{Binding}" TextWrapping="Wrap" />
+            <!-- #FF995500 : même couleur d'avertissement que Palette.Warning côté App (contraste WCAG
+                 AA 5,75:1 sur fond blanc, contre 2,85:1 pour l'ambre standard #FFD18A1D) ; ce module ne
+                 peut pas référencer les ressources de RomTranslator.App (dépendance à sens unique). -->
+            <TextBlock Margin="0,2" FontSize="13" Foreground="#FF995500" Text="{Binding}" TextWrapping="Wrap" />
           </DataTemplate>
         </ItemsControl.ItemTemplate>
       </ItemsControl>

@@ -651,6 +651,9 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="NewProject_CreationFailed" xml:space="preserve">
     <value>Impossible de créer le projet : {0}</value>
   </data>
+  <data name="NewProject_CreatingProject" xml:space="preserve">
+    <value>Extraction du texte en cours…</value>
+  </data>
   <data name="NewProject_DoneMessage" xml:space="preserve">
     <value>Le projet a été créé et le texte a été extrait automatiquement.</value>
   </data>

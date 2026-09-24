@@ -4,6 +4,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using RomTranslator.App.ViewModels;
 using RomTranslator.Core.Configuration;
 using RomTranslator.Core.Information;
@@ -133,7 +134,7 @@ public sealed class MainViewModelTests
     }
 
     [Fact]
-    public void End_to_end_create_translate_save_and_export_a_saturn_project()
+    public async Task End_to_end_create_translate_save_and_export_a_saturn_project()
     {
         using TemporaryDirectory temp = new();
         PortableLocations locations = new(temp.FullPath);
@@ -160,7 +161,7 @@ public sealed class MainViewModelTests
                 wizard.ValidateImageCommand.Execute(cuePath);
                 wizard.ProjectName = "Mon jeu";
                 wizard.ContinueToSettingsCommand.Execute(null);
-                wizard.CreateProjectCommand.Execute(null);
+                wizard.CreateProjectCommand.ExecuteAsync(null).GetAwaiter().GetResult();
                 createdProjectPath = wizard.CreatedProjectPath;
                 return createdProjectPath;
             },
@@ -192,11 +193,11 @@ public sealed class MainViewModelTests
         Assert.Equal("Salut, voyageur!", reloaded.Entries.Single(e => e.SourceText == "Hello, adventurer!").TranslatedText);
 
         Directory.CreateDirectory(Path.Combine(temp.FullPath, "export"));
-        projectTab.ExportTranslatedRomCommand.Execute(null);
+        await projectTab.ExportTranslatedRomCommand.ExecuteAsync(null);
         Assert.NotNull(romExportPath);
         Assert.True(File.Exists(romExportPath));
 
-        projectTab.ExportPatchCommand.Execute(null);
+        await projectTab.ExportPatchCommand.ExecuteAsync(null);
         Assert.NotNull(patchExportPath);
         Assert.True(File.Exists(patchExportPath), viewModel.Status.Message);
     }

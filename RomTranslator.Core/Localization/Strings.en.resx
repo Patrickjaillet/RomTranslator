@@ -651,6 +651,9 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   <data name="NewProject_CreationFailed" xml:space="preserve">
     <value>Could not create the project: {0}</value>
   </data>
+  <data name="NewProject_CreatingProject" xml:space="preserve">
+    <value>Extracting text…</value>
+  </data>
   <data name="NewProject_DoneMessage" xml:space="preserve">
     <value>The project was created and the text was extracted automatically.</value>
   </data>

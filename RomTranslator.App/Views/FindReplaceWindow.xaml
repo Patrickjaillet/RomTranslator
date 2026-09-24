@@ -15,7 +15,8 @@
                  ExtendsContentIntoTitleBar="True"
                  ShowInTaskbar="False"
                  WindowBackdropType="Mica"
-                 WindowStartupLocation="CenterOwner">
+                 WindowStartupLocation="CenterOwner"
+                 FocusManager.FocusedElement="{Binding ElementName=SearchTextBox}">
 
   <Grid>
     <Grid.RowDefinitions>
@@ -28,7 +29,7 @@
 
     <StackPanel Grid.Row="1" Margin="{DynamicResource Metrics.PagePadding}">
       <TextBlock Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.FindReplace_SearchLabel}" />
-      <ui:TextBox Margin="0,8,0,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+      <ui:TextBox x:Name="SearchTextBox" Margin="0,8,0,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
 
       <TextBlock Margin="0,20,0,0" Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.FindReplace_ReplacementLabel}" />
       <ui:TextBox Margin="0,8,0,0" Text="{Binding ReplacementText, UpdateSourceTrigger=PropertyChanged}" />
@@ -48,8 +49,8 @@
                 Margin="{DynamicResource Metrics.PagePadding}"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-      <ui:Button Margin="0,0,8,0" Click="OnCloseClick" Content="{x:Static loc:Strings.FindReplace_CloseButton}" />
-      <ui:Button Appearance="Primary" Command="{Binding ReplaceAllCommand}" Content="{x:Static loc:Strings.FindReplace_ReplaceAllButton}" />
+      <ui:Button Margin="0,0,8,0" Click="OnCloseClick" Content="{x:Static loc:Strings.FindReplace_CloseButton}" IsCancel="True" />
+      <ui:Button Appearance="Primary" Command="{Binding ReplaceAllCommand}" Content="{x:Static loc:Strings.FindReplace_ReplaceAllButton}" IsDefault="True" />
     </StackPanel>
   </Grid>
 </ui:FluentWindow>

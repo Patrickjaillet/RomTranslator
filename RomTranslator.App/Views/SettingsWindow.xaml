@@ -114,8 +114,8 @@
                 Margin="{DynamicResource Metrics.PagePadding}"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-      <ui:Button Margin="0,0,8,0" Click="OnCancelClick" Content="{x:Static loc:Strings.Settings_Cancel}" />
-      <ui:Button Appearance="Primary" Click="OnSaveClick" Content="{x:Static loc:Strings.Settings_Save}" />
+      <ui:Button Margin="0,0,8,0" Click="OnCancelClick" Content="{x:Static loc:Strings.Settings_Cancel}" IsCancel="True" />
+      <ui:Button Appearance="Primary" Click="OnSaveClick" Content="{x:Static loc:Strings.Settings_Save}" IsDefault="True" />
     </StackPanel>
   </Grid>
 </ui:FluentWindow>

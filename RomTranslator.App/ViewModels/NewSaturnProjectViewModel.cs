@@ -7,6 +7,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.Core.Abstractions;
@@ -69,6 +70,7 @@ public sealed class NewSaturnProjectViewModel : ObservableObject
     private string? _externalCharacterTablePath;
     private string? _errorMessage;
     private string? _createdProjectPath;
+    private bool _isCreatingProject;
 
     /// <summary>Initialise l'assistant.</summary>
     /// <param name="module">Module Saturn utilisé pour valider l'image et extraire le texte.</param>
@@ -91,7 +93,7 @@ public sealed class NewSaturnProjectViewModel : ObservableObject
         ValidateImageCommand = new RelayCommand<string>(ValidateImage, path => !string.IsNullOrWhiteSpace(path));
         ContinueToSettingsCommand = new RelayCommand(() => Step = NewSaturnProjectStep.ProjectSettings, () => IsRomValid);
         BackToImageCommand = new RelayCommand(() => Step = NewSaturnProjectStep.SelectImage);
-        CreateProjectCommand = new RelayCommand(CreateProject, CanCreateProject);
+        CreateProjectCommand = new AsyncRelayCommand(CreateProjectAsync, CanCreateProject);
     }
 
     /// <summary>Étape courante de l'assistant.</summary>
@@ -181,6 +183,22 @@ public sealed class NewSaturnProjectViewModel : ObservableObject
         private set => SetProperty(ref _createdProjectPath, value);
     }
 
+    /// <summary>
+    /// Indique si l'extraction automatique du texte et l'enregistrement du projet sont en cours (opération
+    /// potentiellement longue sur une grande image ROM).
+    /// </summary>
+    public bool IsCreatingProject
+    {
+        get => _isCreatingProject;
+        private set
+        {
+            if (SetProperty(ref _isCreatingProject, value))
+            {
+                CreateProjectCommand.NotifyCanExecuteChanged();
+            }
+        }
+    }
+
     /// <summary>Valide l'image disque choisie et avance <see cref="IsRomValid" /> en conséquence.</summary>
     public RelayCommand<string> ValidateImageCommand { get; }
 
@@ -191,7 +209,7 @@ public sealed class NewSaturnProjectViewModel : ObservableObject
     public RelayCommand BackToImageCommand { get; }
 
     /// <summary>Crée le projet : extraction automatique du texte puis enregistrement du fichier <c>.rtproj</c>.</summary>
-    public RelayCommand CreateProjectCommand { get; }
+    public AsyncRelayCommand CreateProjectCommand { get; }
 
     private void ValidateImage(string? path)
     {
@@ -209,7 +227,7 @@ public sealed class NewSaturnProjectViewModel : ObservableObject
 
     private bool CanCreateProject()
     {
-        if (string.IsNullOrWhiteSpace(ProjectName) || !IsRomValid)
+        if (IsCreatingProject || string.IsNullOrWhiteSpace(ProjectName) || !IsRomValid)
         {
             return false;
         }
@@ -217,34 +235,59 @@ public sealed class NewSaturnProjectViewModel : ObservableObject
         return CharacterTableChoice != SaturnCharacterTableChoice.ExternalFile || !string.IsNullOrWhiteSpace(ExternalCharacterTablePath);
     }
 
-    private void CreateProject()
+    private async Task CreateProjectAsync()
     {
         ErrorMessage = null;
+        IsCreatingProject = true;
 
         try
         {
-            TranslationProject project = TranslationProjectFactory.Create(ProjectName, SaturnConsoleModule.ModuleId, RomPath);
-            project.CharacterTableName = ResolveCharacterTableName();
+            string projectName = ProjectName;
+            string romPath = RomPath;
+            string? characterTableName = ResolveCharacterTableName();
+            SaturnCharacterTableChoice characterTableChoice = CharacterTableChoice;
+            string? externalCharacterTablePath = ExternalCharacterTablePath;
 
-            ICharacterTable characterTable = ResolveCharacterTable(project.CharacterTableName);
-            project.Entries.AddRange(ExtractEntries(characterTable));
+            (string projectPath, string? errorMessage) = await Task.Run(() =>
+            {
+                try
+                {
+                    TranslationProject project = TranslationProjectFactory.Create(projectName, SaturnConsoleModule.ModuleId, romPath);
+                    project.CharacterTableName = characterTableName;
 
-            string projectPath = Path.Combine(_projectsDirectory, MakeSafeFileName(ProjectName) + TranslationProjectStore.FileExtension);
-            _projectStore.Save(project, projectPath);
+                    ICharacterTable characterTable = ResolveCharacterTable(characterTableChoice, characterTableName, externalCharacterTablePath);
+                    project.Entries.AddRange(ExtractEntries(romPath, characterTable));
+
+                    string path = Path.Combine(_projectsDirectory, MakeSafeFileName(projectName) + TranslationProjectStore.FileExtension);
+                    _projectStore.Save(project, path);
+
+                    return (path, (string?)null);
+                }
+                catch (Exception exception) when (exception is IOException or InvalidDataException or UnauthorizedAccessException)
+                {
+                    return (string.Empty, exception.Message);
+                }
+            }).ConfigureAwait(true);
+
+            if (errorMessage is not null)
+            {
+                ErrorMessage = string.Format(CultureInfo.CurrentCulture, CreationFailedFormat, errorMessage);
+                return;
+            }
 
             CreatedProjectPath = projectPath;
             Step = NewSaturnProjectStep.Done;
         }
-        catch (Exception exception) when (exception is IOException or InvalidDataException or UnauthorizedAccessException)
+        finally
         {
-            ErrorMessage = string.Format(CultureInfo.CurrentCulture, CreationFailedFormat, exception.Message);
+            IsCreatingProject = false;
         }
     }
 
-    private List<Core.Projects.TranslationEntry> ExtractEntries(ICharacterTable characterTable)
+    private List<Core.Projects.TranslationEntry> ExtractEntries(string romPath, ICharacterTable characterTable)
     {
         List<Core.Projects.TranslationEntry> entries = new();
-        foreach (ITranslationEntry entry in _module.TextExtractor.ExtractAutomatically(RomPath, characterTable))
+        foreach (ITranslationEntry entry in _module.TextExtractor.ExtractAutomatically(romPath, characterTable))
         {
             entries.Add((Core.Projects.TranslationEntry)entry);
         }
@@ -263,13 +306,13 @@ public sealed class NewSaturnProjectViewModel : ObservableObject
         };
     }
 
-    private SaturnCharacterTable ResolveCharacterTable(string? characterTableName)
+    private SaturnCharacterTable ResolveCharacterTable(SaturnCharacterTableChoice choice, string? characterTableName, string? externalCharacterTablePath)
     {
-        return CharacterTableChoice switch
+        return choice switch
         {
             SaturnCharacterTableChoice.ShiftJisKana => PredefinedCharacterTables.LoadShiftJisKana(_applicationDirectory),
             SaturnCharacterTableChoice.ExternalFile => new SaturnCharacterTable(
-                Path.GetFileNameWithoutExtension(characterTableName!), CharacterTableFileReader.Read(characterTableName!)),
+                Path.GetFileNameWithoutExtension(externalCharacterTablePath!), CharacterTableFileReader.Read(characterTableName!)),
             _ => PredefinedCharacterTables.LoadAscii(_applicationDirectory),
         };
     }

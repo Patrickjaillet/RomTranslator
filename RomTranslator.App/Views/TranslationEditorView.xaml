@@ -12,6 +12,11 @@
              xmlns:loc="clr-namespace:RomTranslator.Core.Localization;assembly=RomTranslator.Core"
              xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
+  <UserControl.InputBindings>
+    <KeyBinding Key="Z" Command="{Binding UndoCommand}" Modifiers="Control" />
+    <KeyBinding Key="Y" Command="{Binding RedoCommand}" Modifiers="Control" />
+  </UserControl.InputBindings>
+
   <UserControl.Resources>
     <ObjectDataProvider x:Key="StatusFilterValues" MethodName="GetValues" ObjectType="{x:Type sys:Enum}">
       <ObjectDataProvider.MethodParameters>
@@ -168,7 +173,7 @@
                                     Grid.Column="1"
                                     VerticalAlignment="Center"
                                     Data="{StaticResource Icon.alert-triangle}"
-                                    Foreground="#FFD18A1D"
+                                    Foreground="{DynamicResource Palette.WarningBrush}"
                                     IconSize="16"
                                     Visibility="{Binding ExceedsLengthLimit, Converter={StaticResource BoolToVisibility}}" />
                 </Grid>
@@ -238,16 +243,16 @@
 
             <Border Margin="0,8,0,0"
                     Padding="10,6"
-                    Background="#1AD18A1D"
-                    BorderBrush="#FFD18A1D"
+                    Background="{DynamicResource Palette.WarningSubtleBackgroundBrush}"
+                    BorderBrush="{DynamicResource Palette.WarningBrush}"
                     BorderThickness="1"
                     CornerRadius="6"
                     Visibility="{Binding ExceedsLengthLimit, Converter={StaticResource BoolToVisibility}}">
               <StackPanel Orientation="Horizontal">
-                <controls:SvgIcon VerticalAlignment="Center" Data="{StaticResource Icon.alert-triangle}" Foreground="#FFD18A1D" IconSize="16" />
+                <controls:SvgIcon VerticalAlignment="Center" Data="{StaticResource Icon.alert-triangle}" Foreground="{DynamicResource Palette.WarningBrush}" IconSize="16" />
                 <TextBlock Margin="8,0,0,0"
                            VerticalAlignment="Center"
-                           Foreground="#FFD18A1D"
+                           Foreground="{DynamicResource Palette.WarningBrush}"
                            Style="{DynamicResource Text.Secondary}"
                            Text="{Binding LengthLimitExceededMessage}"
                            TextWrapping="Wrap" />

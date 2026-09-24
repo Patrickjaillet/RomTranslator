@@ -3,6 +3,7 @@
 
 using System;
 using System.Windows;
+using System.Windows.Input;
 using Microsoft.Win32;
 using RomTranslator.Core.Localization;
 using RomTranslator.Modules.SegaSaturn.CharacterTables;
@@ -40,6 +41,14 @@ public partial class CharacterTableEditorWindow : Wpf.Ui.Controls.FluentWindow
         if (dialog.ShowDialog(this) == true)
         {
             _viewModel.Save(dialog.FileName);
+        }
+    }
+
+    private void OnWindowKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
+        {
+            Close();
         }
     }
 }

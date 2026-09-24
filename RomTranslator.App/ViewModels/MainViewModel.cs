@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.App.Services;
 using RomTranslator.Core.Abstractions;
@@ -309,8 +310,8 @@ public sealed class MainViewModel
                 romInfo,
                 editor,
                 openCharacterTableEditor: () => OpenCharacterTableEditorFor(context.CharacterTable),
-                exportTranslatedRom: () => ExportTranslatedRom(context.Project, context.CharacterTable),
-                exportPatch: () => ExportPatch(context.Project, context.CharacterTable));
+                exportTranslatedRom: () => ExportTranslatedRomAsync(context.Project, context.CharacterTable),
+                exportPatch: () => ExportPatchAsync(context.Project, context.CharacterTable));
 
             Tabs.AddTab(new TabItemViewModel(tabId, context.Project.Name, SaturnModule.IconKey, projectTab));
             Tabs.SelectTab(tabId);
@@ -339,7 +340,7 @@ public sealed class MainViewModel
         _openCharacterTableEditor(new CharacterTableEditorViewModel(file));
     }
 
-    private void ExportTranslatedRom(TranslationProject project, ICharacterTable characterTable)
+    private async Task ExportTranslatedRomAsync(TranslationProject project, ICharacterTable characterTable)
     {
         string? outputPath = _promptSaveTranslatedRomPath();
         if (outputPath is null)
@@ -347,9 +348,14 @@ public sealed class MainViewModel
             return;
         }
 
+        Status.BeginProgress(isIndeterminate: true);
+
         try
         {
-            TextInjectionResult result = SaturnModule.TextInjector.Inject(project.RomPath, outputPath, project.Entries.ConvertAll(entry => (ITranslationEntry)entry), characterTable);
+            IReadOnlyList<ITranslationEntry> entries = project.Entries.ConvertAll(entry => (ITranslationEntry)entry);
+            TextInjectionResult result = await Task.Run(
+                () => SaturnModule.TextInjector.Inject(project.RomPath, outputPath, entries, characterTable)).ConfigureAwait(true);
+
             Status.ReportMessage(result.Messages.Count == 0
                 ? string.Format(CultureInfo.CurrentCulture, RomExportedFormat, outputPath)
                 : string.Format(CultureInfo.CurrentCulture, RomExportedWithMessagesFormat, outputPath, result.Messages.Count));
@@ -358,9 +364,13 @@ public sealed class MainViewModel
         {
             Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, RomExportFailedFormat, exception.Message));
         }
+        finally
+        {
+            Status.EndProgress();
+        }
     }
 
-    private void ExportPatch(TranslationProject project, ICharacterTable characterTable)
+    private async Task ExportPatchAsync(TranslationProject project, ICharacterTable characterTable)
     {
         string? patchPath = _promptSaveIpsPatchPath();
         if (patchPath is null)
@@ -372,13 +382,20 @@ public sealed class MainViewModel
         Directory.CreateDirectory(temporaryDirectory);
         string temporaryRomPath = Path.Combine(temporaryDirectory, "translated.cue");
 
+        Status.BeginProgress(isIndeterminate: true);
+
         try
         {
-            SaturnModule.TextInjector.Inject(project.RomPath, temporaryRomPath, project.Entries.ConvertAll(entry => (ITranslationEntry)entry), characterTable);
+            IReadOnlyList<ITranslationEntry> entries = project.Entries.ConvertAll(entry => (ITranslationEntry)entry);
 
-            string sourceDataFile = CueSheetReader.Read(project.RomPath).FirstDataTrack!.DataFilePath;
-            string translatedDataFile = CueSheetReader.Read(temporaryRomPath).FirstDataTrack!.DataFilePath;
-            IpsPatch.Create(sourceDataFile, translatedDataFile, patchPath);
+            await Task.Run(() =>
+            {
+                SaturnModule.TextInjector.Inject(project.RomPath, temporaryRomPath, entries, characterTable);
+
+                string sourceDataFile = CueSheetReader.Read(project.RomPath).FirstDataTrack!.DataFilePath;
+                string translatedDataFile = CueSheetReader.Read(temporaryRomPath).FirstDataTrack!.DataFilePath;
+                IpsPatch.Create(sourceDataFile, translatedDataFile, patchPath);
+            }).ConfigureAwait(true);
 
             Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, PatchExportedFormat, patchPath));
         }
@@ -388,6 +405,7 @@ public sealed class MainViewModel
         }
         finally
         {
+            Status.EndProgress();
             TryDeleteDirectory(temporaryDirectory);
         }
     }

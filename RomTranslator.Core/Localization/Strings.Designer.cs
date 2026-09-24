@@ -558,6 +558,9 @@ public static class Strings
     /// <summary>Chaîne localisée « NewProject_CreationFailed ».</summary>
     public static string NewProject_CreationFailed => _resourceManager.GetString("NewProject_CreationFailed", CultureInfo.CurrentUICulture) ?? string.Empty;
 
+    /// <summary>Chaîne localisée « NewProject_CreatingProject ».</summary>
+    public static string NewProject_CreatingProject => _resourceManager.GetString("NewProject_CreatingProject", CultureInfo.CurrentUICulture) ?? string.Empty;
+
     /// <summary>Chaîne localisée « NewProject_DoneMessage ».</summary>
     public static string NewProject_DoneMessage => _resourceManager.GetString("NewProject_DoneMessage", CultureInfo.CurrentUICulture) ?? string.Empty;
 

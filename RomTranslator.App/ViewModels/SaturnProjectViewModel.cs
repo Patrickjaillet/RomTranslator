@@ -2,6 +2,7 @@
 // © 2026 Patrick JAILLET — RomTranslator
 
 using System;
+using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.Core.Localization;
@@ -19,14 +20,17 @@ public sealed class SaturnProjectViewModel : ObservableObject
     /// <param name="romInfo">Métadonnées du jeu détecté, ou <see langword="null" /> si elles n'ont pas pu être lues.</param>
     /// <param name="editor">Éditeur de traduction générique, déjà construit pour le projet.</param>
     /// <param name="openCharacterTableEditor">Ouvre l'éditeur de table de caractères du module.</param>
-    /// <param name="exportTranslatedRom">Génère l'image ROM traduite complète.</param>
-    /// <param name="exportPatch">Génère un patch IPS.</param>
+    /// <param name="exportTranslatedRom">
+    /// Génère l'image ROM traduite complète (réinjection et écriture disque, potentiellement longues sur une
+    /// grande image : exécutée en tâche de fond par <see cref="ExportTranslatedRomCommand" />).
+    /// </param>
+    /// <param name="exportPatch">Génère un patch IPS (même remarque de performance que <paramref name="exportTranslatedRom" />).</param>
     public SaturnProjectViewModel(
         SaturnRomInfoViewModel? romInfo,
         TranslationEditorViewModel editor,
         Action openCharacterTableEditor,
-        Action exportTranslatedRom,
-        Action exportPatch)
+        Func<Task> exportTranslatedRom,
+        Func<Task> exportPatch)
     {
         ArgumentNullException.ThrowIfNull(editor);
         ArgumentNullException.ThrowIfNull(openCharacterTableEditor);
@@ -37,8 +41,8 @@ public sealed class SaturnProjectViewModel : ObservableObject
         Editor = editor;
 
         OpenCharacterTableEditorCommand = new RelayCommand(openCharacterTableEditor);
-        ExportTranslatedRomCommand = new RelayCommand(exportTranslatedRom);
-        ExportPatchCommand = new RelayCommand(exportPatch);
+        ExportTranslatedRomCommand = new AsyncRelayCommand(exportTranslatedRom);
+        ExportPatchCommand = new AsyncRelayCommand(exportPatch);
     }
 
     /// <summary>Métadonnées du jeu détecté dans l'image disque, ou <see langword="null" /> si elles n'ont pas pu être lues.</summary>
@@ -54,8 +58,8 @@ public sealed class SaturnProjectViewModel : ObservableObject
     public RelayCommand OpenCharacterTableEditorCommand { get; }
 
     /// <summary>Génère l'image ROM traduite complète.</summary>
-    public RelayCommand ExportTranslatedRomCommand { get; }
+    public AsyncRelayCommand ExportTranslatedRomCommand { get; }
 
     /// <summary>Génère un patch IPS à partir de la ROM source et de la ROM traduite.</summary>
-    public RelayCommand ExportPatchCommand { get; }
+    public AsyncRelayCommand ExportPatchCommand { get; }
 }

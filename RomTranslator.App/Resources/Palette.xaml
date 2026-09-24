@@ -13,6 +13,16 @@
   <Color x:Key="Palette.Accent">#FF1D5FD1</Color>
   <SolidColorBrush x:Key="Palette.AccentBrush" Color="{StaticResource Palette.Accent}" />
 
+  <!--
+    Couleur d'avertissement (icônes et texte d'alerte : dépassement de longueur, incohérences de
+    glossaire). #FF995500 plutôt que l'ambre standard #FFD18A1D : ce dernier n'offre qu'un contraste de
+    2,85:1 sur fond blanc, sous le seuil WCAG AA de 4,5:1 pour du texte normal ; #FF995500 atteint 5,75:1
+    tout en restant reconnaissable comme un avertissement (ambre foncé plutôt que rouge).
+  -->
+  <Color x:Key="Palette.Warning">#FF995500</Color>
+  <SolidColorBrush x:Key="Palette.WarningBrush" Color="{StaticResource Palette.Warning}" />
+  <SolidColorBrush x:Key="Palette.WarningSubtleBackgroundBrush" Color="#1A995500" />
+
   <Thickness x:Key="Metrics.PagePadding">32</Thickness>
   <Thickness x:Key="Metrics.CardPadding">16</Thickness>
   <CornerRadius x:Key="Metrics.CardRadius">8</CornerRadius>

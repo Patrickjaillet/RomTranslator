@@ -15,7 +15,8 @@
                  ExtendsContentIntoTitleBar="True"
                  ShowInTaskbar="False"
                  WindowBackdropType="Mica"
-                 WindowStartupLocation="CenterOwner">
+                 WindowStartupLocation="CenterOwner"
+                 FocusManager.FocusedElement="{Binding ElementName=NewTermTextBox}">
 
   <Grid>
     <Grid.RowDefinitions>
@@ -41,7 +42,7 @@
                   PlaceholderText="{x:Static loc:Strings.Glossary_NewTermWatermark}" />
 
       <StackPanel Grid.Column="1" Orientation="Horizontal">
-        <ui:Button Margin="8,0,8,0" Click="OnAddClick" Content="{x:Static loc:Strings.Glossary_AddButton}" />
+        <ui:Button Margin="8,0,8,0" Click="OnAddClick" Content="{x:Static loc:Strings.Glossary_AddButton}" IsDefault="True" />
         <ui:Button Command="{Binding RemoveEntryCommand}" Content="{x:Static loc:Strings.Glossary_RemoveButton}" />
       </StackPanel>
     </Grid>
@@ -91,7 +92,7 @@
       <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Inconsistencies}">
         <ItemsControl.ItemTemplate>
           <DataTemplate>
-            <TextBlock Margin="0,2" FontSize="13" Foreground="#FFD18A1D" TextWrapping="Wrap">
+            <TextBlock Margin="0,2" FontSize="13" Foreground="{DynamicResource Palette.WarningBrush}" TextWrapping="Wrap">
               <TextBlock.Text>
                 <MultiBinding StringFormat="{x:Static loc:Strings.Glossary_InconsistencyMessage}">
                   <Binding Path="Entry.TranslatedText" />
@@ -109,7 +110,7 @@
                 Margin="{DynamicResource Metrics.PagePadding}"
                 HorizontalAlignment="Right"
                 Orientation="Horizontal">
-      <ui:Button Click="OnCloseClick" Content="{x:Static loc:Strings.Glossary_CloseButton}" />
+      <ui:Button Click="OnCloseClick" Content="{x:Static loc:Strings.Glossary_CloseButton}" IsCancel="True" />
     </StackPanel>
   </Grid>
 </ui:FluentWindow>

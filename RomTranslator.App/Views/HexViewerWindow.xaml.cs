@@ -2,6 +2,7 @@
 // © 2026 Patrick JAILLET — RomTranslator
 
 using System;
+using System.Windows.Input;
 using RomTranslator.App.ViewModels;
 
 namespace RomTranslator.App.Views;
@@ -16,5 +17,13 @@ public partial class HexViewerWindow : Wpf.Ui.Controls.FluentWindow
 
         DataContext = viewModel;
         InitializeComponent();
+    }
+
+    private void OnWindowKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Escape)
+        {
+            Close();
+        }
     }
 }

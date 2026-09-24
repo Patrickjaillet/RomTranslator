@@ -134,30 +134,51 @@
       </StackPanel>
     </ScrollViewer>
 
-    <StackPanel Grid.Row="2"
-                Margin="{DynamicResource Metrics.PagePadding}"
-                HorizontalAlignment="Right"
-                Orientation="Horizontal">
-      <ui:Button Margin="0,0,8,0"
-                 Click="OnCancelClick"
-                 Content="{x:Static loc:Strings.NewProject_CancelButton}"
-                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=Invert|Done}" />
-      <ui:Button Margin="0,0,8,0"
-                 Command="{Binding BackToImageCommand}"
-                 Content="{x:Static loc:Strings.NewProject_BackButton}"
-                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=ProjectSettings}" />
-      <ui:Button Appearance="Primary"
-                 Command="{Binding ContinueToSettingsCommand}"
-                 Content="{x:Static loc:Strings.NewProject_NextButton}"
-                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=SelectImage}" />
-      <ui:Button Appearance="Primary"
-                 Command="{Binding CreateProjectCommand}"
-                 Content="{x:Static loc:Strings.NewProject_CreateButton}"
-                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=ProjectSettings}" />
-      <ui:Button Appearance="Primary"
-                 Click="OnOpenProjectClick"
-                 Content="{x:Static loc:Strings.NewProject_OpenButton}"
-                 Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=Done}" />
-    </StackPanel>
+    <Grid Grid.Row="2" Margin="{DynamicResource Metrics.PagePadding}">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0"
+                  VerticalAlignment="Center"
+                  Orientation="Horizontal"
+                  Visibility="{Binding IsCreatingProject, Converter={StaticResource BoolToVisibility}}">
+        <ProgressBar Width="120" Height="6" VerticalAlignment="Center" IsIndeterminate="True" />
+        <TextBlock Margin="12,0,0,0"
+                   VerticalAlignment="Center"
+                   Style="{DynamicResource Text.Secondary}"
+                   Text="{x:Static loc:Strings.NewProject_CreatingProject}" />
+      </StackPanel>
+
+      <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+        <ui:Button Margin="0,0,8,0"
+                   Click="OnCancelClick"
+                   Content="{x:Static loc:Strings.NewProject_CancelButton}"
+                   IsCancel="True"
+                   IsEnabled="{Binding IsCreatingProject, Converter={StaticResource InverseBool}}"
+                   Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=Invert|Done}" />
+        <ui:Button Margin="0,0,8,0"
+                   Command="{Binding BackToImageCommand}"
+                   Content="{x:Static loc:Strings.NewProject_BackButton}"
+                   IsEnabled="{Binding IsCreatingProject, Converter={StaticResource InverseBool}}"
+                   Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=ProjectSettings}" />
+        <ui:Button Appearance="Primary"
+                   Command="{Binding ContinueToSettingsCommand}"
+                   Content="{x:Static loc:Strings.NewProject_NextButton}"
+                   IsDefault="True"
+                   Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=SelectImage}" />
+        <ui:Button Appearance="Primary"
+                   Command="{Binding CreateProjectCommand}"
+                   Content="{x:Static loc:Strings.NewProject_CreateButton}"
+                   IsDefault="True"
+                   Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=ProjectSettings}" />
+        <ui:Button Appearance="Primary"
+                   Click="OnOpenProjectClick"
+                   Content="{x:Static loc:Strings.NewProject_OpenButton}"
+                   IsDefault="True"
+                   Visibility="{Binding Step, Converter={StaticResource EnumEquals}, ConverterParameter=Done}" />
+      </StackPanel>
+    </Grid>
   </Grid>
 </ui:FluentWindow>
