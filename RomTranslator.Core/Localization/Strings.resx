@@ -411,4 +411,48 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="Diff_IpsPatchCreated" xml:space="preserve">
     <value>Patch IPS généré : {0}</value>
   </data>
+
+  <!-- Module Sega Saturn : chargement et validation de l'image disque -->
+  <data name="Saturn_Error_CueFileHasNoTrack" xml:space="preserve">
+    <value>Le fichier .cue ne décrit aucune piste : {0}</value>
+  </data>
+  <data name="Saturn_Error_CueTrackBeforeFile" xml:space="preserve">
+    <value>Le fichier .cue référence une piste avant toute ligne FILE.</value>
+  </data>
+  <data name="Saturn_Error_CueMalformedTrackLine" xml:space="preserve">
+    <value>Ligne TRACK mal formée dans le fichier .cue : {0}</value>
+  </data>
+  <data name="Saturn_Error_CueUnsupportedTrackMode" xml:space="preserve">
+    <value>Mode de piste non pris en charge dans le fichier .cue : {0}</value>
+  </data>
+  <data name="Saturn_Error_CueMissingFileName" xml:space="preserve">
+    <value>Ligne FILE sans nom de fichier entre guillemets dans le fichier .cue : {0}</value>
+  </data>
+  <data name="Saturn_Error_NoDataTrack" xml:space="preserve">
+    <value>Le fichier .cue ne décrit aucune piste de données : {0}</value>
+  </data>
+  <data name="Saturn_Error_MissingHardwareId" xml:space="preserve">
+    <value>L'image ne commence pas par l'identifiant matériel Sega Saturn attendu : {0}</value>
+  </data>
+  <data name="Saturn_Error_HeaderTooShort" xml:space="preserve">
+    <value>Les données fournies ({0} octets) sont trop courtes pour contenir l'en-tête IP.BIN ({1} octets attendus).</value>
+  </data>
+  <data name="Saturn_Error_VolumeDescriptorNotFound" xml:space="preserve">
+    <value>Descripteur de volume primaire ISO9660 introuvable au secteur 16 : image non reconnue.</value>
+  </data>
+  <data name="Saturn_Validation_TrackFileMissing" xml:space="preserve">
+    <value>Piste {0} : fichier introuvable : {1}</value>
+  </data>
+  <data name="Saturn_Validation_TruncatedImage" xml:space="preserve">
+    <value>La taille du fichier de données ({0} octets) n'est pas un multiple entier de la taille de secteur ({1} octets) : l'image semble tronquée.</value>
+  </data>
+  <data name="Saturn_Validation_UnreadableIpBin" xml:space="preserve">
+    <value>Impossible de lire l'en-tête IP.BIN : {0}</value>
+  </data>
+  <data name="Saturn_Validation_DetectedRegion" xml:space="preserve">
+    <value>Région détectée : {0}</value>
+  </data>
+  <data name="Saturn_Validation_UnknownRegion" xml:space="preserve">
+    <value>inconnue</value>
+  </data>
 </root>

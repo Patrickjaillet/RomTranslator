@@ -19,10 +19,12 @@
     <ProjectReference Include="..\RomTranslator.Modules.SegaSaturn\RomTranslator.Modules.SegaSaturn.csproj" />
   </ItemGroup>
 
-  <!-- Assertions de métadonnées d'assembly partagées avec RomTranslator.Tests (source unique). -->
+  <!-- Assertions de métadonnées d'assembly et utilitaires de test partagés avec RomTranslator.Tests (source unique). -->
   <ItemGroup>
     <Compile Include="..\RomTranslator.Tests\Support\AssemblyMetadataAssertions.cs"
              Link="Support\AssemblyMetadataAssertions.cs" />
+    <Compile Include="..\RomTranslator.Tests\Support\TemporaryDirectory.cs"
+             Link="Support\TemporaryDirectory.cs" />
   </ItemGroup>
 
 </Project>

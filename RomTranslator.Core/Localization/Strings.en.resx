@@ -411,4 +411,48 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   <data name="Diff_IpsPatchCreated" xml:space="preserve">
     <value>IPS patch generated: {0}</value>
   </data>
+
+  <!-- Sega Saturn module: disc image loading and validation -->
+  <data name="Saturn_Error_CueFileHasNoTrack" xml:space="preserve">
+    <value>The .cue file describes no track: {0}</value>
+  </data>
+  <data name="Saturn_Error_CueTrackBeforeFile" xml:space="preserve">
+    <value>The .cue file references a track before any FILE line.</value>
+  </data>
+  <data name="Saturn_Error_CueMalformedTrackLine" xml:space="preserve">
+    <value>Malformed TRACK line in the .cue file: {0}</value>
+  </data>
+  <data name="Saturn_Error_CueUnsupportedTrackMode" xml:space="preserve">
+    <value>Unsupported track mode in the .cue file: {0}</value>
+  </data>
+  <data name="Saturn_Error_CueMissingFileName" xml:space="preserve">
+    <value>FILE line without a quoted file name in the .cue file: {0}</value>
+  </data>
+  <data name="Saturn_Error_NoDataTrack" xml:space="preserve">
+    <value>The .cue file describes no data track: {0}</value>
+  </data>
+  <data name="Saturn_Error_MissingHardwareId" xml:space="preserve">
+    <value>The image does not start with the expected Sega Saturn hardware identifier: {0}</value>
+  </data>
+  <data name="Saturn_Error_HeaderTooShort" xml:space="preserve">
+    <value>The provided data ({0} bytes) is too short to contain the IP.BIN header ({1} bytes expected).</value>
+  </data>
+  <data name="Saturn_Error_VolumeDescriptorNotFound" xml:space="preserve">
+    <value>ISO9660 primary volume descriptor not found at sector 16: image not recognized.</value>
+  </data>
+  <data name="Saturn_Validation_TrackFileMissing" xml:space="preserve">
+    <value>Track {0}: file not found: {1}</value>
+  </data>
+  <data name="Saturn_Validation_TruncatedImage" xml:space="preserve">
+    <value>The data file size ({0} bytes) is not an exact multiple of the sector size ({1} bytes): the image appears truncated.</value>
+  </data>
+  <data name="Saturn_Validation_UnreadableIpBin" xml:space="preserve">
+    <value>Could not read the IP.BIN header: {0}</value>
+  </data>
+  <data name="Saturn_Validation_DetectedRegion" xml:space="preserve">
+    <value>Detected region: {0}</value>
+  </data>
+  <data name="Saturn_Validation_UnknownRegion" xml:space="preserve">
+    <value>unknown</value>
+  </data>
 </root>
