@@ -475,4 +475,31 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   <data name="Saturn_Table_UnknownCharacter" xml:space="preserve">
     <value>Character "{0}" has no match in the character table.</value>
   </data>
+  <data name="Saturn_CharacterTableEditor_Title" xml:space="preserve">
+    <value>Character table</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_Load" xml:space="preserve">
+    <value>Open…</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_Save" xml:space="preserve">
+    <value>Save…</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_BytesColumn" xml:space="preserve">
+    <value>Bytes (hex)</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_TextColumn" xml:space="preserve">
+    <value>Character(s)</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_ValidColumn" xml:space="preserve">
+    <value>Valid</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_FileFilter" xml:space="preserve">
+    <value>Character table (*.tbl)|*.tbl</value>
+  </data>
 </root>

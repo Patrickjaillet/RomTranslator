@@ -475,4 +475,31 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="Saturn_Table_UnknownCharacter" xml:space="preserve">
     <value>Le caractère « {0} » n'a pas de correspondance dans la table de caractères.</value>
   </data>
+  <data name="Saturn_CharacterTableEditor_Title" xml:space="preserve">
+    <value>Table de caractères</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_Add" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_Remove" xml:space="preserve">
+    <value>Retirer</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_Load" xml:space="preserve">
+    <value>Ouvrir…</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_Save" xml:space="preserve">
+    <value>Enregistrer…</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_BytesColumn" xml:space="preserve">
+    <value>Octets (hex.)</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_TextColumn" xml:space="preserve">
+    <value>Caractère(s)</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_ValidColumn" xml:space="preserve">
+    <value>Valide</value>
+  </data>
+  <data name="Saturn_CharacterTableEditor_FileFilter" xml:space="preserve">
+    <value>Table de caractères (*.tbl)|*.tbl</value>
+  </data>
 </root>

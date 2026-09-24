@@ -1,0 +1,88 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<ui:FluentWindow x:Class="RomTranslator.Modules.SegaSaturn.Views.CharacterTableEditorWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:vm="clr-namespace:RomTranslator.Modules.SegaSaturn.CharacterTables"
+                 xmlns:loc="clr-namespace:RomTranslator.Core.Localization;assembly=RomTranslator.Core"
+                 Title="{x:Static loc:Strings.Saturn_CharacterTableEditor_Title}"
+                 Width="760"
+                 Height="600"
+                 MinWidth="600"
+                 MinHeight="420"
+                 ExtendsContentIntoTitleBar="True"
+                 ShowInTaskbar="False"
+                 WindowBackdropType="Mica"
+                 WindowStartupLocation="CenterOwner">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <ui:TitleBar Grid.Row="0" Title="{x:Static loc:Strings.Saturn_CharacterTableEditor_Title}" />
+
+    <Grid Grid.Row="1" Margin="24,12,24,12">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0" Orientation="Horizontal">
+        <ui:Button Margin="0,0,8,0" Command="{Binding AddEntryCommand}" Content="{x:Static loc:Strings.Saturn_CharacterTableEditor_Add}" />
+        <ui:Button Command="{Binding RemoveEntryCommand}" Content="{x:Static loc:Strings.Saturn_CharacterTableEditor_Remove}" />
+      </StackPanel>
+
+      <StackPanel Grid.Column="1" Orientation="Horizontal">
+        <ui:Button Margin="0,0,8,0" Click="OnLoadClick" Content="{x:Static loc:Strings.Saturn_CharacterTableEditor_Load}" />
+        <ui:Button Appearance="Primary" Click="OnSaveClick" Content="{x:Static loc:Strings.Saturn_CharacterTableEditor_Save}" />
+      </StackPanel>
+    </Grid>
+
+    <Border Grid.Row="2"
+            Margin="24,0,24,12"
+            Padding="1"
+            Background="{DynamicResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{DynamicResource DividerStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="8">
+      <DataGrid AutoGenerateColumns="False"
+                Background="Transparent"
+                BorderThickness="0"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                FontFamily="Consolas"
+                ItemsSource="{Binding Entries}"
+                SelectedItem="{Binding SelectedEntry, Mode=TwoWay}">
+        <DataGrid.Columns>
+          <DataGridTextColumn Width="140"
+                               Binding="{Binding HexBytes, UpdateSourceTrigger=PropertyChanged}"
+                               Header="{x:Static loc:Strings.Saturn_CharacterTableEditor_BytesColumn}" />
+          <DataGridTextColumn Width="*"
+                               Binding="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                               Header="{x:Static loc:Strings.Saturn_CharacterTableEditor_TextColumn}" />
+          <DataGridCheckBoxColumn Width="90"
+                                   Binding="{Binding IsValid, Mode=OneWay}"
+                                   Header="{x:Static loc:Strings.Saturn_CharacterTableEditor_ValidColumn}"
+                                   IsReadOnly="True" />
+        </DataGrid.Columns>
+      </DataGrid>
+    </Border>
+
+    <StackPanel Grid.Row="3" Margin="24,0,24,20">
+      <ItemsControl ItemsSource="{Binding ValidationIssues}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate>
+            <TextBlock Margin="0,2" FontSize="13" Foreground="#FFD18A1D" Text="{Binding}" TextWrapping="Wrap" />
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </StackPanel>
+  </Grid>
+</ui:FluentWindow>

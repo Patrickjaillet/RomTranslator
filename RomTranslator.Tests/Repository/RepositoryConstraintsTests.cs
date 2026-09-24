@@ -26,10 +26,14 @@ public sealed class RepositoryConstraintsTests
         return _productionProjects.SelectMany(project => RepositoryLocator.EnumerateFiles(project, "*.cs"));
     }
 
+    private static IEnumerable<string> ProductionMarkup()
+    {
+        return _productionProjects.SelectMany(project => RepositoryLocator.EnumerateFiles(project, "*.xaml"));
+    }
+
     private static IEnumerable<string> AppMarkupAndSources()
     {
-        return RepositoryLocator.EnumerateFiles("RomTranslator.App", "*.xaml")
-            .Concat(RepositoryLocator.EnumerateFiles("RomTranslator.App", "*.cs"));
+        return ProductionMarkup().Concat(ProductionSources());
     }
 
     private static List<string> FindMatches(IEnumerable<string> files, Regex pattern, string? exemptFileName = null)
@@ -58,7 +62,7 @@ public sealed class RepositoryConstraintsTests
     {
         Regex bitmap = new(@"\.(png|jpe?g|bmp|gif|ico|tiff?|webp)\b", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
-        Assert.Empty(FindMatches(RepositoryLocator.EnumerateFiles("RomTranslator.App", "*.xaml"), bitmap));
+        Assert.Empty(FindMatches(ProductionMarkup(), bitmap));
     }
 
     [Fact]
@@ -119,7 +123,7 @@ public sealed class RepositoryConstraintsTests
         const string copyright = "\u00A9 2026 Patrick JAILLET";
 
         List<string> missing = new();
-        foreach (string file in ProductionSources().Concat(RepositoryLocator.EnumerateFiles("RomTranslator.App", "*.xaml")))
+        foreach (string file in ProductionSources().Concat(ProductionMarkup()))
         {
             string head = string.Join('\n', File.ReadLines(file).Take(6));
             if (!head.Contains(spdx) || !head.Contains(copyright))

@@ -2,7 +2,15 @@
 
   <PropertyGroup>
     <RootNamespace>RomTranslator.Modules.SegaSaturn</RootNamespace>
+    <!-- WPF est une brique du framework .NET Windows Desktop, pas une référence à RomTranslator.App :
+         un module console fournit sa propre interface (vues XAML) via IConsoleModule.CreateTabContent. -->
+    <UseWPF>true</UseWPF>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="WPF-UI" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />
