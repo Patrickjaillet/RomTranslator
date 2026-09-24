@@ -1,12 +1,6 @@
 ## RomTranslator — .gitignore
 ## Toute modification de ce fichier doit être justifiée dans MEMOIRE.md
 
-# --- Fichiers de gouvernance internes (jamais publiés) ---
-ROADMAP.md
-CLAUDE.md
-MEMOIRE.md
-COMPILATION.md
-
 # --- Build .NET ---
 bin/
 obj/

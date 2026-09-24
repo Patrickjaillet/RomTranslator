@@ -15,7 +15,7 @@ namespace RomTranslator.Tests.SegaSaturn;
 
 /// <summary>
 /// Test d'intégration bout-en-bout sur une véritable image homebrew Sega Saturn, libre de droits, disponible
-/// localement chez le propriétaire du dépôt pour la vérification manuelle du module (voir <c>CLAUDE.md</c>).
+/// localement chez le propriétaire du dépôt pour la vérification manuelle du module.
 /// Le chemin de cette image n'est <b>jamais</b> committé dans le dépôt ni codé en dur ailleurs que dans ce
 /// fichier de test ; l'image elle-même n'est jamais copiée ni incluse dans le dépôt (contrainte stricte du
 /// ROADMAP : aucune ROM, même homebrew, n'est committée). Ce test s'ignore silencieusement sur toute machine
@@ -38,7 +38,7 @@ public sealed class HomebrewIntegrationTests
     {
         if (!File.Exists(LocalHomebrewCuePath))
         {
-            Assert.Skip("Image homebrew locale absente (disponible uniquement sur le poste du propriétaire, jamais committée) : voir CLAUDE.md.");
+            Assert.Skip("Image homebrew locale absente (disponible uniquement sur le poste du propriétaire, jamais committée).");
             return;
         }
 
@@ -62,7 +62,7 @@ public sealed class HomebrewIntegrationTests
     {
         if (!File.Exists(LocalHomebrewCuePath))
         {
-            Assert.Skip("Image homebrew locale absente (disponible uniquement sur le poste du propriétaire, jamais committée) : voir CLAUDE.md.");
+            Assert.Skip("Image homebrew locale absente (disponible uniquement sur le poste du propriétaire, jamais committée).");
             return;
         }
 
