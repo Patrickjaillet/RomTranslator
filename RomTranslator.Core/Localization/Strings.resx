@@ -362,4 +362,53 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="Settings_Cancel" xml:space="preserve">
     <value>Annuler</value>
   </data>
+
+  <!-- Visualiseur hexadécimal -->
+  <data name="HexViewer_Title" xml:space="preserve">
+    <value>Visualiseur hexadécimal</value>
+  </data>
+  <data name="HexViewer_PageIndicator" xml:space="preserve">
+    <value>Page {0} sur {1}</value>
+  </data>
+  <data name="HexViewer_Previous" xml:space="preserve">
+    <value>Page précédente</value>
+  </data>
+  <data name="HexViewer_Next" xml:space="preserve">
+    <value>Page suivante</value>
+  </data>
+  <data name="HexViewer_FileSizeLabel" xml:space="preserve">
+    <value>Taille du fichier : {0} octets</value>
+  </data>
+
+  <!-- Comparaison binaire (diff) -->
+  <data name="Diff_Title" xml:space="preserve">
+    <value>Comparaison de deux images ROM</value>
+  </data>
+  <data name="Diff_Summary" xml:space="preserve">
+    <value>{0} plage(s) d'octets différente(s)</value>
+  </data>
+  <data name="Diff_Identical" xml:space="preserve">
+    <value>Les deux images sont identiques.</value>
+  </data>
+  <data name="Diff_OffsetColumn" xml:space="preserve">
+    <value>Décalage</value>
+  </data>
+  <data name="Diff_LengthColumn" xml:space="preserve">
+    <value>Longueur</value>
+  </data>
+  <data name="Diff_OriginalColumn" xml:space="preserve">
+    <value>Original</value>
+  </data>
+  <data name="Diff_ModifiedColumn" xml:space="preserve">
+    <value>Modifié</value>
+  </data>
+  <data name="Diff_CreateIpsPatch" xml:space="preserve">
+    <value>Générer un patch IPS…</value>
+  </data>
+  <data name="Diff_IpsLimitExceeded" xml:space="preserve">
+    <value>Impossible de générer un patch IPS : une différence dépasse la limite de 16 Mio du format.</value>
+  </data>
+  <data name="Diff_IpsPatchCreated" xml:space="preserve">
+    <value>Patch IPS généré : {0}</value>
+  </data>
 </root>

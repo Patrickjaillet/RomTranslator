@@ -1,0 +1,78 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<ui:FluentWindow x:Class="RomTranslator.App.Views.HexViewerWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:controls="clr-namespace:RomTranslator.App.Controls"
+                 xmlns:binary="clr-namespace:RomTranslator.Core.Binary;assembly=RomTranslator.Core"
+                 xmlns:loc="clr-namespace:RomTranslator.Core.Localization;assembly=RomTranslator.Core"
+                 Title="{x:Static loc:Strings.HexViewer_Title}"
+                 Width="820"
+                 Height="640"
+                 MinWidth="640"
+                 MinHeight="420"
+                 ExtendsContentIntoTitleBar="True"
+                 ShowInTaskbar="False"
+                 WindowBackdropType="Mica"
+                 WindowStartupLocation="CenterOwner">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+
+    <ui:TitleBar Grid.Row="0" Title="{x:Static loc:Strings.HexViewer_Title}" />
+
+    <Grid Grid.Row="1" Margin="24,12,24,12">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*" />
+        <ColumnDefinition Width="Auto" />
+      </Grid.ColumnDefinitions>
+
+      <StackPanel Grid.Column="0">
+        <TextBlock Style="{DynamicResource Text.Secondary}" Text="{Binding FilePath}" TextTrimming="CharacterEllipsis" />
+        <TextBlock Margin="0,2,0,0" Style="{DynamicResource Text.Secondary}" Text="{Binding FileSizeText}" />
+      </StackPanel>
+
+      <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+        <controls:SvgButton Margin="0,0,4,0"
+                            Command="{Binding PreviousPageCommand}"
+                            IconData="{StaticResource Icon.undo}"
+                            ToolTip="{x:Static loc:Strings.HexViewer_Previous}" />
+        <TextBlock Margin="8,0" VerticalAlignment="Center" Style="{DynamicResource Text.Secondary}" Text="{Binding PageIndicatorText}" />
+        <controls:SvgButton Margin="4,0,0,0"
+                            Command="{Binding NextPageCommand}"
+                            IconData="{StaticResource Icon.redo}"
+                            ToolTip="{x:Static loc:Strings.HexViewer_Next}" />
+      </StackPanel>
+    </Grid>
+
+    <Border Grid.Row="2" Margin="24,0,24,20" Style="{DynamicResource Surface.Card}" Padding="0">
+      <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ItemsControl FontFamily="Consolas" ItemsSource="{Binding Lines}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate DataType="{x:Type binary:HexDumpLine}">
+              <Grid Margin="12,3">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="90" />
+                  <ColumnDefinition Width="Auto" />
+                  <ColumnDefinition Width="16" />
+                  <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0" Style="{DynamicResource Text.Secondary}" Text="{Binding OffsetHex}" />
+                <TextBlock Grid.Column="1" Style="{DynamicResource Text.Body}" Text="{Binding HexColumn}" />
+                <TextBlock Grid.Column="3" Style="{DynamicResource Text.Secondary}" Text="{Binding AsciiColumn}" />
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+  </Grid>
+</ui:FluentWindow>

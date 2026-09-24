@@ -11,6 +11,8 @@
   <converters:TranslationStatusToLabelConverter x:Key="TranslationStatusToLabel" />
   <converters:CountToVisibilityConverter x:Key="CountToVisibility" />
   <converters:NullToVisibilityConverter x:Key="NullToVisibility" />
+  <converters:InverseBooleanConverter x:Key="InverseBool" />
+  <converters:InverseBooleanToVisibilityConverter x:Key="InverseBoolToVisibility" />
   <BooleanToVisibilityConverter x:Key="BoolToVisibility" />
 
 </ResourceDictionary>
