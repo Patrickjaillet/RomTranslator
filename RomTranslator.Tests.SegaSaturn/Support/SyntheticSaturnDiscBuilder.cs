@@ -31,7 +31,9 @@ internal static class SyntheticSaturnDiscBuilder
         string makerId = "SEGA ENTERPRISES",
         string productNumber = "T-000000  ",
         string areaSymbols = "JTUE      ",
-        bool validHardwareId = true)
+        bool validHardwareId = true,
+        byte[]? payloadBytes = null,
+        long payloadOffset = 0)
     {
         byte[] ipBinSector = BuildIpBinSector(gameTitle, makerId, productNumber, areaSymbols, validHardwareId);
         byte[] primaryVolumeDescriptor = BuildPrimaryVolumeDescriptor(rootDirectorySector: 18, rootDirectoryLength: SectorSize);
@@ -52,8 +54,14 @@ internal static class SyntheticSaturnDiscBuilder
         WriteSector(image, rootDirectorySector);
         WriteSector(image, fileSector);
 
+        byte[] imageBytes = image.ToArray();
+        if (payloadBytes is { Length: > 0 })
+        {
+            Array.Copy(payloadBytes, 0, imageBytes, payloadOffset, payloadBytes.Length);
+        }
+
         string isoPath = Path.Combine(directory, "test.iso");
-        File.WriteAllBytes(isoPath, image.ToArray());
+        File.WriteAllBytes(isoPath, imageBytes);
 
         string cuePath = Path.Combine(directory, "test.cue");
         File.WriteAllText(cuePath, "FILE \"test.iso\" BINARY\n  TRACK 01 MODE1/2048\n    INDEX 01 00:00:00\n");
