@@ -21,6 +21,17 @@ public interface ICharacterTable
     /// <returns>Texte décodé.</returns>
     string Decode(IReadOnlyList<byte> bytes);
 
+    /// <summary>
+    /// Tente de décoder une séquence d'octets, sans lever d'exception en cas d'échec. À préférer à
+    /// <see cref="Decode" /> pour sonder la validité d'une séquence à haute fréquence (par exemple un
+    /// balayage heuristique octet par octet) : une exception .NET a un coût d'exécution significatif,
+    /// inadapté à un chemin d'échec potentiellement emprunté des millions de fois sur une grande ROM.
+    /// </summary>
+    /// <param name="bytes">Octets à décoder.</param>
+    /// <param name="text">Texte décodé si la méthode retourne <see langword="true" /> ; <see langword="null" /> sinon.</param>
+    /// <returns><see langword="true" /> si la séquence entière a pu être décodée.</returns>
+    bool TryDecode(IReadOnlyList<byte> bytes, out string? text);
+
     /// <summary>Encode du texte en la séquence d'octets correspondante, selon cette table.</summary>
     /// <param name="text">Texte à encoder.</param>
     /// <exception cref="System.ArgumentException">Un caractère du texte n'a pas de correspondance dans la table.</exception>

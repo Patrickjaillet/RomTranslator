@@ -15,6 +15,12 @@ internal sealed class FakeCharacterTable : ICharacterTable
 
     public string Decode(IReadOnlyList<byte> bytes) => Encoding.ASCII.GetString(bytes.ToArray());
 
+    public bool TryDecode(IReadOnlyList<byte> bytes, out string? text)
+    {
+        text = Decode(bytes);
+        return true;
+    }
+
     public IReadOnlyList<byte> Encode(string text) => Encoding.ASCII.GetBytes(text);
 
     public IReadOnlyList<string> Validate() => System.Array.Empty<string>();

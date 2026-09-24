@@ -188,16 +188,7 @@ public sealed class SaturnTextExtractor : ITextExtractor
         byte[] slice = new byte[length];
         Array.Copy(bytes, start, slice, 0, length);
 
-        try
-        {
-            text = characterTable.Decode(slice);
-            return true;
-        }
-        catch (ArgumentException)
-        {
-            text = null;
-            return false;
-        }
+        return characterTable.TryDecode(slice, out text);
     }
 
     private static List<ITranslationEntry> GroupIntoEntries(List<CandidateString> candidates)

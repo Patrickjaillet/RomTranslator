@@ -78,6 +78,39 @@ public sealed class SaturnCharacterTableTests
     }
 
     [Fact]
+    public void TryDecode_returns_true_and_the_decoded_text_for_a_valid_sequence()
+    {
+        SaturnCharacterTable table = CreateAsciiTable();
+
+        bool succeeded = table.TryDecode(new byte[] { 0x41, 0x42, 0x43 }, out string? text);
+
+        Assert.True(succeeded);
+        Assert.Equal("ABC", text);
+    }
+
+    [Fact]
+    public void TryDecode_returns_false_without_throwing_when_a_byte_has_no_match()
+    {
+        SaturnCharacterTable table = CreateAsciiTable();
+
+        bool succeeded = table.TryDecode(new byte[] { 0xFF }, out string? text);
+
+        Assert.False(succeeded);
+        Assert.Null(text);
+    }
+
+    [Fact]
+    public void TryDecode_returns_false_when_a_valid_prefix_is_followed_by_an_unknown_byte()
+    {
+        SaturnCharacterTable table = CreateAsciiTable();
+
+        bool succeeded = table.TryDecode(new byte[] { 0x41, 0xFF }, out string? text);
+
+        Assert.False(succeeded);
+        Assert.Null(text);
+    }
+
+    [Fact]
     public void Encode_throws_when_a_character_has_no_match()
     {
         SaturnCharacterTable table = CreateAsciiTable();

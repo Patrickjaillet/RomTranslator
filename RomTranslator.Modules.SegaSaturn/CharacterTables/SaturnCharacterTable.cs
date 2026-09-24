@@ -63,17 +63,46 @@ public sealed class SaturnCharacterTable : ICharacterTable
     {
         ArgumentNullException.ThrowIfNull(bytes);
 
+        if (!TryDecode(bytes, out string? text))
+        {
+            // Relève l'échec en exception, avec l'octet fautif identifié — TryDecode ne le rapporte pas car
+            // son chemin d'échec doit rester libre de toute allocation, y compris celle d'un message d'erreur.
+            int position = 0;
+            while (position < bytes.Count && TryDecodeNext(bytes, position, out _, out int consumed))
+            {
+                position += consumed;
+            }
+
+            throw new ArgumentException(
+                string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Table_UnknownByte, bytes[position].ToString("X2", CultureInfo.InvariantCulture)),
+                nameof(bytes));
+        }
+
+        return text!;
+    }
+
+    /// <inheritdoc />
+    public bool TryDecode(IReadOnlyList<byte> bytes, out string? text)
+    {
+        ArgumentNullException.ThrowIfNull(bytes);
+
         StringBuilder result = new();
         int position = 0;
 
         while (position < bytes.Count)
         {
-            (string text, int consumed) = DecodeNext(bytes, position);
-            result.Append(text);
+            if (!TryDecodeNext(bytes, position, out string? next, out int consumed))
+            {
+                text = null;
+                return false;
+            }
+
+            result.Append(next);
             position += consumed;
         }
 
-        return result.ToString();
+        text = result.ToString();
+        return true;
     }
 
     /// <inheritdoc />
@@ -129,22 +158,24 @@ public sealed class SaturnCharacterTable : ICharacterTable
         return issues;
     }
 
-    private (string Text, int Consumed) DecodeNext(IReadOnlyList<byte> bytes, int position)
+    private bool TryDecodeNext(IReadOnlyList<byte> bytes, int position, out string? text, out int consumed)
     {
         int maxLength = Math.Min(_maxSequenceLength, bytes.Count - position);
 
         for (int length = maxLength; length >= 1; length--)
         {
             string key = ToKey(bytes, position, length);
-            if (_decodeMap.TryGetValue(key, out string? text))
+            if (_decodeMap.TryGetValue(key, out string? matchedText))
             {
-                return (text, length);
+                text = matchedText;
+                consumed = length;
+                return true;
             }
         }
 
-        throw new ArgumentException(
-            string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Table_UnknownByte, bytes[position].ToString("X2", CultureInfo.InvariantCulture)),
-            nameof(bytes));
+        text = null;
+        consumed = 0;
+        return false;
     }
 
     private (byte[] Bytes, int Consumed) EncodeNext(string text, int position)

@@ -23,6 +23,12 @@ public sealed class TranslationEntryViewModelTests
 
         public string Decode(IReadOnlyList<byte> bytes) => Encoding.ASCII.GetString(bytes.ToArray());
 
+        public bool TryDecode(IReadOnlyList<byte> bytes, out string? text)
+        {
+            text = Decode(bytes);
+            return true;
+        }
+
         public IReadOnlyList<byte> Encode(string text)
         {
             if (text.Any(c => c > 127))
