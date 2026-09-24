@@ -4,7 +4,7 @@ Toutes les modifications notables de RomTranslator sont documentées dans ce fic
 
 Le format s'inspire de [Keep a Changelog](https://keepachangelog.com/fr/1.1.0/), et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/) (SemVer).
 
-## [1.0.2] - 2026-09-24
+## [1.0.3] - 2026-09-24
 
 Première version publique. Socle applicatif et module de traduction Sega Saturn complets.
 
