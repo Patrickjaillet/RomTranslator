@@ -304,6 +304,79 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   <data name="Editor_Redo_ToolTip" xml:space="preserve">
     <value>Redo the undone change</value>
   </data>
+  <data name="Editor_OpenFindReplace_ToolTip" xml:space="preserve">
+    <value>Find and replace in translations</value>
+  </data>
+  <data name="Editor_CharacterTablePreviewLabel" xml:space="preserve">
+    <value>Preview (character table)</value>
+  </data>
+  <data name="Editor_CharacterTablePreview_UnsupportedCharacter" xml:space="preserve">
+    <value>⚠ One or more characters in this translation cannot be represented with the current character table.</value>
+  </data>
+  <data name="Editor_OpenGlossary_ToolTip" xml:space="preserve">
+    <value>Open the project glossary</value>
+  </data>
+
+  <!-- Find and replace -->
+  <data name="FindReplace_Title" xml:space="preserve">
+    <value>Find and replace</value>
+  </data>
+  <data name="FindReplace_SearchLabel" xml:space="preserve">
+    <value>Find</value>
+  </data>
+  <data name="FindReplace_ReplacementLabel" xml:space="preserve">
+    <value>Replace with</value>
+  </data>
+  <data name="FindReplace_MatchCount" xml:space="preserve">
+    <value>{0} matching entrie(s)</value>
+  </data>
+  <data name="FindReplace_ReplaceAllButton" xml:space="preserve">
+    <value>Replace all</value>
+  </data>
+  <data name="FindReplace_NoMatch" xml:space="preserve">
+    <value>No translation contains "{0}".</value>
+  </data>
+  <data name="FindReplace_ReplacedCount" xml:space="preserve">
+    <value>{0} entrie(s) changed.</value>
+  </data>
+  <data name="FindReplace_CloseButton" xml:space="preserve">
+    <value>Close</value>
+  </data>
+
+  <!-- Glossary -->
+  <data name="Glossary_Title" xml:space="preserve">
+    <value>Project glossary</value>
+  </data>
+  <data name="Glossary_SourceTermLabel" xml:space="preserve">
+    <value>Source term</value>
+  </data>
+  <data name="Glossary_TargetTermLabel" xml:space="preserve">
+    <value>Chosen translation</value>
+  </data>
+  <data name="Glossary_NoteLabel" xml:space="preserve">
+    <value>Note</value>
+  </data>
+  <data name="Glossary_AddButton" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Glossary_RemoveButton" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Glossary_NewTermWatermark" xml:space="preserve">
+    <value>New source term…</value>
+  </data>
+  <data name="Glossary_NoEntries" xml:space="preserve">
+    <value>The glossary does not contain any term yet.</value>
+  </data>
+  <data name="Glossary_InconsistenciesHeader" xml:space="preserve">
+    <value>Terminology inconsistencies detected</value>
+  </data>
+  <data name="Glossary_InconsistencyMessage" xml:space="preserve">
+    <value>"{0}" does not use the chosen translation "{1}" for the term "{2}".</value>
+  </data>
+  <data name="Glossary_CloseButton" xml:space="preserve">
+    <value>Close</value>
+  </data>
 
   <!-- About box -->
   <data name="About_Title" xml:space="preserve">

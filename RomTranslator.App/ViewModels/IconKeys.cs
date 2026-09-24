@@ -68,4 +68,10 @@ public static class IconKeys
 
     /// <summary>Alerte (dépassement de la limite de longueur).</summary>
     public const string AlertTriangle = "alert-triangle";
+
+    /// <summary>Recherche et remplacement.</summary>
+    public const string Replace = "replace";
+
+    /// <summary>Glossaire.</summary>
+    public const string Book = "book";
 }

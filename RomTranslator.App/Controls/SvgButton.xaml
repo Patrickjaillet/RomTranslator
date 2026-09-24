@@ -15,6 +15,7 @@
   </UserControl.Resources>
   <ui:Button Appearance="Transparent"
              AutomationProperties.Name="{Binding ToolTip, ElementName=Root}"
+             Click="OnInnerButtonClick"
              Command="{Binding Command, ElementName=Root}"
              CommandParameter="{Binding CommandParameter, ElementName=Root}">
     <StackPanel Orientation="Horizontal">

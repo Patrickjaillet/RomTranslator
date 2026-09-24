@@ -37,6 +37,9 @@ public partial class SvgButton : UserControl
     /// <summary>Indique qu'un libellé est défini.</summary>
     public static readonly DependencyProperty HasLabelProperty = _hasLabelPropertyKey.DependencyProperty;
 
+    /// <summary>Déclenché au clic, en plus de <see cref="Command" />, pour les actions gérées par la vue.</summary>
+    public event RoutedEventHandler? Click;
+
     public SvgButton()
     {
         InitializeComponent();
@@ -83,5 +86,10 @@ public partial class SvgButton : UserControl
     private static void OnLabelChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
     {
         sender.SetValue(_hasLabelPropertyKey, !string.IsNullOrEmpty(e.NewValue as string));
+    }
+
+    private void OnInnerButtonClick(object sender, RoutedEventArgs e)
+    {
+        Click?.Invoke(this, e);
     }
 }

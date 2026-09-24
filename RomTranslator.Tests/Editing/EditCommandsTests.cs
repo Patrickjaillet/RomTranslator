@@ -51,4 +51,60 @@ public sealed class EditCommandsTests
         stack.Redo();
         Assert.Equal("Bonjour", entry.TranslatedText);
     }
+
+    [Fact]
+    public void CompositeEditCommand_applies_every_command_in_order()
+    {
+        TranslationEntry first = new("e1", "Hello", 0, translatedText: "a");
+        TranslationEntry second = new("e2", "World", 8, translatedText: "b");
+        CompositeEditCommand command = new(new IEditCommand[]
+        {
+            new EditTranslatedTextCommand(first, "aa"),
+            new EditTranslatedTextCommand(second, "bb"),
+        });
+
+        command.Do();
+
+        Assert.Equal("aa", first.TranslatedText);
+        Assert.Equal("bb", second.TranslatedText);
+        Assert.Equal(2, command.Count);
+    }
+
+    [Fact]
+    public void CompositeEditCommand_undoes_every_command_in_reverse_order()
+    {
+        TranslationEntry first = new("e1", "Hello", 0, translatedText: "a");
+        TranslationEntry second = new("e2", "World", 8, translatedText: "b");
+        CompositeEditCommand command = new(new IEditCommand[]
+        {
+            new EditTranslatedTextCommand(first, "aa"),
+            new EditTranslatedTextCommand(second, "bb"),
+        });
+
+        command.Do();
+        command.Undo();
+
+        Assert.Equal("a", first.TranslatedText);
+        Assert.Equal("b", second.TranslatedText);
+    }
+
+    [Fact]
+    public void CompositeEditCommand_integrates_with_the_undo_redo_stack_as_a_single_step()
+    {
+        TranslationEntry first = new("e1", "Hello", 0);
+        TranslationEntry second = new("e2", "World", 8);
+        UndoRedoStack stack = new();
+
+        stack.Execute(new CompositeEditCommand(new IEditCommand[]
+        {
+            new EditTranslatedTextCommand(first, "Bonjour"),
+            new EditTranslatedTextCommand(second, "Monde"),
+        }));
+
+        Assert.True(stack.CanUndo);
+        stack.Undo();
+        Assert.Equal(string.Empty, first.TranslatedText);
+        Assert.Equal(string.Empty, second.TranslatedText);
+        Assert.False(stack.CanUndo);
+    }
 }

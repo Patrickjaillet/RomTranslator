@@ -304,6 +304,79 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="Editor_Redo_ToolTip" xml:space="preserve">
     <value>Rétablir la modification annulée</value>
   </data>
+  <data name="Editor_OpenFindReplace_ToolTip" xml:space="preserve">
+    <value>Rechercher et remplacer dans les traductions</value>
+  </data>
+  <data name="Editor_CharacterTablePreviewLabel" xml:space="preserve">
+    <value>Aperçu (table de caractères)</value>
+  </data>
+  <data name="Editor_CharacterTablePreview_UnsupportedCharacter" xml:space="preserve">
+    <value>⚠ Un ou plusieurs caractères de cette traduction ne sont pas représentables avec la table de caractères actuelle.</value>
+  </data>
+  <data name="Editor_OpenGlossary_ToolTip" xml:space="preserve">
+    <value>Ouvrir le glossaire du projet</value>
+  </data>
+
+  <!-- Recherche et remplacement -->
+  <data name="FindReplace_Title" xml:space="preserve">
+    <value>Rechercher et remplacer</value>
+  </data>
+  <data name="FindReplace_SearchLabel" xml:space="preserve">
+    <value>Rechercher</value>
+  </data>
+  <data name="FindReplace_ReplacementLabel" xml:space="preserve">
+    <value>Remplacer par</value>
+  </data>
+  <data name="FindReplace_MatchCount" xml:space="preserve">
+    <value>{0} entrée(s) correspondante(s)</value>
+  </data>
+  <data name="FindReplace_ReplaceAllButton" xml:space="preserve">
+    <value>Tout remplacer</value>
+  </data>
+  <data name="FindReplace_NoMatch" xml:space="preserve">
+    <value>Aucune traduction ne contient « {0} ».</value>
+  </data>
+  <data name="FindReplace_ReplacedCount" xml:space="preserve">
+    <value>{0} entrée(s) modifiée(s).</value>
+  </data>
+  <data name="FindReplace_CloseButton" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
+
+  <!-- Glossaire -->
+  <data name="Glossary_Title" xml:space="preserve">
+    <value>Glossaire du projet</value>
+  </data>
+  <data name="Glossary_SourceTermLabel" xml:space="preserve">
+    <value>Terme source</value>
+  </data>
+  <data name="Glossary_TargetTermLabel" xml:space="preserve">
+    <value>Traduction retenue</value>
+  </data>
+  <data name="Glossary_NoteLabel" xml:space="preserve">
+    <value>Remarque</value>
+  </data>
+  <data name="Glossary_AddButton" xml:space="preserve">
+    <value>Ajouter</value>
+  </data>
+  <data name="Glossary_RemoveButton" xml:space="preserve">
+    <value>Retirer</value>
+  </data>
+  <data name="Glossary_NewTermWatermark" xml:space="preserve">
+    <value>Nouveau terme source…</value>
+  </data>
+  <data name="Glossary_NoEntries" xml:space="preserve">
+    <value>Le glossaire ne contient encore aucun terme.</value>
+  </data>
+  <data name="Glossary_InconsistenciesHeader" xml:space="preserve">
+    <value>Incohérences terminologiques détectées</value>
+  </data>
+  <data name="Glossary_InconsistencyMessage" xml:space="preserve">
+    <value>« {0} » ne reprend pas la traduction retenue « {1} » pour le terme « {2} ».</value>
+  </data>
+  <data name="Glossary_CloseButton" xml:space="preserve">
+    <value>Fermer</value>
+  </data>
 
   <!-- Boîte À propos -->
   <data name="About_Title" xml:space="preserve">

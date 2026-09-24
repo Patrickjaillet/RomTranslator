@@ -81,6 +81,7 @@ public sealed class TranslationEntryViewModel : ObservableObject
             OnPropertyChanged(nameof(ExceedsLengthLimit));
             OnPropertyChanged(nameof(LengthLimitDisplayText));
             OnPropertyChanged(nameof(LengthLimitExceededMessage));
+            OnPropertyChanged(nameof(CharacterTablePreviewText));
         }
     }
 
@@ -122,6 +123,33 @@ public sealed class TranslationEntryViewModel : ObservableObject
         ? string.Format(CultureInfo.CurrentCulture, Strings.Editor_LengthLimitExceeded, check.EncodedLength, check.Limit)
         : null;
 
+    /// <summary>
+    /// Aperçu du texte traduit tel qu'il sera réellement affiché en jeu, obtenu en encodant puis décodant la
+    /// traduction avec la table de caractères du projet (un aller-retour identique au texte saisi signifie que
+    /// chaque caractère est représentable) ; <see langword="null" /> si le module console ne fournit pas de
+    /// table de caractères, ou si aucun rendu en jeu n'est simulé (voir <see cref="Strings.Editor_CharacterTablePreview_UnsupportedCharacter" />
+    /// pour le message affiché en cas de caractère non représentable).
+    /// </summary>
+    public string? CharacterTablePreviewText
+    {
+        get
+        {
+            if (_characterTable is null)
+            {
+                return null;
+            }
+
+            try
+            {
+                return _characterTable.Decode(_characterTable.Encode(_entry.TranslatedText));
+            }
+            catch (ArgumentException)
+            {
+                return Strings.Editor_CharacterTablePreview_UnsupportedCharacter;
+            }
+        }
+    }
+
     /// <summary>Notifie qu'une propriété affichée a pu changer à la suite d'une annulation/un rétablissement externe.</summary>
     public void RefreshFromEntry()
     {
@@ -131,5 +159,6 @@ public sealed class TranslationEntryViewModel : ObservableObject
         OnPropertyChanged(nameof(ExceedsLengthLimit));
         OnPropertyChanged(nameof(LengthLimitDisplayText));
         OnPropertyChanged(nameof(LengthLimitExceededMessage));
+        OnPropertyChanged(nameof(CharacterTablePreviewText));
     }
 }

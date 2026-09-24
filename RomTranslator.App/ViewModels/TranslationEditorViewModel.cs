@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Windows.Data;
@@ -50,6 +51,10 @@ public sealed class TranslationEditorViewModel : ObservableObject
         _entriesView = CollectionViewSource.GetDefaultView(_entries);
         _entriesView.Filter = FilterEntry;
 
+        UndoCommand = new RelayCommand(() => _undoRedo.Undo(), () => CanUndo);
+        RedoCommand = new RelayCommand(() => _undoRedo.Redo(), () => CanRedo);
+        Glossary = new GlossaryViewModel(_project);
+
         _undoRedo.StateChanged += (_, _) =>
         {
             OnPropertyChanged(nameof(CanUndo));
@@ -64,14 +69,15 @@ public sealed class TranslationEditorViewModel : ObservableObject
 
             RefreshStatistics();
             _entriesView.Refresh();
+            Glossary.RefreshInconsistencies();
         };
-
-        UndoCommand = new RelayCommand(() => _undoRedo.Undo(), () => CanUndo);
-        RedoCommand = new RelayCommand(() => _undoRedo.Redo(), () => CanRedo);
 
         RefreshStatistics();
         SelectedEntry = _entries.FirstOrDefault();
     }
+
+    /// <summary>Glossaire du projet, partagé par l'éditeur et la fenêtre de gestion du glossaire.</summary>
+    public GlossaryViewModel Glossary { get; }
 
     /// <summary>Vue filtrée des entrées, à lier à la liste de l'interface.</summary>
     public ICollectionView Entries => _entriesView;
@@ -149,6 +155,22 @@ public sealed class TranslationEditorViewModel : ObservableObject
     {
         int updatedCount = TranslationCsvExchange.Import(_project.Entries, path);
 
+        RefreshAfterExternalEdit();
+
+        return updatedCount;
+    }
+
+    /// <summary>
+    /// Crée un outil de recherche/remplacement sur les traductions du projet, lié à la même pile
+    /// d'annulation/rétablissement que l'éditeur, afin qu'un remplacement global reste annulable en une fois.
+    /// </summary>
+    public FindReplaceViewModel CreateFindReplaceViewModel()
+    {
+        return new FindReplaceViewModel(_project.Entries, _undoRedo, RefreshAfterExternalEdit);
+    }
+
+    private void RefreshAfterExternalEdit()
+    {
         foreach (TranslationEntryViewModel entry in _entries)
         {
             entry.RefreshFromEntry();
@@ -156,8 +178,7 @@ public sealed class TranslationEditorViewModel : ObservableObject
 
         RefreshStatistics();
         _entriesView.Refresh();
-
-        return updatedCount;
+        Glossary.RefreshInconsistencies();
     }
 
     private bool FilterEntry(object candidate)

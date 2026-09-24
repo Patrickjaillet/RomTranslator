@@ -1,0 +1,55 @@
+<!--
+  SPDX-License-Identifier: GPL-3.0-only
+  © 2026 Patrick JAILLET — RomTranslator
+-->
+<ui:FluentWindow x:Class="RomTranslator.App.Views.FindReplaceWindow"
+                 xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                 xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+                 xmlns:loc="clr-namespace:RomTranslator.Core.Localization;assembly=RomTranslator.Core"
+                 Title="{x:Static loc:Strings.FindReplace_Title}"
+                 Width="440"
+                 Height="320"
+                 MinWidth="380"
+                 MinHeight="280"
+                 ExtendsContentIntoTitleBar="True"
+                 ShowInTaskbar="False"
+                 WindowBackdropType="Mica"
+                 WindowStartupLocation="CenterOwner">
+
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="*" />
+      <RowDefinition Height="Auto" />
+    </Grid.RowDefinitions>
+
+    <ui:TitleBar Grid.Row="0" Title="{x:Static loc:Strings.FindReplace_Title}" ShowMaximize="False" />
+
+    <StackPanel Grid.Row="1" Margin="{DynamicResource Metrics.PagePadding}">
+      <TextBlock Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.FindReplace_SearchLabel}" />
+      <ui:TextBox Margin="0,8,0,0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
+
+      <TextBlock Margin="0,20,0,0" Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.FindReplace_ReplacementLabel}" />
+      <ui:TextBox Margin="0,8,0,0" Text="{Binding ReplacementText, UpdateSourceTrigger=PropertyChanged}" />
+
+      <TextBlock Margin="0,16,0,0"
+                 Style="{DynamicResource Text.Secondary}"
+                 Text="{Binding MatchCountText}" />
+
+      <TextBlock Margin="0,8,0,0"
+                 Style="{DynamicResource Text.Secondary}"
+                 Text="{Binding ResultMessage}"
+                 TextWrapping="Wrap"
+                 Visibility="{Binding ResultMessage, Converter={StaticResource NullToVisibility}}" />
+    </StackPanel>
+
+    <StackPanel Grid.Row="2"
+                Margin="{DynamicResource Metrics.PagePadding}"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+      <ui:Button Margin="0,0,8,0" Click="OnCloseClick" Content="{x:Static loc:Strings.FindReplace_CloseButton}" />
+      <ui:Button Appearance="Primary" Command="{Binding ReplaceAllCommand}" Content="{x:Static loc:Strings.FindReplace_ReplaceAllButton}" />
+    </StackPanel>
+  </Grid>
+</ui:FluentWindow>

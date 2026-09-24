@@ -1,6 +1,10 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // © 2026 Patrick JAILLET — RomTranslator
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using RomTranslator.App.ViewModels;
 using RomTranslator.Core.Abstractions;
 using RomTranslator.Core.Editing;
@@ -12,6 +16,26 @@ namespace RomTranslator.Tests.ViewModels;
 
 public sealed class TranslationEntryViewModelTests
 {
+    /// <summary>Table de caractères stricte (rejette tout caractère hors ASCII), pour tester l'aperçu.</summary>
+    private sealed class StrictAsciiCharacterTable : ICharacterTable
+    {
+        public string Name => "ASCII strict de test";
+
+        public string Decode(IReadOnlyList<byte> bytes) => Encoding.ASCII.GetString(bytes.ToArray());
+
+        public IReadOnlyList<byte> Encode(string text)
+        {
+            if (text.Any(c => c > 127))
+            {
+                throw new ArgumentException("Caractère non pris en charge.", nameof(text));
+            }
+
+            return Encoding.ASCII.GetBytes(text);
+        }
+
+        public IReadOnlyList<string> Validate() => Array.Empty<string>();
+    }
+
     [Fact]
     public void Exposes_the_read_only_fields_of_the_wrapped_entry()
     {
@@ -94,6 +118,34 @@ public sealed class TranslationEntryViewModelTests
 
         Assert.False(viewModel.ExceedsLengthLimit);
         Assert.Null(viewModel.LengthLimitExceededMessage);
+    }
+
+    [Fact]
+    public void CharacterTablePreviewText_is_null_when_no_character_table_is_configured()
+    {
+        TranslationEntry entry = new("e1", "Hello", 0, translatedText: "Bonjour");
+        TranslationEntryViewModel viewModel = new(entry, new UndoRedoStack());
+
+        Assert.Null(viewModel.CharacterTablePreviewText);
+    }
+
+    [Fact]
+    public void CharacterTablePreviewText_round_trips_a_representable_translation()
+    {
+        TranslationEntry entry = new("e1", "Hello", 0, translatedText: "Bonjour");
+        TranslationEntryViewModel viewModel = new(entry, new UndoRedoStack(), characterTable: new StrictAsciiCharacterTable());
+
+        Assert.Equal("Bonjour", viewModel.CharacterTablePreviewText);
+    }
+
+    [Fact]
+    public void CharacterTablePreviewText_reports_an_unsupported_character_instead_of_throwing()
+    {
+        TranslationEntry entry = new("e1", "Hello", 0, translatedText: "Café");
+        TranslationEntryViewModel viewModel = new(entry, new UndoRedoStack(), characterTable: new StrictAsciiCharacterTable());
+
+        Assert.NotNull(viewModel.CharacterTablePreviewText);
+        Assert.NotEqual("Café", viewModel.CharacterTablePreviewText);
     }
 
     [Fact]

@@ -78,6 +78,14 @@
                   VerticalAlignment="Center"
                   Orientation="Horizontal">
         <controls:SvgButton Margin="0,0,4,0"
+                            Click="OnOpenFindReplaceClick"
+                            IconData="{StaticResource Icon.replace}"
+                            ToolTip="{x:Static loc:Strings.Editor_OpenFindReplace_ToolTip}" />
+        <controls:SvgButton Margin="0,0,12,0"
+                            Click="OnOpenGlossaryClick"
+                            IconData="{StaticResource Icon.book}"
+                            ToolTip="{x:Static loc:Strings.Editor_OpenGlossary_ToolTip}" />
+        <controls:SvgButton Margin="0,0,4,0"
                             Command="{Binding UndoCommand}"
                             IconData="{StaticResource Icon.undo}"
                             ToolTip="{x:Static loc:Strings.Editor_Undo_ToolTip}" />
@@ -216,6 +224,13 @@
             <TextBox MinHeight="80"
                      Style="{DynamicResource Editor.TranslationTextBox}"
                      Text="{Binding TranslatedText, UpdateSourceTrigger=PropertyChanged}" />
+
+            <StackPanel Margin="0,20,0,0" Visibility="{Binding CharacterTablePreviewText, Converter={StaticResource NullToVisibility}}">
+              <TextBlock Style="{DynamicResource Text.Subheading}" Text="{x:Static loc:Strings.Editor_CharacterTablePreviewLabel}" />
+              <Border Margin="0,6,0,0" Padding="10,8" Style="{DynamicResource Surface.Card}">
+                <TextBlock FontFamily="Consolas" Text="{Binding CharacterTablePreviewText}" TextWrapping="Wrap" />
+              </Border>
+            </StackPanel>
 
             <TextBlock Margin="0,8,0,0"
                        Style="{DynamicResource Text.Secondary}"

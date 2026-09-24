@@ -16,6 +16,7 @@ public sealed class TranslationProject
     public const int CurrentSchemaVersion = 1;
 
     private List<TranslationEntry> _entries = new();
+    private List<GlossaryEntry> _glossary = new();
 
     /// <summary>Version du format du fichier, pour les migrations futures.</summary>
     public int SchemaVersion { get; set; } = CurrentSchemaVersion;
@@ -46,5 +47,15 @@ public sealed class TranslationProject
     {
         get => _entries;
         set => _entries = value ?? new List<TranslationEntry>();
+    }
+
+    /// <summary>
+    /// Glossaire du projet : termes récurrents (personnages, objets, lieux) et leur traduction retenue,
+    /// pour la cohérence terminologique (jamais <see langword="null" />).
+    /// </summary>
+    public List<GlossaryEntry> Glossary
+    {
+        get => _glossary;
+        set => _glossary = value ?? new List<GlossaryEntry>();
     }
 }
