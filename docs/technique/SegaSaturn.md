@@ -7,10 +7,11 @@
 > Document de recherche préalable à l'implémentation du module Sega Saturn (Phase 5). Rédigé à partir de
 > recherches sur le web (documentation SEGA officielle référencée mais non directement exploitable — PDF
 > scanné —, sites de reverse engineering, communautés romhacking) et de connaissances générales sur
-> l'architecture Saturn. **Niveau de confiance indiqué pour chaque section** : les affirmations non
-> vérifiées auprès d'une source primaire exploitable doivent être confirmées avant d'écrire du code qui en
-> dépend de façon critique (notamment les offsets exacts de l'IP.BIN), par exemple par extraction manuelle
-> d'un IP.BIN réel avec un éditeur hexadécimal et comparaison avec ce document.
+> l'architecture Saturn. **Niveau de confiance indiqué pour chaque section.** La structure de l'IP.BIN
+> (§ 3) a pu être vérifiée avec un niveau de confiance élevé grâce au code source du SDK homebrew Yaul et à
+> une extraction hexadécimale directe sur une image homebrew réelle fournie par le propriétaire du projet ;
+> les autres sections reposent sur des sources secondaires recoupées et restent à confirmer au cas par cas
+> au fil de l'implémentation.
 
 ---
 
@@ -50,32 +51,53 @@ Le fichier `.cue` référence un ou plusieurs fichiers `.bin`, avec des lignes `
 
 ## 3. En-tête IP.BIN (Initial Program)
 
-**Confiance : moyenne** pour la structure générale et la présence des champs ; **faible à confirmer** pour les offsets byte-par-byte exacts de chaque champ, faute d'avoir pu extraire le texte de la spécification officielle SEGA (« Disc Format Standards Specification Sheet », document ST-040-R4-051795, disponible en PDF scanné sur antime.kapsi.fi/sega/files/ST-040-R4-051795.pdf, référence citée par de multiples sources communautaires comme document autoritaire). **Action recommandée avant la Phase 5.2** : extraire l'IP.BIN d'une image ROM de test (homebrew libre de droits) avec un éditeur hexadécimal et comparer avec le tableau ci-dessous, en s'appuyant si possible sur les gabarits `IP.BIN` fournis par le SDK homebrew moderne Yaul (`yaul-org/libyaul` sur GitHub) plutôt que sur ce seul document.
+**Confiance : élevée.** Les offsets ci-dessous proviennent du fichier source `libyaul/ip/ip.sx` du SDK homebrew open source **Yaul** (`github.com/yaul-org/libyaul`, licence libre, dépôt consulté directement), qui définit littéralement la disposition des champs assemblés dans l'IP.BIN. Cette structure a été **vérifiée par extraction hexadécimale directe sur deux images réelles indépendantes** fournies par le propriétaire du projet :
+1. une image homebrew (`sl_coff.iso`, disque 1 de *CubecatYarniaPublic2_0_2*, secteurs `MODE1/2048`) ;
+2. un jeu commercial officiel (*Dark Savior*, USA, extrait au format BIN/CUE `MODE1/2352` depuis un fichier `.chd` avec `chdman extractcd`).
 
-### Faits confirmés par plusieurs sources indépendantes
+Chaque champ correspond exactement aux octets observés sur les deux images (avec des valeurs différentes propres à chaque jeu — zone, périphériques, titre, adresse de premier fichier —, ce qui confirme que la structure elle-même, et non son contenu, est bien fixe). Cette double vérification croisée (source du SDK + deux observations réelles concordantes, homebrew et commercial) lève la réserve précédente sur les offsets non confirmés.
 
-- L'IP.BIN occupe les **premiers 32 768 octets (32 Kio)** du disque, soit les **16 premiers secteurs** de 2 048 octets de la zone système (certaines sources mentionnent 15 secteurs pour la partie strictement « boot » avant l'AIP — à confirmer).
-- Le tout premier champ du disque est la chaîne d'identification matérielle **`"SEGA SEGASATURN"`**, vérifiée par le BIOS de démarrage (« boot ROM ») avant tout chargement : c'est ce motif que `SaturnRomValidator` devra rechercher en tout premier lieu pour reconnaître une image Saturn valide.
-- L'IP.BIN est composé d'un **code de boot** (« boot code ») suivi du **programme initial de l'application** (AIP, « Application Initial Program »).
-- Le code de boot est chargé par le BIOS à l'adresse mémoire **`0x06002000`** (zone RAM basse) ; l'adresse de l'AIP qui suit dépend de la taille du code de boot et du nombre de codes de zone/région présents dans l'en-tête.
-- L'en-tête contient au moins les champs suivants (noms et présence confirmés, offsets exacts non vérifiés) : identifiant matériel, identifiant de fabricant (« maker ID »), numéro de produit et version, date de sortie (« release date »), informations sur les périphériques compatibles, symboles de zone/région, nom du jeu (« game title »), adresses de pile pour les deux processeurs SH-2 (maître et esclave), adresse et taille du premier fichier à charger (habituellement `1ST_READ.BIN`).
-- Un outil de sécurité (« security ring ») vérifie certains octets de l'IP.BIN long-mot par long-mot lors du démarrage sur un vrai Saturn ; ce mécanisme concerne uniquement l'exécution sur matériel réel et n'affecte pas la lecture/écriture d'une image ROM par un outil de traduction (aucune préoccupation particulière pour `IRomLoader`/`ITextInjector`, sauf si RomTranslator devait un jour valider l'exécutabilité sur matériel réel, hors périmètre v1).
+### Structure exacte (vérifiée)
 
-### Tableau de travail (à vérifier avant implémentation, Phase 5.2)
+| Champ | Offset | Longueur | `sl_coff.iso` (homebrew) | *Dark Savior* (USA, commercial) |
+|---|---|---|---|---|
+| Identifiant matériel | `0x000` | 16 octets | `"SEGA SEGASATURN "` | `"SEGA SEGASATURN "` |
+| Identifiant fabricant (« maker ID ») | `0x010` | 16 octets | `"SEGA SONIC ZTM  "` | `"SEGA ENTERPRISES"` |
+| Numéro de produit | `0x020` | 10 octets | `"T-0606080 "` | `"MK-81304  "` |
+| Version | `0x02A` | 6 octets | `"V1.000"` | `"V1.000"` |
+| Date de sortie (AAAAMMJJ) | `0x030` | 8 octets | `"20180721"` | `"19961119"` |
+| Informations sur le périphérique (« device information ») | `0x038` | 8 octets | `"CD-1/1  "` | `"CD-1/1  "` |
+| Symbole(s) de zone cible | `0x040` | 10 octets | `"JTUE      "` | `"JTU       "` |
+| Remplissage fixe (espaces) | `0x04A` | 6 octets | espaces | espaces |
+| Périphérique(s) compatible(s) | `0x050` | 16 octets | `"U               "` | `"JAE             "` |
+| Nom du jeu (« game name »), complété par des espaces | `0x060` | 112 octets | `"SONIC Z-TREME V.0.07"` suivi d'espaces | `"DARK SAVIOR"` suivi d'espaces |
+| Réservé | `0x0D0` | 4 octets | `0x00000000` | `0x00000000` |
+| Réservé | `0x0D4` | 4 octets | `0x00000000` | `0x00000000` |
+| Réservé | `0x0D8` | 4 octets | `0x00000000` | `0x00000000` |
+| Réservé | `0x0DC` | 4 octets | `0x00000000` | `0x00000000` |
+| Taille de l'IP (`__ip_len`) | `0x0E0` | 4 octets, big-endian | `0x00001800` (6 144 octets) | `0x00001800` (6 144 octets) |
+| Adresse de pile du SH-2 maître (« Stack-M ») | `0x0E4` | 4 octets, big-endian | `0x00000000` (voir note) | `0x00000000` (voir note) |
+| Réservé | `0x0E8` | 4 octets | `0x00000000` | `0x00000000` |
+| Adresse de pile du SH-2 esclave (« Stack-S ») | `0x0EC` | 4 octets, big-endian | `0x00000000` (voir note) | `0x00000000` (voir note) |
+| Adresse du premier fichier à charger (« 1st read address ») | `0x0F0` | 4 octets, big-endian | `0x06004000` | `0x06010000` |
+| Taille du premier fichier à charger (« 1st read size ») | `0x0F4` | 4 octets, big-endian | `0x00000000` (voir note) | non relevée sur cet exemple |
+| Réservé | `0x0F8` | 4 octets | `0x00000000` | — |
+| Réservé | `0x0FC` | 4 octets | `0x00000000` | — |
+| Sécurité (blocs `sys_sec`/`sys_arej`/`sys_aret`/`sys_areu`/`sys_aree`), puis code de boot (« boot code ») | à partir de `0x100` | variable | code exécutable, hors du périmètre de RomTranslator | idem |
 
-| Champ | Offset approximatif | Longueur approximative | Confiance |
-|---|---|---|---|
-| Identifiant matériel (`"SEGA SEGASATURN"`) | `0x0000` | 16 octets | Élevée |
-| Identifiant fabricant | après l'identifiant matériel | variable | Moyenne (présence confirmée, offset à vérifier) |
-| Numéro de produit / version | — | — | Moyenne (présence confirmée, offset à vérifier) |
-| Date de sortie | — | — | Moyenne (présence confirmée, offset à vérifier) |
-| Symboles de périphériques compatibles | — | — | Moyenne (présence confirmée, offset à vérifier) |
-| Symboles de zone/région | — | — | Moyenne (présence confirmée, offset à vérifier) |
-| Titre du jeu | — | jusqu'à 112 octets selon les usages courants du SDK (à confirmer) | Faible |
-| Adresses de pile (maître/esclave SH-2) | — | — | Faible |
-| Adresse/taille du premier fichier à exécuter | — | — | Faible |
+Toutes les valeurs entières multi-octets (tailles, adresses) sont stockées en **big-endian**, cohérent avec l'architecture Hitachi SH-2 de la Saturn en mode natif.
 
-Ce tableau sera complété avec les offsets exacts en Phase 5.2, avant l'écriture de `SaturnRomLoader`, une fois une image de test disponible pour vérification directe.
+**Note sur les adresses de pile et la taille du premier fichier observées à zéro** : sur les deux images vérifiées, ces champs contiennent `0x00000000` plutôt qu'une adresse ou une taille réelle. Deux explications possibles, non tranchées par cette seule vérification : (1) ces valeurs sont calculées et renseignées dynamiquement par le BIOS/chargeur à l'exécution plutôt que fixées dans l'IP.BIN sur disque, ou (2) certains outils de mastering (dont celui utilisé pour ces deux images) laissent ces champs à zéro par convention lorsque le chargeur applicatif détermine lui-même ces valeurs au démarrage. Sans conséquence pour `SaturnRomLoader`/`SaturnRomValidator` (Phase 5.2), qui n'ont besoin que de lire les métadonnées d'identification du jeu (titre, éditeur, région, numéro de produit), pas de reproduire le comportement du chargeur de démarrage.
+
+### Faits complémentaires confirmés
+
+- L'IP.BIN occupe au minimum les **premiers 32 768 octets (32 Kio)** de la zone système du disque (16 secteurs de 2 048 octets), même si sa taille effective déclarée (`0x0E0`) peut être inférieure (6 144 octets dans l'exemple observé) ; le gabarit Yaul complète explicitement l'IP.BIN à une taille minimale supérieure à 4 Kio par un remplissage (`.fill 256`) à la toute fin du fichier assemblé.
+- Le champ « Identifiant matériel » (`"SEGA SEGASATURN "`) est ce que `SaturnRomValidator` doit rechercher en tout premier lieu pour reconnaître une image Saturn valide.
+- Le code de boot est chargé par le BIOS à l'adresse mémoire **`0x06002000`** (zone RAM basse partagée par les deux SH-2) ; l'adresse de l'AIP qui suit dépend de la taille du code de boot.
+- Un outil de sécurité (« security ring ») vérifie certains octets de l'IP.BIN lors du démarrage sur un vrai Saturn ; ce mécanisme ne concerne que l'exécution sur matériel réel et n'affecte pas la lecture/écriture d'une image ROM par RomTranslator.
+- **Limite du champ « Nom du jeu »** : 112 octets exactement (confirmé par le script `make-ip`, qui tronque explicitement à 112 caractères) — une contrainte à respecter si RomTranslator devait un jour permettre de modifier ce champ (hors périmètre v1, qui ne traduit que le contenu du jeu, pas ses métadonnées IP.BIN).
+
+**Ce tableau est prêt à être utilisé tel quel pour écrire `SaturnRomLoader` en Phase 5.2** ; seule l'interprétation exacte des symboles de zone (`0x040`, ex. `"JTUE"` = Japon/Taïwan(?)/USA/Europe, à confirmer précisément lettre par lettre si le module doit un jour distinguer les régions) reste à préciser au moment de l'implémentation, sans bloquer l'écriture du chargeur lui-même.
 
 ---
 
@@ -143,7 +165,8 @@ Ce tableau sera complété avec les offsets exacts en Phase 5.2, avant l'écritu
 - [Compressed DAT files on many Saturn Games — SegaXtreme](https://segaxtreme.net/threads/compressed-dat-files-on-many-saturn-games.257/)
 - [Translation issues: Hacking the Panzer Dragoon Saga font — SegaXtreme](https://segaxtreme.net/threads/translation-issues-hacking-the-panzer-dragoon-saga-font.16280/)
 - [Cracking The Sega Saturn After 20 Years — Hackaday](https://hackaday.com/2016/07/11/cracking-the-sega-saturn-after-20-years/)
-- [libyaul — SDK Saturn homebrew open source moderne (GitHub)](https://github.com/yaul-org/libyaul) — non consulté en détail lors de cette recherche (accès direct au dépôt indisponible), recommandé comme référence de vérification en Phase 5.2.
+- [libyaul — SDK Saturn homebrew open source moderne (GitHub)](https://github.com/yaul-org/libyaul), en particulier [`libyaul/ip/ip.sx`](https://github.com/yaul-org/libyaul/blob/develop/libyaul/ip/ip.sx) (gabarit assembleur exact de l'IP.BIN, source de la structure exacte du § 3) et [`tools/make-ip/make-ip`](https://github.com/yaul-org/libyaul/blob/develop/tools/make-ip/make-ip) (script qui renseigne ce gabarit, confirme la troncature du titre à 112 caractères).
+- Vérification directe par extraction hexadécimale (réalisée pendant cette session, pas une source web) : `sl_coff.iso` (disque 1 de *CubecatYarniaPublic2_0_2*, image homebrew fournie par le propriétaire du projet) et *Dark Savior* (USA), jeu commercial officiel extrait au format BIN/CUE depuis un fichier `.chd` de la collection personnelle du propriétaire avec l'outil `chdman` (MAME Compressed Hunks of Data manager).
 
 ---
 
@@ -152,3 +175,4 @@ Ce tableau sera complété avec les offsets exacts en Phase 5.2, avant l'écritu
 | Date | Modification |
 |---|---|
 | 2026-09-24 | Rédaction initiale (Phase 5.1), à partir de recherches web et de connaissances générales. Offsets exacts de l'IP.BIN à confirmer avant la Phase 5.2 (voir § 3). |
+| 2026-09-24 | Structure de l'IP.BIN (§ 3) vérifiée et complétée avec les offsets exacts, à partir du code source du SDK Yaul et d'une extraction hexadécimale croisée sur une image homebrew et un jeu commercial officiel (*Dark Savior*, USA) fournis par le propriétaire du projet. Le point bloquant identifié à la rédaction initiale est levé. |
