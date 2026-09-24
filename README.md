@@ -19,7 +19,7 @@ Le premier module disponible cible la **Sega Saturn**. D'autres consoles seront 
 
 ## Statut du projet
 
-Le projet est en cours de développement. Consultez les [notes de version](CHANGELOG.md) pour l'état d'avancement détaillé une fois la première release publiée.
+RomTranslator est publié et fonctionnel, avec le module de traduction Sega Saturn complet. Consultez les [notes de version](CHANGELOG.md) pour le détail de chaque version.
 
 ## Installation
 
@@ -34,7 +34,7 @@ Aucune donnée n'est écrite en dehors du dossier de l'application (pas de regis
 ## Configuration requise
 
 - Windows 10 ou Windows 11 (64 bits)
-- Voir la section « Prérequis » du site officiel pour le détail du runtime .NET nécessaire
+- Aucun prérequis supplémentaire : la distribution portable inclut le runtime .NET nécessaire (self-contained)
 
 ## Utilisation
 
