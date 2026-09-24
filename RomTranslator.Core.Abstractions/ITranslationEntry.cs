@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // © 2026 Patrick JAILLET — RomTranslator
 
+using System.Collections.Generic;
+
 namespace RomTranslator.Core.Abstractions;
 
 /// <summary>Statut de traduction d'une entrée de texte.</summary>
@@ -39,7 +41,14 @@ public interface ITranslationEntry
     /// <summary>Contexte libre aidant à la traduction (personnage, scène, contrainte narrative...), ou <see langword="null" />.</summary>
     string? Context { get; }
 
-    /// <summary>Décalage (offset) de l'entrée dans la ROM d'origine.</summary>
+    /// <summary>
+    /// Décalages (offsets) de chaque occurrence identique du texte source dans la ROM d'origine, dans l'ordre
+    /// où elles ont été rencontrées (au moins un élément). Toutes doivent être réécrites lors de la
+    /// réinjection de la traduction.
+    /// </summary>
+    IReadOnlyList<long> Offsets { get; }
+
+    /// <summary>Décalage de la première occurrence, pour l'affichage.</summary>
     long Offset { get; }
 
     /// <summary>Nombre d'occurrences identiques regroupées sous cette entrée (au moins 1).</summary>

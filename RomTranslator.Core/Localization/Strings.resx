@@ -575,4 +575,24 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="Saturn_CharacterTableEditor_FileFilter" xml:space="preserve">
     <value>Table de caractères (*.tbl)|*.tbl</value>
   </data>
+
+  <!-- Module Sega Saturn : réinjection -->
+  <data name="Saturn_Injection_TranslationTooLongNoRelocation" xml:space="preserve">
+    <value>La traduction de « {0} » (« {1} ») dépasse la longueur du texte source et aucune zone de réserve n'a été fournie pour la reloger.</value>
+  </data>
+  <data name="Saturn_Injection_NoKnownPointer" xml:space="preserve">
+    <value>Aucun pointeur connu ne désigne le texte source « {0} » : impossible de le reloger en toute sécurité.</value>
+  </data>
+  <data name="Saturn_Injection_StringRelocated" xml:space="preserve">
+    <value>« {0} » a été relogée à l'octet 0x{1:X} de la zone de réserve.</value>
+  </data>
+  <data name="Saturn_Injection_FreeSpaceExhausted" xml:space="preserve">
+    <value>La zone de réserve est insuffisante : {0} octet(s) nécessaire(s), {1} restant(s).</value>
+  </data>
+  <data name="Saturn_Injection_NoSpaceCharacter" xml:space="preserve">
+    <value>La table de caractères ne peut pas encoder un espace en un seul octet : impossible de compléter une traduction plus courte que l'original.</value>
+  </data>
+  <data name="Saturn_Injection_ConsistencyMismatch" xml:space="preserve">
+    <value>Contrôle de cohérence : la relecture à l'emplacement écrit pour « {0} » (décalage 0x{1:X}) donne « {2} », différent de la traduction attendue.</value>
+  </data>
 </root>

@@ -202,20 +202,20 @@ public sealed class SaturnTextExtractor : ITextExtractor
 
     private static List<ITranslationEntry> GroupIntoEntries(List<CandidateString> candidates)
     {
-        // Un même texte source peut apparaître à plusieurs offsets ; la première occurrence rencontrée
-        // fixe l'offset et l'identifiant de l'entrée regroupée, les suivantes n'incrémentent que le compteur.
-        Dictionary<string, (long FirstOffset, int Count)> occurrencesByText = new(StringComparer.Ordinal);
+        // Un même texte source peut apparaître à plusieurs offsets ; toutes les occurrences sont conservées
+        // (nécessaire à la réinjection, Phase 5.6), dans l'ordre où elles ont été rencontrées.
+        Dictionary<string, List<long>> offsetsByText = new(StringComparer.Ordinal);
         List<string> textsInFirstSeenOrder = new();
 
         foreach (CandidateString candidate in candidates)
         {
-            if (occurrencesByText.TryGetValue(candidate.Text, out (long FirstOffset, int Count) existing))
+            if (offsetsByText.TryGetValue(candidate.Text, out List<long>? offsets))
             {
-                occurrencesByText[candidate.Text] = (existing.FirstOffset, existing.Count + 1);
+                offsets.Add(candidate.Offset);
             }
             else
             {
-                occurrencesByText[candidate.Text] = (candidate.Offset, 1);
+                offsetsByText[candidate.Text] = new List<long> { candidate.Offset };
                 textsInFirstSeenOrder.Add(candidate.Text);
             }
         }
@@ -223,12 +223,11 @@ public sealed class SaturnTextExtractor : ITextExtractor
         List<ITranslationEntry> entries = new(textsInFirstSeenOrder.Count);
         foreach (string text in textsInFirstSeenOrder)
         {
-            (long offset, int count) = occurrencesByText[text];
+            List<long> offsets = offsetsByText[text];
             entries.Add(new TranslationEntry(
-                id: offset.ToString("X", CultureInfo.InvariantCulture),
+                id: offsets[0].ToString("X", CultureInfo.InvariantCulture),
                 sourceText: text,
-                offset: offset,
-                occurrenceCount: count));
+                offsets: offsets));
         }
 
         return entries;

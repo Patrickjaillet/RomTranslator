@@ -39,7 +39,7 @@ public sealed class TranslationEntryViewModelTests
     [Fact]
     public void Exposes_the_read_only_fields_of_the_wrapped_entry()
     {
-        TranslationEntry entry = new("e1", "Hello", 0x1A, occurrenceCount: 3, context: "Titre de l'écran");
+        TranslationEntry entry = new("e1", "Hello", new long[] { 0x1A, 0x2A, 0x3A }, context: "Titre de l'écran");
         TranslationEntryViewModel viewModel = new(entry, new UndoRedoStack());
 
         Assert.Equal("e1", viewModel.Id);

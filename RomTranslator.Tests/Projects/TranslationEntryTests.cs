@@ -37,9 +37,19 @@ public sealed class TranslationEntryTests
     }
 
     [Fact]
-    public void Constructor_rejects_an_occurrence_count_below_one()
+    public void Constructor_rejects_an_empty_offset_list()
     {
-        Assert.Throws<ArgumentOutOfRangeException>(() => new TranslationEntry("e1", "Hello", 0, occurrenceCount: 0));
+        Assert.Throws<ArgumentException>(() => new TranslationEntry("e1", "Hello", Array.Empty<long>()));
+    }
+
+    [Fact]
+    public void Constructor_accepts_multiple_offsets_for_duplicated_occurrences()
+    {
+        TranslationEntry entry = new("e1", "Hello", new long[] { 0x10, 0x40, 0x90 });
+
+        Assert.Equal(0x10, entry.Offset);
+        Assert.Equal(3, entry.OccurrenceCount);
+        Assert.Equal(new long[] { 0x10, 0x40, 0x90 }, entry.Offsets);
     }
 
     [Theory]

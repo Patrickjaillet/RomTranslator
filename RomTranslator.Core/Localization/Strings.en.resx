@@ -575,4 +575,24 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   <data name="Saturn_CharacterTableEditor_FileFilter" xml:space="preserve">
     <value>Character table (*.tbl)|*.tbl</value>
   </data>
+
+  <!-- Sega Saturn module: reinjection -->
+  <data name="Saturn_Injection_TranslationTooLongNoRelocation" xml:space="preserve">
+    <value>The translation of "{0}" ("{1}") exceeds the source text length and no free space area was provided to relocate it.</value>
+  </data>
+  <data name="Saturn_Injection_NoKnownPointer" xml:space="preserve">
+    <value>No known pointer references the source text "{0}": it cannot be safely relocated.</value>
+  </data>
+  <data name="Saturn_Injection_StringRelocated" xml:space="preserve">
+    <value>"{0}" was relocated to byte 0x{1:X} of the free space area.</value>
+  </data>
+  <data name="Saturn_Injection_FreeSpaceExhausted" xml:space="preserve">
+    <value>The free space area is not large enough: {0} byte(s) needed, {1} remaining.</value>
+  </data>
+  <data name="Saturn_Injection_NoSpaceCharacter" xml:space="preserve">
+    <value>The character table cannot encode a space as a single byte: a translation shorter than the original cannot be padded.</value>
+  </data>
+  <data name="Saturn_Injection_ConsistencyMismatch" xml:space="preserve">
+    <value>Consistency check: rereading the written location for "{0}" (offset 0x{1:X}) gives "{2}", which differs from the expected translation.</value>
+  </data>
 </root>

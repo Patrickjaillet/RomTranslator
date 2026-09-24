@@ -486,4 +486,22 @@ public static class Strings
     /// <summary>Chaîne localisée « Saturn_CharacterTableEditor_FileFilter ».</summary>
     public static string Saturn_CharacterTableEditor_FileFilter => _resourceManager.GetString("Saturn_CharacterTableEditor_FileFilter", CultureInfo.CurrentUICulture) ?? string.Empty;
 
+    /// <summary>Chaîne localisée « Saturn_Injection_TranslationTooLongNoRelocation ».</summary>
+    public static string Saturn_Injection_TranslationTooLongNoRelocation => _resourceManager.GetString("Saturn_Injection_TranslationTooLongNoRelocation", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Injection_NoKnownPointer ».</summary>
+    public static string Saturn_Injection_NoKnownPointer => _resourceManager.GetString("Saturn_Injection_NoKnownPointer", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Injection_StringRelocated ».</summary>
+    public static string Saturn_Injection_StringRelocated => _resourceManager.GetString("Saturn_Injection_StringRelocated", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Injection_FreeSpaceExhausted ».</summary>
+    public static string Saturn_Injection_FreeSpaceExhausted => _resourceManager.GetString("Saturn_Injection_FreeSpaceExhausted", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Injection_NoSpaceCharacter ».</summary>
+    public static string Saturn_Injection_NoSpaceCharacter => _resourceManager.GetString("Saturn_Injection_NoSpaceCharacter", CultureInfo.CurrentUICulture) ?? string.Empty;
+
+    /// <summary>Chaîne localisée « Saturn_Injection_ConsistencyMismatch ».</summary>
+    public static string Saturn_Injection_ConsistencyMismatch => _resourceManager.GetString("Saturn_Injection_ConsistencyMismatch", CultureInfo.CurrentUICulture) ?? string.Empty;
+
 }
