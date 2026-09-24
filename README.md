@@ -1,6 +1,6 @@
 # RomTranslator
 
-**RomTranslator** est un logiciel Windows portable dédié à la traduction de ROMs de jeux vidéo en français. L'application est organisée en onglets, chaque onglet correspondant à une console prise en charge : extraction du texte du jeu, édition de la traduction, puis réinjection dans une image de ROM prête à l'emploi.
+**RomTranslator** est un logiciel Windows portable dédié à la traduction de ROMs de jeux vidéo dans la langue de votre choix. L'application est organisée en onglets, chaque onglet correspondant à une console prise en charge : extraction du texte du jeu, édition de la traduction, puis réinjection dans une image de ROM prête à l'emploi.
 
 Le premier module disponible cible la **Sega Saturn**. D'autres consoles seront ajoutées progressivement, sur la base du même socle applicatif.
 
@@ -15,7 +15,7 @@ Le premier module disponible cible la **Sega Saturn**. D'autres consoles seront 
 - Extraction automatique et manuelle de blocs de texte
 - Éditeur de traductions avec suivi de statut, glossaire et contrôle de longueur
 - Réinjection du texte traduit avec relocalisation des pointeurs
-- Génération d'une image de ROM traduite ou d'un patch (IPS/xdelta)
+- Génération d'une image de ROM traduite ou d'un patch IPS
 
 ## Statut du projet
 
