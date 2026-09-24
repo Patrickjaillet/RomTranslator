@@ -455,4 +455,24 @@ Move the application to a folder that is writable (desktop, external drive, etc.
   <data name="Saturn_Validation_UnknownRegion" xml:space="preserve">
     <value>unknown</value>
   </data>
+
+  <!-- Sega Saturn module: character tables -->
+  <data name="Saturn_Error_TableMalformedLine" xml:space="preserve">
+    <value>Malformed character table line (expected HEX=text): {0}</value>
+  </data>
+  <data name="Saturn_Error_TableInvalidHex" xml:space="preserve">
+    <value>Invalid hexadecimal sequence in the character table: {0}</value>
+  </data>
+  <data name="Saturn_Table_DuplicateByteSequence" xml:space="preserve">
+    <value>Byte sequence {0} is mapped to two different texts: "{1}" and "{2}".</value>
+  </data>
+  <data name="Saturn_Table_DuplicateText" xml:space="preserve">
+    <value>Text "{0}" is mapped to two different byte sequences: {1} and {2}.</value>
+  </data>
+  <data name="Saturn_Table_UnknownByte" xml:space="preserve">
+    <value>Byte {0} has no match in the character table.</value>
+  </data>
+  <data name="Saturn_Table_UnknownCharacter" xml:space="preserve">
+    <value>Character "{0}" has no match in the character table.</value>
+  </data>
 </root>

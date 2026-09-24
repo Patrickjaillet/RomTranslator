@@ -455,4 +455,24 @@ Déplacez l'application dans un dossier accessible en écriture (bureau, disque 
   <data name="Saturn_Validation_UnknownRegion" xml:space="preserve">
     <value>inconnue</value>
   </data>
+
+  <!-- Module Sega Saturn : tables de caractères -->
+  <data name="Saturn_Error_TableMalformedLine" xml:space="preserve">
+    <value>Ligne de table de caractères mal formée (attendu HEX=texte) : {0}</value>
+  </data>
+  <data name="Saturn_Error_TableInvalidHex" xml:space="preserve">
+    <value>Séquence hexadécimale invalide dans la table de caractères : {0}</value>
+  </data>
+  <data name="Saturn_Table_DuplicateByteSequence" xml:space="preserve">
+    <value>La séquence d'octets {0} est associée à deux textes différents : « {1} » et « {2} ».</value>
+  </data>
+  <data name="Saturn_Table_DuplicateText" xml:space="preserve">
+    <value>Le texte « {0} » est associé à deux séquences d'octets différentes : {1} et {2}.</value>
+  </data>
+  <data name="Saturn_Table_UnknownByte" xml:space="preserve">
+    <value>L'octet {0} n'a pas de correspondance dans la table de caractères.</value>
+  </data>
+  <data name="Saturn_Table_UnknownCharacter" xml:space="preserve">
+    <value>Le caractère « {0} » n'a pas de correspondance dans la table de caractères.</value>
+  </data>
 </root>

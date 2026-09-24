@@ -9,4 +9,12 @@
     <ProjectReference Include="..\RomTranslator.Core\RomTranslator.Core.csproj" />
   </ItemGroup>
 
+  <!-- Tables de caractères prédéfinies (.tbl) : copiées telles quelles, portables et éditables par l'utilisateur. -->
+  <ItemGroup>
+    <None Include="CharacterTables\PredefinedTables\*.tbl">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <Link>PredefinedTables\%(Filename)%(Extension)</Link>
+    </None>
+  </ItemGroup>
+
 </Project>
