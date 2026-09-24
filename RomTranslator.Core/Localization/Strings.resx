@@ -211,16 +211,16 @@
     <value>Bienvenue dans {0}</value>
   </data>
   <data name="Home_Description" xml:space="preserve">
-    <value>Traduisez des ROMs de jeux vidéo en français : extraction du texte, édition de la traduction, puis réinjection dans une image prête à l'emploi.</value>
+    <value>Traduisez des ROMs de jeux vidéo dans la langue de votre choix : extraction du texte, édition de la traduction, puis réinjection dans une image prête à l'emploi.</value>
   </data>
   <data name="Home_VersionPrefix" xml:space="preserve">
     <value>Version {0}</value>
   </data>
   <data name="Home_OneTabPerConsole_Title" xml:space="preserve">
-    <value>Un onglet par console</value>
+    <value>Un onglet par projet</value>
   </data>
   <data name="Home_OneTabPerConsole_Description" xml:space="preserve">
-    <value>Chaque console prise en charge apparaît dans un onglet dédié, à droite de cet onglet d'accueil. Le module Sega Saturn sera le premier disponible.</value>
+    <value>Créez ou ouvrez un projet de traduction (menu Fichier) pour qu'il apparaisse dans un onglet dédié, à droite de cet onglet d'accueil. Le module Sega Saturn est le premier disponible.</value>
   </data>
   <data name="Home_UsefulLinks" xml:space="preserve">
     <value>Liens utiles</value>

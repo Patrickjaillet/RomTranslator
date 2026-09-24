@@ -211,16 +211,16 @@
     <value>Welcome to {0}</value>
   </data>
   <data name="Home_Description" xml:space="preserve">
-    <value>Translate video game ROMs into French: extract the text, edit the translation, then reinject it into a ready-to-use image.</value>
+    <value>Translate video game ROMs into any language you choose: extract the text, edit the translation, then reinject it into a ready-to-use image.</value>
   </data>
   <data name="Home_VersionPrefix" xml:space="preserve">
     <value>Version {0}</value>
   </data>
   <data name="Home_OneTabPerConsole_Title" xml:space="preserve">
-    <value>One tab per console</value>
+    <value>One tab per project</value>
   </data>
   <data name="Home_OneTabPerConsole_Description" xml:space="preserve">
-    <value>Each supported console appears in its own tab, to the right of this home tab. The Sega Saturn module will be the first one available.</value>
+    <value>Create or open a translation project (File menu) to have it appear in its own tab, to the right of this home tab. The Sega Saturn module is the first one available.</value>
   </data>
   <data name="Home_UsefulLinks" xml:space="preserve">
     <value>Useful links</value>
