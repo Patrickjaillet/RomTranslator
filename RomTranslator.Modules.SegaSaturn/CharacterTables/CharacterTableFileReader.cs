@@ -40,7 +40,7 @@ public static class CharacterTableFileReader
         foreach (string rawLine in lines)
         {
             string line = rawLine.TrimEnd('\r');
-            if (line.Length == 0 || line[0] == '#')
+            if (string.IsNullOrWhiteSpace(line) || line[0] == '#')
             {
                 continue;
             }

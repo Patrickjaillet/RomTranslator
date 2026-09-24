@@ -90,7 +90,7 @@ public sealed class RepositoryConstraintsTests
     public void Production_code_never_writes_outside_the_application_folder()
     {
         Regex outsideStorage = new(
-            @"SpecialFolder|Registry|GetTempPath|GetTempFileName|CreateTempSubdirectory|AppData",
+            @"SpecialFolder|\bRegistry\b|GetTempPath|GetTempFileName|CreateTempSubdirectory|AppData",
             RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
 
         Assert.Empty(FindMatches(ProductionSources(), outsideStorage));

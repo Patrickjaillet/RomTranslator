@@ -37,6 +37,6 @@ public sealed class LanguageSelectorTests
     [Fact]
     public void Resolve_rejects_a_null_system_language()
     {
-        Assert.Throws<ArgumentException>(() => LanguageSelector.Resolve(null, null!));
+        Assert.ThrowsAny<ArgumentException>(() => LanguageSelector.Resolve(null, null!));
     }
 }

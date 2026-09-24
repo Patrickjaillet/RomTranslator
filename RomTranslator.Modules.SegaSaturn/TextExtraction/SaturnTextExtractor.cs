@@ -112,42 +112,92 @@ public sealed class SaturnTextExtractor : ITextExtractor
 
     /// <summary>
     /// Longueur maximale, en octets, examinée pour une seule chaîne candidate. Une chaîne de dialogue de
-    /// jeu dépasse rarement quelques centaines de caractères ; cette limite évite un coût quadratique
-    /// incontrôlé si une longue plage de la ROM se décode par coïncidence.
+    /// jeu dépasse rarement quelques centaines de caractères ; cette limite plafonne le nombre d'itérations
+    /// de la recherche par doublement dans <see cref="TryDecodeCandidateAt" /> (voir sa documentation).
     /// </summary>
     private const int MaxCandidateByteLength = 512;
 
     /// <summary>
-    /// Détermine la plus longue chaîne décodable en partant de <paramref name="start" />. Le succès de
-    /// <see cref="ICharacterTable.Decode" /> sur une longueur donnée n'est pas monotone (une table DTE/MTE
-    /// peut définir une séquence de 2 octets sans qu'aucun des deux octets pris individuellement ne soit
-    /// valide), donc chaque longueur est testée indépendamment plutôt que par recherche dichotomique ; les
-    /// chaînes de texte de jeu restent courtes, ce qui garde ce parcours linéaire largement suffisant.
+    /// Détermine la plus longue chaîne décodable en partant de <paramref name="start" />, en au plus
+    /// <c>O(log MaxCandidateByteLength)</c> appels à <see cref="ICharacterTable.Decode" /> dans le cas courant.
+    /// Une recherche linéaire (essayer chaque longueur de 1 à <see cref="MaxCandidateByteLength" />) coûterait
+    /// un décodage complet par longueur testée, soit un coût quadratique par position de balayage — bien trop
+    /// lent dès qu'une plage de plusieurs centaines d'octets se décode entièrement (par exemple une zone de
+    /// remplissage constituée d'espaces). La recherche procède donc par doublement (1, 2, 4, 8...) jusqu'à
+    /// dépasser la longueur maximale décodable, puis affine par dichotomie entre le dernier échec et le
+    /// dernier succès. Le succès de <see cref="ICharacterTable.Decode" /> sur une longueur donnée n'est pas
+    /// garanti strictement monotone (une table DTE/MTE peut définir une séquence multi-octets sans qu'aucun
+    /// octet pris individuellement ne soit valide), donc cette recherche peut dans de rares cas ne pas trouver
+    /// la longueur décodable la plus longue possible ; il s'agit d'un compromis délibéré pour un balayage
+    /// heuristique (voir <c>MEMOIRE.md</c>), pas d'une désérialisation qui exigerait une exactitude totale.
     /// </summary>
     private static (string? Text, int ByteLength) TryDecodeCandidateAt(byte[] bytes, int start, ICharacterTable characterTable)
     {
         int maxAvailable = Math.Min(bytes.Length - start, MaxCandidateByteLength);
-        int longestDecodable = 0;
-        string? longestText = null;
 
-        for (int length = 1; length <= maxAvailable; length++)
+        int lastSuccess = 0;
+        int lastFailure = 0;
+        int length = 1;
+
+        while (length <= maxAvailable)
         {
-            byte[] slice = new byte[length];
-            Array.Copy(bytes, start, slice, 0, length);
-
-            try
+            if (TryDecode(bytes, start, length, characterTable, out _))
             {
-                longestText = characterTable.Decode(slice);
-                longestDecodable = length;
+                lastSuccess = length;
+                length *= 2;
             }
-            catch (ArgumentException)
+            else
             {
-                // Cette longueur ne se décode pas entièrement ; une longueur plus grande peut néanmoins
-                // réussir si la table définit une séquence multi-octets qui englobe ce point (DTE/MTE).
+                lastFailure = length;
+                break;
             }
         }
 
-        return longestDecodable == 0 ? (null, 0) : (longestText, longestDecodable);
+        if (lastFailure > 0)
+        {
+            int low = lastSuccess;
+            int high = lastFailure;
+
+            while (high - low > 1)
+            {
+                int mid = low + ((high - low) / 2);
+                if (TryDecode(bytes, start, mid, characterTable, out _))
+                {
+                    low = mid;
+                }
+                else
+                {
+                    high = mid;
+                }
+            }
+
+            lastSuccess = low;
+        }
+
+        if (lastSuccess == 0)
+        {
+            return (null, 0);
+        }
+
+        TryDecode(bytes, start, lastSuccess, characterTable, out string? text);
+        return (text, lastSuccess);
+    }
+
+    private static bool TryDecode(byte[] bytes, int start, int length, ICharacterTable characterTable, out string? text)
+    {
+        byte[] slice = new byte[length];
+        Array.Copy(bytes, start, slice, 0, length);
+
+        try
+        {
+            text = characterTable.Decode(slice);
+            return true;
+        }
+        catch (ArgumentException)
+        {
+            text = null;
+            return false;
+        }
     }
 
     private static List<ITranslationEntry> GroupIntoEntries(List<CandidateString> candidates)

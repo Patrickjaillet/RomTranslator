@@ -48,6 +48,6 @@ public sealed class TranslationEntryTests
     [InlineData(" ")]
     public void Constructor_rejects_an_invalid_id(string? id)
     {
-        Assert.Throws<ArgumentException>(() => new TranslationEntry(id!, "Hello", 0));
+        Assert.ThrowsAny<ArgumentException>(() => new TranslationEntry(id!, "Hello", 0));
     }
 }

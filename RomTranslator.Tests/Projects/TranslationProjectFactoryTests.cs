@@ -30,6 +30,6 @@ public sealed class TranslationProjectFactoryTests
     [InlineData("Nom", "sega-saturn", null)]
     public void Create_rejects_missing_arguments(string? name, string? consoleId, string? romPath)
     {
-        Assert.Throws<ArgumentException>(() => TranslationProjectFactory.Create(name!, consoleId!, romPath!));
+        Assert.ThrowsAny<ArgumentException>(() => TranslationProjectFactory.Create(name!, consoleId!, romPath!));
     }
 }

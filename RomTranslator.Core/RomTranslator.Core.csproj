@@ -8,4 +8,16 @@
     <ProjectReference Include="..\RomTranslator.Core.Abstractions\RomTranslator.Core.Abstractions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!--
+      Strings.Designer.cs est généré à partir de Strings.resx (une entrée par clé, ResourceManager résolu sur
+      CultureInfo.CurrentUICulture) : aucun générateur MSBuild pour les .resx n'est disponible en ligne de
+      commande (PublicResXFileCodeGenerator est un outil Visual Studio uniquement). Régénérer ce fichier après
+      toute modification de Strings.resx (voir COMPILATION.md).
+    -->
+    <EmbeddedResource Update="Localization\Strings.en.resx">
+      <DependentUpon>Strings.resx</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>
