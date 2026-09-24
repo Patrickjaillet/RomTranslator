@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using RomTranslator.Core.Abstractions;
 using RomTranslator.Core.Localization;
 using RomTranslator.Core.Projects;
@@ -20,6 +21,8 @@ namespace RomTranslator.Modules.SegaSaturn.TextExtraction;
 /// </summary>
 public sealed class SaturnTextExtractor : ITextExtractor
 {
+    private static readonly CompositeFormat NoDataTrackFormat = CompositeFormat.Parse(Strings.Saturn_Error_NoDataTrack);
+
     private readonly TextScanOptions _scanOptions;
 
     /// <summary>Initialise l'extracteur avec les paramètres de balayage heuristique par défaut.</summary>
@@ -45,7 +48,7 @@ public sealed class SaturnTextExtractor : ITextExtractor
 
         CueSheet cueSheet = CueSheetReader.Read(romPath);
         CueTrack dataTrack = cueSheet.FirstDataTrack
-            ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_NoDataTrack, romPath));
+            ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, NoDataTrackFormat, romPath));
 
         using SectorReader sectorReader = new(dataTrack);
         long totalSectors = new FileInfo(dataTrack.DataFilePath).Length / SectorReaderStride(dataTrack);
@@ -67,7 +70,7 @@ public sealed class SaturnTextExtractor : ITextExtractor
 
         CueSheet cueSheet = CueSheetReader.Read(romPath);
         CueTrack dataTrack = cueSheet.FirstDataTrack
-            ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_NoDataTrack, romPath));
+            ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, NoDataTrackFormat, romPath));
 
         using SectorReader sectorReader = new(dataTrack);
         long startSector = startOffset / SectorReader.SectorDataSize;

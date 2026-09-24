@@ -37,6 +37,8 @@ public sealed record SaturnIpBinHeader(
 /// <summary>Lit l'en-tête IP.BIN situé au tout début de la zone système d'un disque Saturn.</summary>
 public static class SaturnIpBin
 {
+    private static readonly CompositeFormat HeaderTooShortFormat = CompositeFormat.Parse(Strings.Saturn_Error_HeaderTooShort);
+
     /// <summary>Identifiant matériel attendu en tête d'une image Saturn valide.</summary>
     public const string ExpectedHardwareId = "SEGA SEGASATURN ";
 
@@ -72,7 +74,7 @@ public static class SaturnIpBin
         if (headerBytes.Length < HeaderRegionSize)
         {
             throw new InvalidDataException(
-                string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_HeaderTooShort, headerBytes.Length, HeaderRegionSize));
+                string.Format(CultureInfo.CurrentCulture, HeaderTooShortFormat, headerBytes.Length, HeaderRegionSize));
         }
 
         return new SaturnIpBinHeader(

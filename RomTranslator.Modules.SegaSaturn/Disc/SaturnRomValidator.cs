@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using RomTranslator.Core.Abstractions;
 using RomTranslator.Core.Localization;
 
@@ -17,6 +18,13 @@ namespace RomTranslator.Modules.SegaSaturn.Disc;
 /// </summary>
 public sealed class SaturnRomValidator : IRomValidator
 {
+    private static readonly CompositeFormat TrackFileMissingFormat = CompositeFormat.Parse(Strings.Saturn_Validation_TrackFileMissing);
+    private static readonly CompositeFormat NoDataTrackFormat = CompositeFormat.Parse(Strings.Saturn_Error_NoDataTrack);
+    private static readonly CompositeFormat MissingHardwareIdFormat = CompositeFormat.Parse(Strings.Saturn_Error_MissingHardwareId);
+    private static readonly CompositeFormat DetectedRegionFormat = CompositeFormat.Parse(Strings.Saturn_Validation_DetectedRegion);
+    private static readonly CompositeFormat UnreadableIpBinFormat = CompositeFormat.Parse(Strings.Saturn_Validation_UnreadableIpBin);
+    private static readonly CompositeFormat TruncatedImageFormat = CompositeFormat.Parse(Strings.Saturn_Validation_TruncatedImage);
+
     /// <inheritdoc />
     public RomValidationResult Validate(string romPath)
     {
@@ -39,14 +47,14 @@ public sealed class SaturnRomValidator : IRomValidator
         {
             if (!File.Exists(track.DataFilePath))
             {
-                errors.Add(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Validation_TrackFileMissing, track.Number, track.DataFilePath));
+                errors.Add(string.Format(CultureInfo.CurrentCulture, TrackFileMissingFormat, track.Number, track.DataFilePath));
             }
         }
 
         CueTrack? dataTrack = cueSheet.FirstDataTrack;
         if (dataTrack is null)
         {
-            errors.Add(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_NoDataTrack, romPath));
+            errors.Add(string.Format(CultureInfo.CurrentCulture, NoDataTrackFormat, romPath));
         }
 
         if (errors.Count > 0)
@@ -67,17 +75,17 @@ public sealed class SaturnRomValidator : IRomValidator
 
             if (!string.Equals(header.HardwareId.TrimEnd(), SaturnIpBin.ExpectedHardwareId.TrimEnd(), StringComparison.Ordinal))
             {
-                errors.Add(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_MissingHardwareId, romPath));
+                errors.Add(string.Format(CultureInfo.CurrentCulture, MissingHardwareIdFormat, romPath));
             }
             else
             {
                 string region = string.IsNullOrEmpty(header.AreaSymbols) ? Strings.Saturn_Validation_UnknownRegion : header.AreaSymbols;
-                infos.Add(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Validation_DetectedRegion, region));
+                infos.Add(string.Format(CultureInfo.CurrentCulture, DetectedRegionFormat, region));
             }
         }
         catch (Exception exception) when (exception is InvalidDataException or EndOfStreamException or IOException)
         {
-            errors.Add(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Validation_UnreadableIpBin, exception.Message));
+            errors.Add(string.Format(CultureInfo.CurrentCulture, UnreadableIpBinFormat, exception.Message));
         }
 
         List<string> messages = new(errors.Count + infos.Count);
@@ -99,7 +107,7 @@ public sealed class SaturnRomValidator : IRomValidator
 
         if (fileLength % sectorStride != 0)
         {
-            message = string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Validation_TruncatedImage, fileLength, sectorStride);
+            message = string.Format(CultureInfo.CurrentCulture, TruncatedImageFormat, fileLength, sectorStride);
             return false;
         }
 

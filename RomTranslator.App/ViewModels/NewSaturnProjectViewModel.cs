@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.Core.Abstractions;
@@ -52,6 +53,8 @@ public enum NewSaturnProjectStep
 /// </summary>
 public sealed class NewSaturnProjectViewModel : ObservableObject
 {
+    private static readonly CompositeFormat CreationFailedFormat = CompositeFormat.Parse(Strings.NewProject_CreationFailed);
+
     private readonly SaturnConsoleModule _module;
     private readonly TranslationProjectStore _projectStore;
     private readonly string _applicationDirectory;
@@ -234,7 +237,7 @@ public sealed class NewSaturnProjectViewModel : ObservableObject
         }
         catch (Exception exception) when (exception is IOException or InvalidDataException or UnauthorizedAccessException)
         {
-            ErrorMessage = string.Format(CultureInfo.CurrentCulture, Strings.NewProject_CreationFailed, exception.Message);
+            ErrorMessage = string.Format(CultureInfo.CurrentCulture, CreationFailedFormat, exception.Message);
         }
     }
 

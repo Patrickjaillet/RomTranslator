@@ -89,7 +89,7 @@ public static class TranslationCsvExchange
         return updatedCount;
     }
 
-    private static bool RowMatchesHeader(IReadOnlyList<string> row)
+    private static bool RowMatchesHeader(List<string> row)
     {
         if (row.Count != Header.Length)
         {

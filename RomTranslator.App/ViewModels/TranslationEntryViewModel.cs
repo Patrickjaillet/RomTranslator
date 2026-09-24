@@ -3,6 +3,7 @@
 
 using System;
 using System.Globalization;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using RomTranslator.Core.Abstractions;
 using RomTranslator.Core.Editing;
@@ -17,6 +18,10 @@ namespace RomTranslator.App.ViewModels;
 /// </summary>
 public sealed class TranslationEntryViewModel : ObservableObject
 {
+    private static readonly CompositeFormat OccurrenceCountLabelFormat = CompositeFormat.Parse(Strings.Editor_OccurrenceCountLabel);
+    private static readonly CompositeFormat LengthLimitLabelFormat = CompositeFormat.Parse(Strings.Editor_LengthLimitLabel);
+    private static readonly CompositeFormat LengthLimitExceededFormat = CompositeFormat.Parse(Strings.Editor_LengthLimitExceeded);
+
     private readonly TranslationEntry _entry;
     private readonly UndoRedoStack _undoRedo;
     private readonly ITranslationLengthPolicy? _lengthPolicy;
@@ -62,7 +67,7 @@ public sealed class TranslationEntryViewModel : ObservableObject
 
     /// <summary>Texte « N occurrence(s) regroupée(s) » affiché sous le panneau d'édition.</summary>
     public string OccurrenceCountDisplayText =>
-        string.Format(CultureInfo.CurrentCulture, Strings.Editor_OccurrenceCountLabel, _entry.OccurrenceCount);
+        string.Format(CultureInfo.CurrentCulture, OccurrenceCountLabelFormat, _entry.OccurrenceCount);
 
     /// <summary>Texte traduit. Chaque changement est empilé pour annulation/rétablissement.</summary>
     public string TranslatedText
@@ -115,12 +120,12 @@ public sealed class TranslationEntryViewModel : ObservableObject
 
     /// <summary>Texte « N / limite octets » affiché sous la zone de traduction, ou <see langword="null" /> si aucune contrainte n'est définie.</summary>
     public string? LengthLimitDisplayText => LengthCheck is { } check
-        ? string.Format(CultureInfo.CurrentCulture, Strings.Editor_LengthLimitLabel, check.EncodedLength, check.Limit)
+        ? string.Format(CultureInfo.CurrentCulture, LengthLimitLabelFormat, check.EncodedLength, check.Limit)
         : null;
 
     /// <summary>Message d'alerte affiché quand la traduction dépasse la limite, ou <see langword="null" /> sinon.</summary>
     public string? LengthLimitExceededMessage => LengthCheck is { ExceedsLimit: true } check
-        ? string.Format(CultureInfo.CurrentCulture, Strings.Editor_LengthLimitExceeded, check.EncodedLength, check.Limit)
+        ? string.Format(CultureInfo.CurrentCulture, LengthLimitExceededFormat, check.EncodedLength, check.Limit)
         : null;
 
     /// <summary>

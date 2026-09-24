@@ -78,7 +78,7 @@ public sealed class IconLibraryTests
             string name = Path.GetFileName(file);
 
             Assert.Equal("0 0 24 24", (string?)root.Attribute("viewBox"));
-            Assert.Empty(root.Descendants().Where(element => element.Name != _svg + "path"));
+            Assert.DoesNotContain(root.Descendants(), element => element.Name != _svg + "path");
             Assert.True(root.Elements(_svg + "path").Any(), name + " ne contient aucun tracé.");
         }
     }

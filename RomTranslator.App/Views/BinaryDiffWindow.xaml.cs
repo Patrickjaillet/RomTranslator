@@ -3,6 +3,7 @@
 
 using System;
 using System.Globalization;
+using System.Text;
 using System.Windows;
 using Microsoft.Win32;
 using RomTranslator.App.ViewModels;
@@ -13,6 +14,8 @@ namespace RomTranslator.App.Views;
 /// <summary>Comparaison de deux images ROM (originale et modifiée) et génération de patch IPS.</summary>
 public partial class BinaryDiffWindow : Wpf.Ui.Controls.FluentWindow
 {
+    private static readonly CompositeFormat IpsPatchCreatedFormat = CompositeFormat.Parse(Strings.Diff_IpsPatchCreated);
+
     private readonly BinaryDiffViewModel _viewModel;
 
     /// <summary>Initialise la fenêtre de comparaison.</summary>
@@ -43,7 +46,7 @@ public partial class BinaryDiffWindow : Wpf.Ui.Controls.FluentWindow
             _viewModel.CreateIpsPatch(dialog.FileName);
             MessageBox.Show(
                 this,
-                string.Format(CultureInfo.CurrentCulture, Strings.Diff_IpsPatchCreated, dialog.FileName),
+                string.Format(CultureInfo.CurrentCulture, IpsPatchCreatedFormat, dialog.FileName),
                 Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);

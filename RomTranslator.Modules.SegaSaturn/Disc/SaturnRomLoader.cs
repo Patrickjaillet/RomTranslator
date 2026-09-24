@@ -4,6 +4,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using RomTranslator.Core.Abstractions;
 using RomTranslator.Core.Localization;
 
@@ -12,6 +13,9 @@ namespace RomTranslator.Modules.SegaSaturn.Disc;
 /// <summary>Charge une image disque Sega Saturn (BIN/CUE) et lit ses métadonnées depuis l'en-tête IP.BIN.</summary>
 public sealed class SaturnRomLoader : IRomLoader
 {
+    private static readonly CompositeFormat NoDataTrackFormat = CompositeFormat.Parse(Strings.Saturn_Error_NoDataTrack);
+    private static readonly CompositeFormat MissingHardwareIdFormat = CompositeFormat.Parse(Strings.Saturn_Error_MissingHardwareId);
+
     /// <inheritdoc />
     /// <exception cref="InvalidDataException">
     /// Le fichier <c>.cue</c> ne décrit aucune piste de données, ou l'en-tête IP.BIN ne commence pas par
@@ -23,7 +27,7 @@ public sealed class SaturnRomLoader : IRomLoader
 
         CueSheet cueSheet = CueSheetReader.Read(romPath);
         CueTrack dataTrack = cueSheet.FirstDataTrack
-            ?? throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_NoDataTrack, romPath));
+            ?? throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, NoDataTrackFormat, romPath));
 
         using SectorReader sectorReader = new(dataTrack);
         byte[] headerBytes = sectorReader.ReadBytes(startSector: 0, byteLength: SaturnIpBin.HeaderRegionSize);
@@ -31,7 +35,7 @@ public sealed class SaturnRomLoader : IRomLoader
         SaturnIpBinHeader header = SaturnIpBin.Parse(headerBytes);
         if (!string.Equals(header.HardwareId.TrimEnd(), SaturnIpBin.ExpectedHardwareId.TrimEnd(), StringComparison.Ordinal))
         {
-            throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_MissingHardwareId, romPath));
+            throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, MissingHardwareIdFormat, romPath));
         }
 
         return new RomMetadata(

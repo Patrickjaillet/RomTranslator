@@ -19,6 +19,11 @@ namespace RomTranslator.Modules.SegaSaturn.CharacterTables;
 /// </summary>
 public sealed class SaturnCharacterTable : ICharacterTable
 {
+    private static readonly CompositeFormat UnknownByteFormat = CompositeFormat.Parse(Strings.Saturn_Table_UnknownByte);
+    private static readonly CompositeFormat DuplicateByteSequenceFormat = CompositeFormat.Parse(Strings.Saturn_Table_DuplicateByteSequence);
+    private static readonly CompositeFormat DuplicateTextFormat = CompositeFormat.Parse(Strings.Saturn_Table_DuplicateText);
+    private static readonly CompositeFormat UnknownCharacterFormat = CompositeFormat.Parse(Strings.Saturn_Table_UnknownCharacter);
+
     private readonly Dictionary<string, string> _decodeMap;
     private readonly Dictionary<string, byte[]> _encodeMap;
     private readonly int _maxSequenceLength;
@@ -74,7 +79,7 @@ public sealed class SaturnCharacterTable : ICharacterTable
             }
 
             throw new ArgumentException(
-                string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Table_UnknownByte, bytes[position].ToString("X2", CultureInfo.InvariantCulture)),
+                string.Format(CultureInfo.CurrentCulture, UnknownByteFormat, bytes[position].ToString("X2", CultureInfo.InvariantCulture)),
                 nameof(bytes));
         }
 
@@ -137,7 +142,7 @@ public sealed class SaturnCharacterTable : ICharacterTable
             if (seenByteSequences.TryGetValue(byteKey, out string? previousText) && previousText != entry.Text)
             {
                 issues.Add(string.Format(
-                    CultureInfo.CurrentCulture, Strings.Saturn_Table_DuplicateByteSequence, FormatHex(entry.Bytes), previousText, entry.Text));
+                    CultureInfo.CurrentCulture, DuplicateByteSequenceFormat, FormatHex(entry.Bytes), previousText, entry.Text));
             }
             else
             {
@@ -147,7 +152,7 @@ public sealed class SaturnCharacterTable : ICharacterTable
             if (seenTexts.TryGetValue(entry.Text, out IReadOnlyList<byte>? previousBytes) && !previousBytes.SequenceEqual(entry.Bytes))
             {
                 issues.Add(string.Format(
-                    CultureInfo.CurrentCulture, Strings.Saturn_Table_DuplicateText, entry.Text, FormatHex(previousBytes), FormatHex(entry.Bytes)));
+                    CultureInfo.CurrentCulture, DuplicateTextFormat, entry.Text, FormatHex(previousBytes), FormatHex(entry.Bytes)));
             }
             else
             {
@@ -192,7 +197,7 @@ public sealed class SaturnCharacterTable : ICharacterTable
         }
 
         throw new ArgumentException(
-            string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Table_UnknownCharacter, text[position]),
+            string.Format(CultureInfo.CurrentCulture, UnknownCharacterFormat, text[position]),
             nameof(text));
     }
 

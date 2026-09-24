@@ -4,6 +4,7 @@
 using System;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media;
@@ -20,6 +21,10 @@ namespace RomTranslator.App;
 /// <summary>Point d'entrée de l'application RomTranslator et racine de composition.</summary>
 public partial class App : Application
 {
+    private static readonly CompositeFormat StorageNotWritableFormat = CompositeFormat.Parse(Strings.Startup_StorageNotWritable);
+    private static readonly CompositeFormat CrashReportSavedFormat = CompositeFormat.Parse(Strings.Startup_CrashReportSaved);
+    private static readonly CompositeFormat UnhandledExceptionFormat = CompositeFormat.Parse(Strings.Startup_UnhandledException);
+
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
@@ -83,7 +88,7 @@ public partial class App : Application
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
             MessageBox.Show(
-                string.Format(CultureInfo.CurrentCulture, Strings.Startup_StorageNotWritable, locations.RootDirectory),
+                string.Format(CultureInfo.CurrentCulture, StorageNotWritableFormat, locations.RootDirectory),
                 Strings.Application_Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -100,10 +105,10 @@ public partial class App : Application
 
             string details = reportPath is null
                 ? Strings.Startup_CrashReportNotSaved
-                : string.Format(CultureInfo.CurrentCulture, Strings.Startup_CrashReportSaved, reportPath);
+                : string.Format(CultureInfo.CurrentCulture, CrashReportSavedFormat, reportPath);
 
             MessageBox.Show(
-                string.Format(CultureInfo.CurrentCulture, Strings.Startup_UnhandledException, details),
+                string.Format(CultureInfo.CurrentCulture, UnhandledExceptionFormat, details),
                 Strings.Application_Title,
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);

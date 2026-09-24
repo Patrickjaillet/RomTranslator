@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using RomTranslator.Core.Information;
 using RomTranslator.Core.Localization;
 
@@ -12,14 +13,17 @@ namespace RomTranslator.App.ViewModels;
 /// <summary>Écran d'accueil : présentation de l'application et liens utiles.</summary>
 public sealed class HomeViewModel
 {
+    private static readonly CompositeFormat WelcomeFormat = CompositeFormat.Parse(Strings.Home_Welcome);
+    private static readonly CompositeFormat VersionPrefixFormat = CompositeFormat.Parse(Strings.Home_VersionPrefix);
+
     /// <summary>Initialise l'écran d'accueil.</summary>
     public HomeViewModel(ApplicationInfo info, IReadOnlyList<LinkItemViewModel> links)
     {
         ArgumentNullException.ThrowIfNull(info);
         ArgumentNullException.ThrowIfNull(links);
 
-        WelcomeText = string.Format(CultureInfo.CurrentCulture, Strings.Home_Welcome, info.Name);
-        VersionText = string.Format(CultureInfo.CurrentCulture, Strings.Home_VersionPrefix, info.Version);
+        WelcomeText = string.Format(CultureInfo.CurrentCulture, WelcomeFormat, info.Name);
+        VersionText = string.Format(CultureInfo.CurrentCulture, VersionPrefixFormat, info.Version);
         CopyrightText = info.Copyright;
         Links = links;
     }

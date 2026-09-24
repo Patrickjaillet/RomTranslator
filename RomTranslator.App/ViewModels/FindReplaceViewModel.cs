@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.Core.Editing;
@@ -18,6 +19,10 @@ namespace RomTranslator.App.ViewModels;
 /// </summary>
 public sealed class FindReplaceViewModel : ObservableObject
 {
+    private static readonly CompositeFormat MatchCountFormat = CompositeFormat.Parse(Strings.FindReplace_MatchCount);
+    private static readonly CompositeFormat NoMatchFormat = CompositeFormat.Parse(Strings.FindReplace_NoMatch);
+    private static readonly CompositeFormat ReplacedCountFormat = CompositeFormat.Parse(Strings.FindReplace_ReplacedCount);
+
     private readonly IReadOnlyList<TranslationEntry> _entries;
     private readonly UndoRedoStack _undoRedo;
     private readonly Action _onReplaced;
@@ -79,7 +84,7 @@ public sealed class FindReplaceViewModel : ObservableObject
     }
 
     /// <summary>Texte « N entrée(s) correspondante(s) » affiché sous les champs de recherche.</summary>
-    public string MatchCountText => string.Format(CultureInfo.CurrentCulture, Strings.FindReplace_MatchCount, _matchCount);
+    public string MatchCountText => string.Format(CultureInfo.CurrentCulture, MatchCountFormat, _matchCount);
 
     /// <summary>Message affiché après un remplacement (nombre d'entrées modifiées).</summary>
     public string ResultMessage
@@ -101,7 +106,7 @@ public sealed class FindReplaceViewModel : ObservableObject
         CompositeEditCommand? command = TranslationFindAndReplace.PrepareReplaceAll(_entries, _searchText, _replacementText);
         if (command is null)
         {
-            ResultMessage = string.Format(CultureInfo.CurrentCulture, Strings.FindReplace_NoMatch, _searchText);
+            ResultMessage = string.Format(CultureInfo.CurrentCulture, NoMatchFormat, _searchText);
             return;
         }
 
@@ -109,7 +114,7 @@ public sealed class FindReplaceViewModel : ObservableObject
         _undoRedo.Execute(command);
         _onReplaced();
 
-        ResultMessage = string.Format(CultureInfo.CurrentCulture, Strings.FindReplace_ReplacedCount, replacedCount);
+        ResultMessage = string.Format(CultureInfo.CurrentCulture, ReplacedCountFormat, replacedCount);
         RefreshMatchCount();
     }
 }

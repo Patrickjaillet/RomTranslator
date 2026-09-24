@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using RomTranslator.Core.Localization;
 
 namespace RomTranslator.Modules.SegaSaturn.Disc;
@@ -16,6 +17,11 @@ namespace RomTranslator.Modules.SegaSaturn.Disc;
 /// </summary>
 public static class CueSheetReader
 {
+    private static readonly CompositeFormat CueMissingFileNameFormat = CompositeFormat.Parse(Strings.Saturn_Error_CueMissingFileName);
+    private static readonly CompositeFormat CueMalformedTrackLineFormat = CompositeFormat.Parse(Strings.Saturn_Error_CueMalformedTrackLine);
+    private static readonly CompositeFormat CueFileHasNoTrackFormat = CompositeFormat.Parse(Strings.Saturn_Error_CueFileHasNoTrack);
+    private static readonly CompositeFormat CueUnsupportedTrackModeFormat = CompositeFormat.Parse(Strings.Saturn_Error_CueUnsupportedTrackMode);
+
     /// <summary>Lit et analyse un fichier <c>.cue</c>.</summary>
     /// <param name="cuePath">Chemin du fichier <c>.cue</c>.</param>
     /// <exception cref="InvalidDataException">Le fichier ne contient aucune piste reconnaissable.</exception>
@@ -34,7 +40,7 @@ public static class CueSheetReader
             if (line.StartsWith("FILE ", StringComparison.OrdinalIgnoreCase))
             {
                 string fileName = ExtractQuoted(line)
-                    ?? throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_CueMissingFileName, rawLine));
+                    ?? throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, CueMissingFileNameFormat, rawLine));
                 currentDataFilePath = Path.Combine(directory, fileName);
             }
             else if (line.StartsWith("TRACK ", StringComparison.OrdinalIgnoreCase))
@@ -47,7 +53,7 @@ public static class CueSheetReader
                 string[] parts = line.Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 if (parts.Length < 3 || !int.TryParse(parts[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out int number))
                 {
-                    throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_CueMalformedTrackLine, rawLine));
+                    throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, CueMalformedTrackLineFormat, rawLine));
                 }
 
                 CueTrackMode mode = ParseTrackMode(parts[2]);
@@ -57,7 +63,7 @@ public static class CueSheetReader
 
         if (tracks.Count == 0)
         {
-            throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_CueFileHasNoTrack, cuePath));
+            throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, CueFileHasNoTrackFormat, cuePath));
         }
 
         return new CueSheet(tracks);
@@ -71,7 +77,7 @@ public static class CueSheetReader
             "MODE1/2048" => CueTrackMode.Mode1Cooked,
             "MODE1/2352" => CueTrackMode.Mode1Raw,
             "MODE2/2336" or "MODE2/2352" => CueTrackMode.Mode2,
-            _ => throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_CueUnsupportedTrackMode, token)),
+            _ => throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, CueUnsupportedTrackModeFormat, token)),
         };
     }
 

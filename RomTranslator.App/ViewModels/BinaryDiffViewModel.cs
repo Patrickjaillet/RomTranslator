@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using RomTranslator.Core.Binary;
 using RomTranslator.Core.Localization;
 
@@ -40,6 +41,8 @@ public sealed class BinaryDifferenceViewModel
 /// </summary>
 public sealed class BinaryDiffViewModel
 {
+    private static readonly CompositeFormat SummaryFormat = CompositeFormat.Parse(Strings.Diff_Summary);
+
     /// <summary>Compare deux fichiers et prépare le résultat pour l'affichage.</summary>
     /// <param name="originalPath">Chemin de l'image ROM d'origine.</param>
     /// <param name="modifiedPath">Chemin de l'image ROM modifiée.</param>
@@ -53,7 +56,7 @@ public sealed class BinaryDiffViewModel
 
         IReadOnlyList<BinaryDifference> differences = BinaryComparer.Compare(originalPath, modifiedPath);
         Differences = differences.Select(difference => new BinaryDifferenceViewModel(difference)).ToList();
-        SummaryText = string.Format(CultureInfo.CurrentCulture, Strings.Diff_Summary, Differences.Count);
+        SummaryText = string.Format(CultureInfo.CurrentCulture, SummaryFormat, Differences.Count);
     }
 
     /// <summary>Chemin de l'image ROM d'origine.</summary>

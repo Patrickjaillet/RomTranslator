@@ -1,8 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // © 2026 Patrick JAILLET — RomTranslator
 
-using System;
-
 namespace RomTranslator.App.ViewModels;
 
 /// <summary>Une entrée du sélecteur de langue des paramètres.</summary>

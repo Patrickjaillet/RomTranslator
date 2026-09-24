@@ -4,7 +4,6 @@
 using System;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using RomTranslator.Core.Diagnostics;
 using RomTranslator.Core.Portability;
 using RomTranslator.Tests.Support;

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.App.Services;
@@ -22,6 +23,8 @@ namespace RomTranslator.App.ViewModels;
 /// </summary>
 public sealed class SettingsViewModel : ObservableObject
 {
+    private static readonly CompositeFormat LinkOpenFailedFormat = CompositeFormat.Parse(Strings.StatusBar_LinkOpenFailed);
+
     private readonly SettingsStore _settingsStore;
     private readonly AppSettings _settings;
     private readonly IFolderLauncher _folderLauncher;
@@ -116,7 +119,7 @@ public sealed class SettingsViewModel : ObservableObject
     {
         if (!_folderLauncher.TryOpen(path))
         {
-            _reportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_LinkOpenFailed, path));
+            _reportMessage(string.Format(CultureInfo.CurrentCulture, LinkOpenFailedFormat, path));
         }
     }
 

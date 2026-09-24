@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using RomTranslator.Core.Abstractions;
 using RomTranslator.Core.Localization;
 using RomTranslator.Modules.SegaSaturn.Disc;
@@ -22,6 +23,13 @@ namespace RomTranslator.Modules.SegaSaturn.Translation;
 /// </summary>
 public sealed class SaturnTextInjector : ITextInjector
 {
+    private static readonly CompositeFormat NoDataTrackFormat = CompositeFormat.Parse(Strings.Saturn_Error_NoDataTrack);
+    private static readonly CompositeFormat TranslationTooLongNoRelocationFormat = CompositeFormat.Parse(Strings.Saturn_Injection_TranslationTooLongNoRelocation);
+    private static readonly CompositeFormat NoKnownPointerFormat = CompositeFormat.Parse(Strings.Saturn_Injection_NoKnownPointer);
+    private static readonly CompositeFormat StringRelocatedFormat = CompositeFormat.Parse(Strings.Saturn_Injection_StringRelocated);
+    private static readonly CompositeFormat ConsistencyMismatchFormat = CompositeFormat.Parse(Strings.Saturn_Injection_ConsistencyMismatch);
+    private static readonly CompositeFormat FreeSpaceExhaustedFormat = CompositeFormat.Parse(Strings.Saturn_Injection_FreeSpaceExhausted);
+
     /// <inheritdoc />
     /// <remarks>Équivalent à <see cref="Inject(string, string, IReadOnlyList{ITranslationEntry}, ICharacterTable, SaturnPointerRelocation?)" /> sans relogement.</remarks>
     public TextInjectionResult Inject(
@@ -59,7 +67,7 @@ public sealed class SaturnTextInjector : ITextInjector
 
         CueSheet sourceCueSheet = CueSheetReader.Read(sourceRomPath);
         CueTrack sourceDataTrack = sourceCueSheet.FirstDataTrack
-            ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_NoDataTrack, sourceRomPath));
+            ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, NoDataTrackFormat, sourceRomPath));
 
         CueSheet outputCueSheet = CopyImage(sourceRomPath, outputRomPath, sourceCueSheet);
         CueTrack outputDataTrack = outputCueSheet.FirstDataTrack!;
@@ -95,7 +103,7 @@ public sealed class SaturnTextInjector : ITextInjector
                 if (relocation is null)
                 {
                     throw new InvalidOperationException(string.Format(
-                        CultureInfo.CurrentCulture, Strings.Saturn_Injection_TranslationTooLongNoRelocation, entry.SourceText, entry.TranslatedText));
+                        CultureInfo.CurrentCulture, TranslationTooLongNoRelocationFormat, entry.SourceText, entry.TranslatedText));
                 }
 
                 long relocatedOffset = AllocateFreeSpace(relocation, ref freeSpaceCursor, encoded.Count);
@@ -116,11 +124,11 @@ public sealed class SaturnTextInjector : ITextInjector
                 if (!pointerUpdated)
                 {
                     throw new InvalidOperationException(string.Format(
-                        CultureInfo.CurrentCulture, Strings.Saturn_Injection_NoKnownPointer, entry.SourceText));
+                        CultureInfo.CurrentCulture, NoKnownPointerFormat, entry.SourceText));
                 }
 
                 messages.Add(string.Format(
-                    CultureInfo.CurrentCulture, Strings.Saturn_Injection_StringRelocated, entry.SourceText, relocatedOffset));
+                    CultureInfo.CurrentCulture, StringRelocatedFormat, entry.SourceText, relocatedOffset));
             }
         }
 
@@ -134,7 +142,7 @@ public sealed class SaturnTextInjector : ITextInjector
     /// texte traduit attendu, pour détecter tout défaut de réinjection (mauvais décalage, table de caractères
     /// incohérente entre l'écriture et la relecture...) avant que le fichier ne soit distribué.
     /// </summary>
-    private static IReadOnlyList<string> VerifyConsistency(
+    private static List<string> VerifyConsistency(
         CueTrack outputDataTrack, ICharacterTable characterTable, IReadOnlyList<(ITranslationEntry Entry, long WrittenOffset, int WrittenLength)> writes)
     {
         List<string> problems = new();
@@ -152,7 +160,7 @@ public sealed class SaturnTextInjector : ITextInjector
             if (!string.Equals(decoded, expected, StringComparison.Ordinal))
             {
                 problems.Add(string.Format(
-                    CultureInfo.CurrentCulture, Strings.Saturn_Injection_ConsistencyMismatch, entry.SourceText, writtenOffset, decoded));
+                    CultureInfo.CurrentCulture, ConsistencyMismatchFormat, entry.SourceText, writtenOffset, decoded));
             }
         }
 
@@ -202,7 +210,7 @@ public sealed class SaturnTextInjector : ITextInjector
         if (requiredLength > remaining)
         {
             throw new InvalidOperationException(string.Format(
-                CultureInfo.CurrentCulture, Strings.Saturn_Injection_FreeSpaceExhausted, requiredLength, remaining));
+                CultureInfo.CurrentCulture, FreeSpaceExhaustedFormat, requiredLength, remaining));
         }
 
         long allocatedOffset = cursor;

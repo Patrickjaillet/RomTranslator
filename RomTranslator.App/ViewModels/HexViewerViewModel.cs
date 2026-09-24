@@ -4,6 +4,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Text;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.Core.Binary;
@@ -19,6 +20,9 @@ public sealed class HexViewerViewModel : ObservableObject
 {
     /// <summary>Nombre de lignes affichées par page.</summary>
     public const int PageSize = 512;
+
+    private static readonly CompositeFormat PageIndicatorFormat = CompositeFormat.Parse(Strings.HexViewer_PageIndicator);
+    private static readonly CompositeFormat FileSizeLabelFormat = CompositeFormat.Parse(Strings.HexViewer_FileSizeLabel);
 
     private readonly HexDumpReader _reader;
     private long _currentPage;
@@ -70,10 +74,10 @@ public sealed class HexViewerViewModel : ObservableObject
 
     /// <summary>Texte « Page N sur M » affiché au-dessus de la liste des lignes.</summary>
     public string PageIndicatorText =>
-        string.Format(CultureInfo.CurrentCulture, Strings.HexViewer_PageIndicator, CurrentPage + 1, PageCount);
+        string.Format(CultureInfo.CurrentCulture, PageIndicatorFormat, CurrentPage + 1, PageCount);
 
     /// <summary>Texte « Taille du fichier : N octets ».</summary>
-    public string FileSizeText => string.Format(CultureInfo.CurrentCulture, Strings.HexViewer_FileSizeLabel, FileLength);
+    public string FileSizeText => string.Format(CultureInfo.CurrentCulture, FileSizeLabelFormat, FileLength);
 
     /// <summary>Affiche la page précédente.</summary>
     public RelayCommand PreviousPageCommand { get; }

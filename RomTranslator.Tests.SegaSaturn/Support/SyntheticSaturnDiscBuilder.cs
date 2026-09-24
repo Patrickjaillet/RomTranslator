@@ -25,6 +25,8 @@ internal static class SyntheticSaturnDiscBuilder
     /// <param name="validHardwareId">
     /// Si <see langword="false" />, remplace l'identifiant matériel par une chaîne invalide (pour tester le rejet).
     /// </param>
+    /// <param name="payloadBytes">Octets arbitraires à injecter dans l'image, ou <see langword="null" /> pour n'en injecter aucun.</param>
+    /// <param name="payloadOffset">Décalage logique où injecter <paramref name="payloadBytes" />.</param>
     public static string Build(
         string directory,
         string gameTitle = "TEST GAME",

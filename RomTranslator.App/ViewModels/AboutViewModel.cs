@@ -3,6 +3,7 @@
 
 using System;
 using System.Globalization;
+using System.Text;
 using RomTranslator.Core.Information;
 using RomTranslator.Core.Localization;
 
@@ -11,6 +12,8 @@ namespace RomTranslator.App.ViewModels;
 /// <summary>Modèle de vue de la boîte de dialogue « À propos ».</summary>
 public sealed class AboutViewModel
 {
+    private static readonly CompositeFormat VersionPrefixFormat = CompositeFormat.Parse(Strings.Home_VersionPrefix);
+
     /// <summary>Initialise la boîte « À propos ».</summary>
     /// <param name="info">Identité de l'application.</param>
     /// <param name="website">Lien vers le site officiel.</param>
@@ -22,7 +25,7 @@ public sealed class AboutViewModel
         ArgumentNullException.ThrowIfNull(repository);
 
         ProductName = info.Name;
-        VersionText = string.Format(CultureInfo.CurrentCulture, Strings.Home_VersionPrefix, info.Version);
+        VersionText = string.Format(CultureInfo.CurrentCulture, VersionPrefixFormat, info.Version);
         CopyrightText = info.Copyright;
         Website = website;
         Repository = repository;

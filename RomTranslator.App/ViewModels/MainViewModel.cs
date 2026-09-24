@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using CommunityToolkit.Mvvm.Input;
 using RomTranslator.App.Services;
 using RomTranslator.Core.Abstractions;
@@ -25,6 +26,16 @@ public sealed class MainViewModel
 {
     /// <summary>Identifiant de l'onglet d'accueil.</summary>
     public const string HomeTabId = "home";
+
+    private static readonly CompositeFormat LinkOpenFailedFormat = CompositeFormat.Parse(Strings.StatusBar_LinkOpenFailed);
+    private static readonly CompositeFormat ProjectOpenFailedFormat = CompositeFormat.Parse(Strings.StatusBar_ProjectOpenFailed);
+    private static readonly CompositeFormat RomExportedFormat = CompositeFormat.Parse(Strings.StatusBar_RomExported);
+    private static readonly CompositeFormat RomExportedWithMessagesFormat = CompositeFormat.Parse(Strings.StatusBar_RomExportedWithMessages);
+    private static readonly CompositeFormat RomExportFailedFormat = CompositeFormat.Parse(Strings.StatusBar_RomExportFailed);
+    private static readonly CompositeFormat PatchExportedFormat = CompositeFormat.Parse(Strings.StatusBar_PatchExported);
+    private static readonly CompositeFormat PatchExportFailedFormat = CompositeFormat.Parse(Strings.StatusBar_PatchExportFailed);
+    private static readonly CompositeFormat ProjectSavedFormat = CompositeFormat.Parse(Strings.StatusBar_ProjectSaved);
+    private static readonly CompositeFormat ProjectSaveFailedFormat = CompositeFormat.Parse(Strings.StatusBar_ProjectSaveFailed);
 
     private readonly SettingsStore _settingsStore;
     private readonly AppSettings _settings;
@@ -121,13 +132,6 @@ public sealed class MainViewModel
         Home = new HomeViewModel(info, Links);
         Tabs = new TabsViewModel(settings.Window.LastActiveTabId);
         Tabs.AddTab(new TabItemViewModel(HomeTabId, Strings.Tab_Home, IconKeys.Home, Home, isPermanent: true));
-        Tabs.PropertyChanged += (_, args) =>
-        {
-            if (args.PropertyName == nameof(TabsViewModel.SelectedItem))
-            {
-                _saveProjectCommand.NotifyCanExecuteChanged();
-            }
-        };
 
         NewProject = new AppCommandViewModel(
             Strings.Menu_File_NewProject, Strings.Menu_File_NewProject_ToolTip, IconKeys.NewProject, new RelayCommand(CreateNewSaturnProject), "Ctrl+N");
@@ -136,6 +140,14 @@ public sealed class MainViewModel
         _saveProjectCommand = new RelayCommand(SaveActiveProject, CanSaveActiveProject);
         SaveProject = new AppCommandViewModel(
             Strings.Menu_File_SaveProject, Strings.Menu_File_SaveProject_ToolTip, IconKeys.Save, _saveProjectCommand, "Ctrl+S");
+
+        Tabs.PropertyChanged += (_, args) =>
+        {
+            if (args.PropertyName == nameof(TabsViewModel.SelectedItem))
+            {
+                _saveProjectCommand.NotifyCanExecuteChanged();
+            }
+        };
         ExportProject = Unavailable(Strings.Menu_File_ExportProject, Strings.Menu_File_ExportProject_ToolTip, IconKeys.Export, "Ctrl+E");
         Exit = new AppCommandViewModel(Strings.Menu_File_Exit, Strings.Menu_File_Exit_ToolTip, IconKeys.Exit, new RelayCommand(exit), "Alt+F4");
 
@@ -255,7 +267,7 @@ public sealed class MainViewModel
 
     private void ReportLinkFailure(string url)
     {
-        Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_LinkOpenFailed, url));
+        Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, LinkOpenFailedFormat, url));
     }
 
     private void CreateNewSaturnProject()
@@ -305,7 +317,7 @@ public sealed class MainViewModel
         }
         catch (Exception exception) when (exception is IOException or InvalidDataException or UnauthorizedAccessException)
         {
-            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_ProjectOpenFailed, exception.Message));
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, ProjectOpenFailedFormat, exception.Message));
         }
     }
 
@@ -339,12 +351,12 @@ public sealed class MainViewModel
         {
             TextInjectionResult result = SaturnModule.TextInjector.Inject(project.RomPath, outputPath, project.Entries.ConvertAll(entry => (ITranslationEntry)entry), characterTable);
             Status.ReportMessage(result.Messages.Count == 0
-                ? string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_RomExported, outputPath)
-                : string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_RomExportedWithMessages, outputPath, result.Messages.Count));
+                ? string.Format(CultureInfo.CurrentCulture, RomExportedFormat, outputPath)
+                : string.Format(CultureInfo.CurrentCulture, RomExportedWithMessagesFormat, outputPath, result.Messages.Count));
         }
         catch (Exception exception) when (exception is IOException or InvalidOperationException)
         {
-            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_RomExportFailed, exception.Message));
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, RomExportFailedFormat, exception.Message));
         }
     }
 
@@ -368,11 +380,11 @@ public sealed class MainViewModel
             string translatedDataFile = CueSheetReader.Read(temporaryRomPath).FirstDataTrack!.DataFilePath;
             IpsPatch.Create(sourceDataFile, translatedDataFile, patchPath);
 
-            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_PatchExported, patchPath));
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, PatchExportedFormat, patchPath));
         }
         catch (Exception exception) when (exception is IOException or InvalidOperationException or NotSupportedException or InvalidDataException)
         {
-            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_PatchExportFailed, exception.Message));
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, PatchExportFailedFormat, exception.Message));
         }
         finally
         {
@@ -410,11 +422,11 @@ public sealed class MainViewModel
         try
         {
             _projectStore.Save(editor.Project, Tabs.SelectedItem.Id);
-            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_ProjectSaved, editor.Project.Name));
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, ProjectSavedFormat, editor.Project.Name));
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
-            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, Strings.StatusBar_ProjectSaveFailed, exception.Message));
+            Status.ReportMessage(string.Format(CultureInfo.CurrentCulture, ProjectSaveFailedFormat, exception.Message));
         }
     }
 }

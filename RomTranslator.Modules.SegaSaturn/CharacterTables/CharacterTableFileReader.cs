@@ -17,6 +17,9 @@ namespace RomTranslator.Modules.SegaSaturn.CharacterTables;
 /// </summary>
 public static class CharacterTableFileReader
 {
+    private static readonly CompositeFormat TableMalformedLineFormat = CompositeFormat.Parse(Strings.Saturn_Error_TableMalformedLine);
+    private static readonly CompositeFormat TableInvalidHexFormat = CompositeFormat.Parse(Strings.Saturn_Error_TableInvalidHex);
+
     /// <summary>Lit et analyse un fichier <c>.tbl</c>.</summary>
     /// <param name="path">Chemin du fichier <c>.tbl</c>, encodé en UTF-8.</param>
     /// <exception cref="InvalidDataException">Une ligne du fichier n'est pas syntaxiquement valide.</exception>
@@ -62,7 +65,7 @@ public static class CharacterTableFileReader
             int equalsIndex = line.IndexOf('=', StringComparison.Ordinal);
             if (equalsIndex < 0)
             {
-                throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_TableMalformedLine, rawLine));
+                throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, TableMalformedLineFormat, rawLine));
             }
 
             IReadOnlyList<byte> bytes = ParseHex(line[..equalsIndex], rawLine);
@@ -73,11 +76,11 @@ public static class CharacterTableFileReader
         return new CharacterTableFile(entries, newLineBytes, endOfTextBytes);
     }
 
-    private static IReadOnlyList<byte> ParseHex(string hex, string rawLine)
+    private static byte[] ParseHex(string hex, string rawLine)
     {
         if (hex.Length == 0 || hex.Length % 2 != 0)
         {
-            throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_TableInvalidHex, rawLine));
+            throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, TableInvalidHexFormat, rawLine));
         }
 
         byte[] bytes = new byte[hex.Length / 2];
@@ -85,7 +88,7 @@ public static class CharacterTableFileReader
         {
             if (!byte.TryParse(hex.AsSpan(i * 2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out bytes[i]))
             {
-                throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, Strings.Saturn_Error_TableInvalidHex, rawLine));
+                throw new InvalidDataException(string.Format(CultureInfo.CurrentCulture, TableInvalidHexFormat, rawLine));
             }
         }
 

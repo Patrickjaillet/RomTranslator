@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-only
 // © 2026 Patrick JAILLET — RomTranslator
 
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using RomTranslator.App.ViewModels;

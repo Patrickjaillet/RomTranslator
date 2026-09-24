@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -23,6 +24,8 @@ namespace RomTranslator.App.ViewModels;
 /// </summary>
 public sealed class TranslationEditorViewModel : ObservableObject
 {
+    private static readonly CompositeFormat ProgressSummaryFormat = CompositeFormat.Parse(Strings.Editor_ProgressSummary);
+
     private readonly TranslationProject _project;
     private readonly UndoRedoStack _undoRedo = new();
     private readonly List<TranslationEntryViewModel> _entries;
@@ -224,7 +227,7 @@ public sealed class TranslationEditorViewModel : ObservableObject
         TranslatedCount = _entries.Count(entry => entry.Status is TranslationStatus.Translated or TranslationStatus.Validated);
         TranslatedPercent = TotalCount == 0 ? 0 : Math.Round(TranslatedCount * 100.0 / TotalCount, 1);
         ProgressSummaryText = string.Format(
-            CultureInfo.CurrentCulture, Strings.Editor_ProgressSummary, TranslatedCount, TotalCount, TranslatedPercent);
+            CultureInfo.CurrentCulture, ProgressSummaryFormat, TranslatedCount, TotalCount, TranslatedPercent);
 
         OnPropertyChanged(nameof(TranslatedCount));
         OnPropertyChanged(nameof(TranslatedPercent));
